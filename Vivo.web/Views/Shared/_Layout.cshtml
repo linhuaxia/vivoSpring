@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="ROBOTS" content="NOINDEX, NOFOLLOW" />
+
+    <link href="~/Content/style.css" rel="stylesheet" />
+    <link href="~/Content/table.css" rel="stylesheet" />
+    <link href="~/Content/weui.min.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    @*<script src="~/Scripts/zepto.min.js"></script>*@
+    <script src="~/Scripts/layer-v2.3/layer/layer.js"></script>
+    <script src="~/Scripts/Public.js"></script>
+
+
+    @RenderSection("head", false)
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    @RenderBody()
+</body>
+</html>

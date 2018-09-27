@@ -1,0 +1,218 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+
+@model Vivo.Model.EvalTemplateInfo
+
+@{
+    ViewBag.Title = "编辑";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IPowerActionInfoService PowerActionBLL = AbstractFactory.CreatePowerActionInfoService();
+}
+@section head{
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            alert(data.ErrorMsg);
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            location.href = "@Url.Action("index")";
+
+        }
+        function OnBegin() {
+            //do something before post data
+
+        }
+        function BtnDelete_Click() {
+            $.post("@Url.Action("Delete")", { ID: @Model.ID }, function (data) {
+                alert(data.ErrorMsg);
+                if (data.ErrorCode == 0) {
+                    location.href = "@Url.Action("index")";
+                }
+            });
+
+        }
+        var TemplateItemJSON=@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.TemplateItemInfo.Select(a => new { a.ID, a.Name, a.MaxScore, a.Enable, a.SortID })));
+        function BtnTemplateItem_Click(TemplateItemID) {
+            layer.open({
+                content: $("#ContentTemplateItem").html(),
+                btn: '完成',
+                shadeClose: false,
+                yes: function () {
+                    location.href = location.href;
+                }
+
+            });
+            if (TemplateItemID) {
+                $("#HidenCurrentTemplateItem").val(TemplateItemID);
+                $(TemplateItemJSON).each(function (index,item) {
+                    if (item.ID == TemplateItemID)
+                    {
+                        $("#TxtItemName").val(item.Name);
+                        $("#CbEnable").prop("checked", item.Enable);
+                        $("#TxtItemMaxScore").val(item.MaxScore);
+                    }
+                });
+            }
+            else {
+                $("#HidenCurrentTemplateItem").val("0");
+
+            }
+            
+        }
+        function BtnAddTemplateItemToServer_Click() {
+            var postData = {
+                ID: $("#HidenCurrentTemplateItem").val(),
+                TemplateID:@Model.ID,
+                Name: $("#TxtItemName").val(),
+                Enable: $("#CbEnable").is(':checked'),
+                MaxScore: $("#TxtItemMaxScore").val()
+            };
+            $.post("@Url.Action("Edit","TemplateItem")", postData, function (data) {
+                alert(data.ErrorMsg);
+            });
+        }
+        function DeleteTemplateItem(ID) {
+            if (!confirm("确定要删除吗？如果项目不是新加上去。建议您禁用就好"))
+            {
+                return;
+            }
+            $.post("@Url.Action("Delete","TemplateItem")",  {ID:ID}, function (data) {
+                alert(data.ErrorMsg);
+                if (data.ErrorCode==0) {
+                    location.href = location.href;
+                }
+            });
+        }
+    </script>
+
+
+
+}
+
+
+@using (Ajax.BeginForm("Edit",  new { @*area = "MP"*@ }, new AjaxOptions { HttpMethod = "post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.ID)
+    
+
+
+    <div class="weui_cells">
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">名称</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "weui_input" } })
+            </div>
+        </div>
+        <div class="weui_cell weui_cell_switch">
+            <div class="weui_cell_hd weui_cell_primary">是否可用</div>
+            <div class="weui_cell_ft">
+                @Html.CheckBoxFor(model => model.Enable, new { @class = "weui_switch", @checked = "checked" })
+            </div>
+        </div>
+        <div class="weui_cell weui_cell_select weui_select_after">
+            <div class="weui_cell_hd">
+                <label for="" class="weui_label">排序号</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.DropDownListFor(model => model.SortID, ViewBag.listSort as IEnumerable<SelectListItem>, new { @class = "weui_select" })
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-primary" style="margin:10px;">
+        <div class="panel-heading">
+            <h3 class="panel-title ">标准设置</h3>
+        </div>
+        <div class="panel-body">
+            <div class="weui_cells">
+                <div class="weui_cell">
+                    <div class="weui_cell_hd"><label class="weui_label">优秀下限</label></div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        @Html.EditorFor(model => model.Amin, new { htmlAttributes = new { @class = "weui_input", placeholder = "请输入" } })
+                    </div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd"><label class="weui_label">良好下限</label></div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        @Html.EditorFor(model => model.BMin, new { htmlAttributes = new { @class = "weui_input", placeholder = "请输入" } })
+                    </div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd"><label class="weui_label">合格下限</label></div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        @Html.EditorFor(model => model.CMin, new { htmlAttributes = new { @class = "weui_input", placeholder = "请输入" } })
+                    </div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd"><label class="weui_label">不合格下限</label></div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        @Html.EditorFor(model => model.DMin, new { htmlAttributes = new { @class = "weui_input", placeholder = "请输入" } })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-primary" style="margin:10px;">
+        <div class="panel-heading clearfix">
+            <h3 class="panel-title pull-left">评价项目</h3>
+                <a href="javascript:BtnTemplateItem_Click();" class="weui_btn weui_btn_mini weui_btn_primary pull-right">添加新项</a>
+        </div>
+        <div class="panel-body">
+            <input type="hidden" id="HidenCurrentTemplateItem" />
+            <div class="weui_cells">
+                @foreach (var item in Model.TemplateItemInfo)
+                {
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">
+                            <i class="weui_icon_cancel" onclick="DeleteTemplateItem(@item.ID)"></i>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <p onclick="BtnTemplateItem_Click(@item.ID)">@item.Name</p>
+                        </div>
+                        <div class="weui_cell_ft">@item.MaxScore
+                        
+                        |@(item.Enable?"":"禁用")
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="weui_btn_area">
+        <input type="submit" value="提交" class="weui_btn weui_btn_primary" />
+    </div>
+
+    <script type="text/html" id="ContentTemplateItem">
+        <div style="text-align:left">
+            <div class="weui_cells">
+                <div class="weui_cell">
+                    <div class="weui_cell_hd"><label class="weui_label">项目名称</label></div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <input class="weui_input" id="TxtItemName" type="text" placeholder="请输入名称">
+                    </div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd"><label class="weui_label">最高分值</label></div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <input class="weui_input" id="TxtItemMaxScore" type="number" pattern="[0-9]*" placeholder="当前项最高允许多少分">
+                    </div>
+                </div>
+                <div class="weui_cell weui_cell_switch">
+                    <div class="weui_cell_hd weui_cell_primary">是否可用</div>
+                    <div class="weui_cell_ft">
+                        <input class="weui_switch" id="CbEnable" type="checkbox" >
+                    </div>
+                </div>
+               <div class="weui_btn_area">
+                    <a class="weui_btn weui_btn_primary" href="javascript:BtnAddTemplateItemToServer_Click();">确定</a>
+                </div>
+            </div>
+        </div>
+    </script>
+}
+
+

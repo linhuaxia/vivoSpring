@@ -1,0 +1,149 @@
+﻿@using Vivo.BLLFactory;
+@using Vivo.Model;
+@using PagedList.Mvc;
+@using Vivo.IBLL;
+@model Vivo.Model.UserInfo
+
+@{
+    ViewBag.Title = "编辑";
+    Layout = "~/Areas/MP/Views/Shared/_Layout.cshtml";
+}
+@section head{
+    <script type="text/javascript">
+        $(function () {
+            $("#PassWord").val("");
+            var SubmitWithName = Request("SubmitWithName");
+            if ("Rule" == SubmitWithName) {
+                $("#BtnRule").click();
+            }
+            if ("Subject" == SubmitWithName) {
+                $("#BtnSubject").click();
+            }
+        });
+        function OnSuccess(data) {
+            alert(data.ErrorMsg);
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            if (Request("WithNoReflash")=="Yes") {
+                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                parent.layer.close(index); //再执行关闭  
+            }
+            else {
+            parent.location.href = "@Url.Action("index")";
+            }
+
+        }
+        function OnBegin() {
+            //do something before post data
+
+        }
+        function BtnDeleteWechatOpenID_Click() {
+            $.post("@Url.Action("DeleteWechatOpenID")", {ID:@Model.ID},function (data) {
+                alert(data.ErrorMsg);
+                if (data.ErrorCode==0) {
+                    location.reload();
+                }
+            });
+        }
+    </script>
+}
+@using (Ajax.BeginForm("Edit", new AjaxOptions
+{
+    HttpMethod = "post",
+    OnSuccess = "OnSuccess",
+    OnBegin = "OnBegin",
+    LoadingElementId = "loadingToast"
+}))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.ID)
+
+    <table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+        <tr>
+            <td class="td1_2">
+                姓名
+            </td>
+            <td class="td1_3">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                登录名
+            </td>
+            <td class="td1_3">
+                @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                密码
+            </td>
+            <td class="td1_3">
+                @Html.EditorFor(model => model.PassWord, new { htmlAttributes = new { @class = "form-control" } })
+                (如不希望重置密码，请留空)
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                学校/部门
+            </td>
+            <td class="td1_3">
+                @Html.DropDownList("DepartmentID", ViewBag.listDepartment as IEnumerable<SelectListItem>, "请选择", htmlAttributes: new { @class = "form-control" })
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                是否启用
+            </td>
+            <td class="td1_3">
+                @Html.CheckBoxFor(model => model.Enable, new { @checked = "checked" })
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                绑定微信号
+            </td>
+            <td class="td1_3">
+                @if (string.IsNullOrEmpty(Model.WechatOpenID))
+                    {
+                    <span>未绑定</span>
+                    }
+                    else
+                    {
+                    <span>@Model.WechatOpenID @Model.WechatNameNick</span>
+                    <input type="button" value="解除绑定" onclick="BtnDeleteWechatOpenID_Click()" />
+                    }
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2" colspan="2">
+
+                @if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.PP系统帐户管理.PPP用户管理.查看用户角色))
+                {
+                    <span id="BtnRule" onclick="LayerCustomertSize('@Url.Action("Select","UserRule", new { UserID = Model.ID })','',false,'400px','100%')" class="btn btn-default">
+
+                        角色配置
+                    </span>
+                }
+
+                @if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.PP系统帐户管理.PPP用户管理.管理用户学科))
+                {
+                    <span id="BtnSubject" onclick="LayerCustomertSize('@Url.Action("Select","UserSubject", new { UserID = Model.ID })','',false,'400px','100%')" class="btn btn-default">
+
+                        学科配置
+                    </span>
+                }
+
+                <input type="submit" value="提交" class="btn btn-default" />
+
+            </td>
+        </tr>
+
+    </table>
+}
+

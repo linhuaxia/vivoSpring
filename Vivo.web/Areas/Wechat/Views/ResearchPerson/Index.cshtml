@@ -1,0 +1,82 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+@using Tool;
+
+@model IPagedList<Vivo.Model.ResearchPlanInfo>
+
+@{
+    ViewBag.Title = "个人听课";
+
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IPowerActionInfoService PowerActionBLL = (IPowerActionInfoService)ViewBag.PowerActionBLL;
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+    var listUserLecture = (List<UserInfo>)ViewBag.listUserLecture;
+}
+@section head{
+
+    <style type="text/css">
+    </style>
+}
+<div class="bd">
+    @if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP个人听课.PPP添加.KEY))
+    {
+        <a href="@Url.Action("Create","ResearchPerson")" class="weui_btn weui_btn_primary" title="添加" style="margin:15px;">
+            添加
+        </a>
+    }
+
+
+</div>
+
+<div class="weui_panel" style="padding:20px;">
+    <div class="weui_panel_bd">
+        @foreach (var item in Model)
+        {
+            var infoUserLecture = listUserLecture.FirstOrDefault(a => a.ID == item.ResearchInfo.FirstOrDefault().lectureUserID);
+            var UserNameLecture = string.Empty;
+            if (null != infoUserLecture)
+            {
+                UserNameLecture = infoUserLecture.Name.IndexOf("|") > 0 ? infoUserLecture.Name.Substring(0, infoUserLecture.Name.IndexOf("|")) : infoUserLecture.Name;
+            }
+
+            <a style="display:block;padding:5px 15px;" class="weui_media_box weui_media_text" href="@Url.Action("Detail","ResearchPerson", new { PlanID = item.ID })">
+                <h4 class="weui_media_title">@item.Name</h4>
+                <p class="weui_media_desc">
+                    @item.DepartmentInfo.Name
+                    <br/>
+                    @item.Memo
+                </p>
+                <ul class="weui_media_info">
+                    <li class="weui_media_info_meta">
+                        时间: @item.DateBegin.ToString("yyyy-MM-dd")
+                    </li>
+                    <li class="weui_media_info_meta weui_media_info_meta_extra">
+                        状态: @SysEnum.GetName(typeof(SysEnum.ResearchPlanStatus), item.Status)
+                    </li>
+                    <li class="weui_media_info_meta weui_media_info_meta_extra">
+                        @(UserNameLecture)
+                    </li>
+                </ul>
+            </a>
+        }
+    </div>
+</div>
+
+
+
+<div style="text-align:center">
+    @Html.PagedListPager((IPagedList)Model,
+    page => Url.Action("Index", new { page = page }),
+    new PagedListRenderOptions
+    {
+        LinkToPreviousPageFormat = "上一页",
+        LinkToNextPageFormat = "下一页",
+        MaximumPageNumbersToDisplay = 0,
+        Display = PagedListDisplayMode.IfNeeded,
+        DisplayEllipsesWhenNotShowingAllPageNumbers = true
+    }
+    )
+</div>

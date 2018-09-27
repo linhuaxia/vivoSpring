@@ -1,0 +1,149 @@
+﻿@using PagedList
+@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+@using PagedList.Mvc;
+@using System.Linq;
+@model ResearchPlanInfo
+@{
+    ViewBag.Title = "研员听课情况";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+    IPowerActionInfoService PowerActionBLL = (IPowerActionInfoService)ViewBag.PowerActionBLL;
+    ISubjectInfoService SubjectBLL = AbstractFactory.CreateSubjectInfoService();
+    IQueryable<ResearchInfo> listResearch = (IQueryable<ResearchInfo>)ViewBag.listResearch;
+    IEnumerable<UserInfo> listUserFinal = (IEnumerable<UserInfo>)ViewBag.listUserFinal;
+
+    var Result = listResearch
+    .GroupBy(r => new { r.UserID, r.SubjectID })
+    .Select(group => new
+    {
+        TotalCount = group.Count(),
+        G = group.Count(a => a.ResearchPlanInfo.TypeEnum == (int)SysEnum.ResearchPlanType.组织调研),
+        P = group.Count(a => a.ResearchPlanInfo.TypeEnum == (int)SysEnum.ResearchPlanType.个人听课),
+        SubjectID = group.Key.SubjectID,
+        UserID = group.Key.UserID
+    }).ToList()
+    .Select(f => new
+    {
+        TotalCount = f.TotalCount,
+        G = f.G,
+        P = f.P,
+        SubjectName = SubjectBLL.GetList(a => a.ID == f.SubjectID).FirstOrDefault().Name,
+        UserName = listUserFinal.FirstOrDefault(u => u.ID == f.UserID).Name,
+        SubjectID = f.SubjectID,
+        UserID = f.UserID
+    })
+    .OrderBy(a => a.UserName).ThenBy(a => a.SubjectName).ThenByDescending(a => a.TotalCount);
+
+}
+@section head{
+    <script type="text/javascript">
+        function BtnSearch_Click() {
+            var URL = "@Url.Action("ResearchS",new { TimeStramp =DateTime.Now.Millisecond})";
+            URL += "&DateBegin=" + $("#TxtDateBegin").val();
+            URL += "&DateEnd=" + $("#TxtDateEnd").val();
+            URL += "&SubjectID=" + $("#DdlSubject").val();
+            URL += "&Name=" + $("#TxtName").val();
+            location.href = URL;
+        }
+        function BtnExport_Click() {
+            var URL = "@Url.Action("Print","PDF",new { area="MP"})";
+            var Parms = "@Url.Action("ResearchS", "Report", new { TimeStramp = "nomean" })";
+            Parms += "&DateBegin=" + $("#TxtDateBegin").val();
+            Parms += "&DateEnd=" + $("#TxtDateEnd").val();
+            Parms += "&SubjectID=" + $("#DdlSubject").val();
+            Parms += "&Name=" + $("#TxtName").val();
+            window.open(URL+"?URL="+Parms, "_black");
+        }
+        function LayerDetail_Click(ResearchTypeEnum, SubjectID, UserID) {
+                var URL = "@Url.Action("ResearchS_Detail")";
+            URL += "?SubjectID=" + SubjectID;
+            URL += "&UserID=" + UserID;
+            URL += "&DateBegin=" + $("#TxtDateBegin").val();
+            URL += "&DateEnd=" + $("#TxtDateEnd").val();
+            URL += "&researchPlanType=" + ResearchTypeEnum + "";
+            location.href = URL;
+
+        }
+    </script>
+    <style type="text/css">
+        .list-group span {
+            margin-left:15px;
+        }
+    </style>
+}
+
+
+<div class="panel panel-primary" style="margin:10px;">
+    <div class="panel-heading clearfix">
+        <h3 class="panel-title pull-left">查询选项</h3>
+        <span class="badge pull-right">
+            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+        </span>
+    </div>
+    <div class="panel-body">
+        <div class="weui_cells weui_cells_form" style="margin:0;">
+            <div class="weui_cell weui_cell_select weui_select_after">
+                <div class="weui_cell_hd">
+                    <label for="" class="weui_label">学科</label>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.DropDownList("DdlSubject", new List<SelectListItem>(), "不限", new { @class = "weui_select" })
+                </div>
+            </div>
+
+            <div class="weui_cell">
+                <div class="weui_cell_hd">教研员</div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.TextBox("TxtName", null, new { placeholder = "", @class = "weui_input" })
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd">开始日期</div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.TextBox("TxtDateBegin", null, new { placeholder = "", @class = "weui_input", type = "date" })
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd">结束日期</div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.TextBox("TxtDateEnd", null, new { placeholder = "", @class = "weui_input", type = "date" })
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <a class="weui_btn weui_btn_default" href="javascript:BtnSearch_Click();">搜索</a>
+        </div>
+    </div>
+</div>
+
+
+
+<ul class="list-group">
+    <li href="#" class="list-group-item disabled">
+        教研员/学校
+        <span class="label label-success pull-right" style="margin-right:10px;">集体</span>
+        <span class="label label-info pull-right" style="margin-right:10px;">个人</span>
+        <span class="label label-warning pull-righ">合计</span>
+    </li>
+@foreach (var item in Result)
+{
+
+    <li href="#" class="list-group-item">
+        @item.UserName
+        /
+        @item.SubjectName
+        <a href="javascript:LayerDetail_Click(@((int)SysEnum.ResearchPlanType.个人听课),@item.SubjectID,@item.UserID)"
+            class="label label-success pull-right" style="margin-right:10px;">
+            @item.P
+        </a>
+        <a  href="javascript:LayerDetail_Click(@((int)SysEnum.ResearchPlanType.组织调研),@item.SubjectID,@item.UserID)"
+           class="label label-info pull-right" style="margin-right:10px;">
+            @item.G
+        </a>
+        <span class="label label-warning pull-righ">3</span>
+    </li>
+}
+</ul>

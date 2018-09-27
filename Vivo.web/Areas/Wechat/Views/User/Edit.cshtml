@@ -1,0 +1,203 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+
+
+@model Vivo.Model.UserInfo
+
+@{
+    ViewBag.Title = "系统帐户-修改";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IPowerActionInfoService PowerActionBLL = (IPowerActionInfoService)ViewBag.PowerActionBLL;
+
+}
+
+@section head{
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            alert(data.ErrorMsg);
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            location.href = "@Url.Action("Detail", new { ID = Model.ID })";
+
+        }
+        function OnBegin() {
+            return true;
+        }
+
+        $(function () {
+            InitRule();
+            InitSubject();
+            $("#BtnAddRule").click(BtnAddRule_Click);
+            $("#BtnAddSubject").click(BtnAddSubject_Click);
+        });
+        var JsonRule =@Html.Raw(ViewBag.listRuleJSON);
+        var JsonSubject=@Html.Raw(ViewBag.listSubjectJSON);
+        function BtnAddRule_Click() {
+            var NewID = $("#DdlRule").val();
+            $.post("@Url.Action("Select", "UserRule", new { area = "MP" })", { UserID:@Model.ID,RuleID: NewID, IsChecked:true }, function (data) {
+                JsonRule = data.Data;
+                InitRule();
+            });
+        }
+        function BtnDelRule_Click(_ID) {
+            $.post("@Url.Action("Select", "UserRule",new { area="MP"})", { UserID:@Model.ID,RuleID: _ID, IsChecked: false }, function (data) {
+                JsonRule = data.Data;
+                InitRule();
+            });
+        }
+        function BtnAddSubject_Click() {
+            var NewID = $("#DdlSubject").val();
+            $.post("@Url.Action("Select", "UserSubject", new { area = "MP" })", { UserID:@Model.ID,ObjID: NewID, IsChecked: true }, function (data) {
+                JsonSubject = data.Data;
+                InitSubject();
+            });
+        }
+        function BtnDelSubject_Click(_ID) {
+            $.post("@Url.Action("Select", "UserSubject", new { area = "MP" })", { UserID:@Model.ID,ObjID: _ID, IsChecked: false  }, function (data) {
+                JsonSubject = data.Data;
+                InitSubject();
+            });
+        }
+
+        function InitRule() {
+            var HTML = "";
+            $(JsonRule).each(function (index, item) {
+                HTML += '<div class="weui_cell">';
+                HTML += '   <div class="weui_cell_bd weui_cell_primary">';
+                HTML += '       <p>' + item.Name + '</p>';
+                HTML += '   </div>';
+                HTML += '   <div class="weui_cell_ft">';
+                HTML += '       <i class="weui_icon_cancel BtnDelRule" onclick="BtnDelRule_Click('+item.ID+')" ></i>';
+                HTML += '   </div>';
+                HTML += '</div>';
+            });
+            $("#DivRule").html(HTML);
+        }
+
+        function InitSubject() {
+            var HTML = "";
+            $(JsonSubject).each(function (index, item) {
+                HTML += '<div class="weui_cell">';
+                HTML += '   <div class="weui_cell_bd weui_cell_primary">';
+                HTML += '       <p>' + item.Name + '</p>';
+                HTML += '   </div>';
+                HTML += '   <div class="weui_cell_ft">';
+                HTML += '       <i class="weui_icon_cancel BtnDelRule" onclick="BtnDelSubject_Click(' + item.ID + ')" ></i>';
+                HTML += '   </div>';
+                HTML += '</div>';
+            });
+            $("#DivSubject").html(HTML);
+        }
+
+    </script>
+
+
+
+
+}
+
+<div class="bd">
+    @using (Ajax.BeginForm("Edit", "User", new { area = "MP" }, new AjaxOptions { HttpMethod = "post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="weui_cells">
+
+            <div class="weui_cell">
+                <div class="weui_cell_hd">
+                    <label for="" class="weui_label">姓名</label>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.TextBoxFor(model => model.Name, new { @class = "weui_input", placeholder = "必填项" })
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd">
+                    <label for="" class="weui_label">登录名</label>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.TextBoxFor(model => model.Code, new { @class = "weui_input", placeholder = "必填项" })
+                </div>
+            </div>
+            <div class="weui_cells weui_cells_form">
+                <div class="weui_cell weui_cell_switch">
+                    <div class="weui_cell_hd weui_cell_primary">是否启用</div>
+                    <div class="weui_cell_ft">
+                        @Html.CheckBoxFor(model => model.Enable, new { @class = "weui_switch" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="weui_cell weui_cell_select weui_select_after">
+                <div class="weui_cell_hd">
+                    <label for="" class="weui_label">学校/部门</label>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.DropDownListFor(model => model.DepartmentID, ViewBag.listDepartment as List<SelectListItem>,
+                           "请选择", new { @class = "weui_select" })
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-primary" style="margin:10px;">
+            <div class="panel-heading clearfix">
+                <h3 class="panel-title pull-left">角色设置</h3>
+                <span class="badge pull-right">
+                    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                </span>
+            </div>
+
+            <div class="panel-body">
+                <div class="weui_cells">
+                    <div class="weui_cell weui_vcode">
+                        <div class="weui_cell_bd weui_cell_primary">
+                            @Html.DropDownList("DdlRule", ViewBag.listRule as IEnumerable<SelectListItem>, new { @class = "weui_select" })
+                        </div>
+                        <div class="weui_cell_ft">
+                            <input class="weui_input" type="button" id="BtnAddRule" value="加入">
+                        </div>
+                    </div>
+                    <div class="weui_cells" id="DivRule">
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="panel panel-primary" style="margin:10px;">
+            <div class="panel-heading clearfix">
+                <h3 class="panel-title pull-left">学科设置</h3>
+                <span class="badge pull-right">
+                    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                </span>
+            </div>
+
+            <div class="panel-body">
+                <div class="weui_cells">
+                    <div class="weui_cell weui_vcode">
+                        <div class="weui_cell_bd weui_cell_primary">
+                            @Html.DropDownList("DdlSubject", ViewBag.listSubject as IEnumerable<SelectListItem>, new { @class = "weui_select" })
+                        </div>
+                        <div class="weui_cell_ft">
+                            <input class="weui_input" type="button" id="BtnAddSubject" value="加入">
+                        </div>
+                    </div>
+                    <div class="weui_cells" id="DivSubject">
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div style="margin:5px 20px;">
+            <input type="submit" value="提交" class="weui_btn weui_btn_primary" id="BtnSubmit" />
+        </div>
+
+    }
+</div>
+
+

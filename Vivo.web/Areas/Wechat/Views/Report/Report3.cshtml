@@ -1,0 +1,207 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+@using Tool;
+@model ResearchPlanInfo
+@{
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+    IResearchInfoService ResearchBLL = AbstractFactory.CreateResearchInfoService();
+    IPowerActionInfoService PowerActionBLL = (IPowerActionInfoService)ViewBag.PowerActionBLL;
+    var infoSubject = (SubjectInfo)ViewBag.infoSubject;
+    var listResearch = Model.ResearchInfo.Where(a => a.SubjectID == infoSubject.ID);
+    ViewBag.Title = infoSubject.Name +"学科调研情况";
+    var infoResearchPlanSubjectSummary = Model.ResearchPlanSubjectSummaryInfo.FirstOrDefault(a => a.SubjectID == infoSubject.ID);
+    var listValuableSubjectResearch = listResearch.Where(a => a.UserInfo.SubjectInfo.Select(u => u.ID).Contains(a.SubjectID));
+}
+@section head{
+<script type="text/javascript">
+            function OnSuccess(data) {
+                console.log(data);
+                alert(data.ErrorMsg);
+                if (data.ErrorCode != 0) {
+                    return;
+                }
+                location.href = location.href;
+
+            }
+            function OnBegin() {
+                //do something before post data
+
+            }
+</script>
+    <script type="text/javascript">
+            $(function () {
+                $('#myTab a:first').tab('show');
+            });
+    </script>
+}
+
+<!-- Modal -->
+<div class="modal fade" id="ModalPost" tabindex="-1" role="dialog" aria-labelledby="ModalPostLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+ @using (Ajax.BeginForm("Report3", new { area = "MP" }, new AjaxOptions { HttpMethod = "post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+ {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.Hidden("PlanID", new { Value = Model.ID })
+    @Html.Hidden("TimeStramp", new { Value = DateTime.Now.ToFileTime().ToString() })
+    @Html.Hidden("SubjectID", new { Value = infoSubject.ID })
+           <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">@infoSubject.Name 学科汇总</h4>
+            </div>
+            <div class="modal-body">
+
+                    <ul id="myTab" class="nav nav-tabs">
+                        @foreach (var item in Model.EvalTemplateInfo.TemplateSubjectSummaryInfo)
+                        {
+                            <li><a href="#@("Tab"+item.ID)" data-toggle="tab">@item.KeyName</a></li>
+                        }
+                    </ul>
+                    <div id="myTabContent" class="tab-content">
+                        @foreach (var item in Model.EvalTemplateInfo.TemplateSubjectSummaryInfo)
+                        {
+                            <div class="tab-pane fade" id="@("Tab"+item.ID)">
+                               @Html.TextArea("Detail" + item.ID, new {@class= "form-control",rows="15",placeholder="请填写"+item.KeyName })
+                            </div>
+                        }
+                    </div>
+               
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn btn-primary">提交</button>
+            </div>
+ }
+        </div>
+    </div>
+</div>
+<div class="weui_cells_title">@ViewBag.Title</div>
+<div id="DivSummaryDetail" style="margin:10px;padding:4px;border:1px solid #CCC;border-radius:5px;">
+    <ul id="myTabB" class="nav nav-tabs">
+        @if (PowerActionBLL.PowerCheck(PowerInfo.P_统计报表.PP集体调研汇总.PPP学科汇总填写.KEY) && UserBLL.GetCurrent().SubjectInfo.Any(s => s.ID == infoSubject.ID))
+        {
+            <li><a data-toggle="modal" data-target="#ModalPost" class="btn btn-success">完善学科汇总</a></li>
+        }
+
+        @foreach (var item in Model.EvalTemplateInfo.TemplateSubjectSummaryInfo)
+        {
+            <li><a href="#@("TabB"+item.ID)" data-toggle="tab">@item.KeyName</a></li>
+        }
+    </ul>
+    <div id="myTabBContent" class="tab-content">
+        @foreach (var item in Model.EvalTemplateInfo.TemplateSubjectSummaryInfo)
+        {
+            <div class="tab-pane fade" id="@("TabB"+item.ID)">
+                @if (null!=ViewData["Detail"+item.ID])
+                {
+                    <text>@Html.Raw(ViewData["Detail" + item.ID].ToString().Replace("\n","<br/>"))</text>
+                }
+                else
+                {
+                    <text>未补充内容</text>
+                }
+            </div>
+        }
+    </div>
+
+
+</div>
+
+<div class="weui_cells_title">学科合计</div>
+<div class="weui_cells">
+@foreach (var itemTemplateItem in Model.EvalTemplateInfo.TemplateItemInfo)
+{
+    <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>@itemTemplateItem.Name</p>
+        </div>
+        <div class="weui_cell_ft">
+            @if (Model.EvalTemplateInfo.TypeFlag == (int)SysEnum.TemplateTypeFlag.分值模板)
+            {
+                var arrays = listValuableSubjectResearch.SelectMany(r=>r.ResearchItemInfo)
+                    .Where(a => a.TemplateItemID == itemTemplateItem.ID).Select(a => a.ScoreValue);
+                if (arrays.Count() > 0)
+                {
+                    <text>@arrays.Average()</text>
+                }
+            }
+            else
+            {
+                foreach (var itemOption in Model.EvalTemplateInfo.TemplateOptionInfo)
+                {
+                    <span class="label label-default lableInliner">
+                        @itemOption.Name
+                        :
+                        @listValuableSubjectResearch.SelectMany(r => r.ResearchItemInfo).Count(a => a.TemplateItemID == itemTemplateItem.ID && a.ScoreValue == itemOption.ID)
+                    </span>
+                }
+
+            }
+        </div>
+    </div>
+}
+</div>
+
+
+<div class="weui_cells_title">听评记录情况</div>
+<div class="weui_panel">
+    <div class="weui_panel_bd">
+
+                    
+
+        @foreach (var item in listResearch)
+        {
+            var infoLectureUser = UserBLL.GetList(a => a.ID == item.lectureUserID).FirstOrDefault();
+            <a class="weui_media_box weui_media_text" href="@Url.Action("Detail","Research",new { ID=item.ID})">
+                <h4 class="weui_media_title">
+                    @(null == infoLectureUser ? "" : infoLectureUser.Name)
+                    by @item.UserInfo.Name
+                </h4>
+                <p class="weui_media_desc">课题：@item.Topic</p>
+                <ul class="weui_media_info">
+                    <li class="weui_media_info_meta">
+                        @SysEnum.GetName(typeof(SysEnum.LessionGrade), Tool.Function.ConverToInt(item.GradeName))
+                        @item.ClassName
+                        第 @item.LessionNumber 节
+                    </li>
+                   
+                </ul>
+
+
+                @foreach (var itemTemplateItem in Model.EvalTemplateInfo.TemplateItemInfo)
+                {
+                    var ItemSelected = item.ResearchItemInfo.FirstOrDefault(a => a.TemplateItemID == itemTemplateItem.ID);
+                    <div class="weui_cell">
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <p>@itemTemplateItem.Name</p>
+                        </div>
+                        <div class="weui_cell_ft">
+                            @if (null != ItemSelected)
+                            {
+                                if (Model.EvalTemplateInfo.TypeFlag == (int)SysEnum.TemplateTypeFlag.分值模板)
+                                {
+                                    <text> @ItemSelected.ScoreValue</text>
+                                }
+                                else
+                                {
+                                    var OptionSelected = Model.EvalTemplateInfo.TemplateOptionInfo.FirstOrDefault(a => a.ID == ItemSelected.ScoreValue);
+                                    if (null != OptionSelected)
+                                    {
+                                        <text> @OptionSelected.Name</text>
+                                    }
+
+                                }
+                            }
+                        </div>
+
+                    </div>
+                }
+
+            </a>
+        }
+
+    </div>
+</div>

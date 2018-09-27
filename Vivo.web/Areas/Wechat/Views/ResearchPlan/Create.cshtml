@@ -1,0 +1,93 @@
+﻿@using Tool;
+@using Vivo.Model;
+
+@model ResearchPlanInfo
+
+@{
+    ViewBag.Title = "新建";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+}
+
+@section head{
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            alert(data.ErrorMsg);
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            location.href = "@Url.Action("Detail")/"+data.Data.ID;
+
+        }
+        function OnBegin() {
+
+        }
+    </script>
+}
+    @using (Ajax.BeginForm("Create", new {  }, new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.TypeEnum, new { value = (int)SysEnum.ResearchPlanType.个人听课 })
+        @Html.HiddenFor(model => model.AreaID, new { value = (int)SysEnum.ResearchArea.区内 })
+        <div class="weui_cells">
+            <div class="weui_cell weui_cell_select weui_select_after">
+                <div class="weui_cell_hd">
+                    <label for="" class="weui_label">分组</label>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.DropDownListFor(model => model.CategoryID, ViewBag.listPlanCategory as IEnumerable<SelectListItem>,  new { @class = "weui_select" })
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><label class="weui_label">名称</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "weui_input" } })
+                </div>
+            </div>
+            <div class="weui_cell weui_cell_select weui_select_after">
+                <div class="weui_cell_hd">
+                    <label for="" class="weui_label">学校</label>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.DropDownListFor(model => model.DepartmentID, ViewBag.listDepartment as IEnumerable<SelectListItem>, "请选择", new { @class = "weui_select" })
+                </div>
+            </div>
+            <div class="weui_cell weui_cell_select weui_select_after">
+                <div class="weui_cell_hd">
+                    <label for="" class="weui_label">评价模板</label>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.DropDownListFor(model => model.TemplateID, ViewBag.listTemplate as IEnumerable<SelectListItem>, "请选择", new { @class = "weui_select" })
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><label for="" class="weui_label">计划日期</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.EditorFor(model => model.DateBegin, new { htmlAttributes = new { @class = "weui_input" , type = "date",value=DateTime.Now.ToString("yyyy-MM-dd") } })
+                </div>
+            </div>
+        </div>
+        <div class="weui_cells">
+
+            <div class="weui_cells_title">备注</div>
+            <div class="weui_cells weui_cells_form">
+                <div class="weui_cell">
+                    <div class="weui_cell_bd weui_cell_primary">
+                        @Html.TextAreaFor(model => model.Memo, new
+                       {
+                           @class = "weui_textarea",
+                           placeholder = "非必填项",
+                           rows = "3"
+                       })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="weui_btn_area">
+            <input type="submit" value="提交" class="weui_btn weui_btn_primary" />
+        </div>
+
+    }

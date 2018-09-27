@@ -1,0 +1,64 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+@using PagedList;
+@using PagedList.Mvc;
+
+@model PagedList.IPagedList<ResearchInfo>
+
+@{
+    ViewBag.Title = "对我的评价记录";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IPowerActionInfoService PowerActionBLL = AbstractFactory.CreatePowerActionInfoService();
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+    UserInfo CurrentUser = ViewBag.CurrentUser;
+
+}
+@section head{
+}
+@foreach (var item in Model)
+{
+    <div class="weui_panel_bd">
+        <a class="weui_media_box weui_media_text" href="@Url.Action("Detail",new { ID=item.ID,GoBack= "/Wechat/Research/ListLectureUser" })">
+            <h4 class="weui_media_title">@item.ResearchPlanInfo.Name</h4>
+            <p class="weui_media_desc">
+                @item.Topic<br/>
+                @SysEnum.GetName(typeof(SysEnum.LessionGrade), Tool.Function.ConverToInt(item.GradeName))
+                @item.ClassName
+                第 @item.LessionNumber 节
+                
+            </p>
+            <ul class="weui_media_info">
+                <li class="weui_media_info_meta">@item.CreateDate.ToString("yyyy-MM-dd HH:mm")</li>
+                <li class="weui_media_info_meta weui_media_info_meta_extra">@item.UserInfo.Name</li>
+                <li class="weui_media_info_meta weui_media_info_meta_extra">@SysEnum.GetName(typeof(SysEnum.ResearchPlanType),item.ResearchPlanInfo.TypeEnum)</li>
+            </ul>
+        </a>
+    </div>
+
+
+}
+<div style="text-align:center">
+    @Html.PagedListPager((IPagedList)Model,
+    page => Url.Action("ListLectureUser", new { page = page }),
+    new PagedListRenderOptions
+    {
+        LinkToPreviousPageFormat = "上一页",
+        LinkToNextPageFormat = "下一页",
+        MaximumPageNumbersToDisplay = 0,
+        Display = PagedListDisplayMode.IfNeeded,
+        DisplayEllipsesWhenNotShowingAllPageNumbers = true
+    }
+    )
+</div>
+
+
+
+
+
+
+
+
+
+
+

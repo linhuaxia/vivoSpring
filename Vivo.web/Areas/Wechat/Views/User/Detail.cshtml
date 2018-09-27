@@ -1,0 +1,146 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+@model Vivo.Model.UserInfo
+@{
+    ViewBag.Title = "系统帐户-详细信息";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IPowerActionInfoService PowerActionBLL = (IPowerActionInfoService)ViewBag.PowerActionBLL;
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+    UserInfo CurrentUser = UserBLL.GetCurrent();
+    var listImages = (List<string>)ViewBag.listImages;
+
+}
+@section head{
+
+
+
+   <script type="text/javascript">
+        $(function () {
+            $("#BtnDelete").click(function () {
+                if (!confirm("确定要删除数据吗？")) {
+                    return;
+                }
+                APINormalGet('@Url.Action("Delete","User",new {area="MP", id=Model.ID})',
+                    '@Url.Action("index")');
+            });
+            $("#BtnUnBind").click(function () {
+                if (!confirm("确定要解除微信绑定吗？")) {
+                    return;
+                }
+                APINormalGet('@Url.Action("DeleteWechatOpenID", "User",new {area="MP", id=Model.ID})','');
+            });
+       });
+
+</script>
+
+}
+
+
+
+
+
+
+
+<div class="bd">
+    <div class="weui_cells_title">基本信息</div>
+    <div class="weui_cells">
+        <div class="weui_cell">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>姓名</p>
+            </div>
+            <div class="weui_cell_ft">@Model.Name</div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>登录名</p>
+            </div>
+            <div class="weui_cell_ft">@Model.Code</div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>学科</p>
+            </div>
+            <div class="weui_cell_ft">@string.Join(",", Model.SubjectInfo.Select(r => r.Name))</div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>角色</p>
+            </div>
+            <div class="weui_cell_ft">@string.Join(",", Model.RuleInfo.Select(r => r.Name))</div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>学校/部门</p>
+            </div>
+            <div class="weui_cell_ft">@Model.DepartmentInfo.Name</div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>状态</p>
+            </div>
+            <div class="weui_cell_ft">@(Model.Enable?"正常":"已禁用")</div>
+        </div>
+    </div>
+@if (Model.MemberGroupInfo.Count() > 0)
+{
+
+    <div class="weui_cells_title">所在群组</div>
+    <div class="weui_cells">
+        @foreach (var item in Model.MemberGroupInfo)
+        {
+        <div class="weui_cell">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>@item.Name</p>
+            </div>
+        </div>
+        }
+
+    </div>
+}
+
+
+    <div class="weui_cells_title">微信绑定微信</div>
+    <div class="weui_cells">
+        <div class="weui_cell">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>昵称</p>
+            </div>
+            <div class="weui_cell_ft">@Model.WechatNameNick</div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>openid</p>
+            </div>
+            <div class="weui_cell_ft">@Model.WechatOpenID</div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>头像</p>
+            </div>
+            <div class="weui_cell_ft">
+                <img src="@Model.WechatHeadImg" style="height:40px;width:40px;" />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="bd spacing" style="margin:10px 10%;">
+@if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.PP系统帐户管理.PPP用户管理.编辑))
+{ 
+    <a href="@Url.Action("Edit",new { id=Model.ID})" class="weui_btn weui_btn_primary">前往修改</a>
+}
+@if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.PP系统帐户管理.PPP用户管理.重置密码))
+{
+
+    <a href="@Url.Action("Pwd",new { id=Model.ID})" class="weui_btn weui_btn_default">重置密码</a>
+}
+@if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.PP系统帐户管理.PPP用户管理.解除微信绑定))
+{
+
+    <a href="javascript:" id="BtnUnBind" class="weui_btn weui_btn_warn">解除微信绑定</a>
+}
+@if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.PP系统帐户管理.PPP用户管理.删除))
+{
+    <a href="javascript:" id="BtnDelete" class="weui_btn weui_btn_warn">删除帐户</a>
+}
+</div>

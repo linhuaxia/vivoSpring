@@ -1,0 +1,325 @@
+﻿*{
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+body{
+	height: 100%;
+	height: 100%;
+	font-size: 0;
+	background: #fff !important;
+}
+#wrapper{
+	overflow: hidden;
+	width: 100%;
+	position: relative;
+	display: block;
+}
+.bg img{
+	width: 100%;
+	height:100%;
+}
+
+  @-webkit-keyframes shake2{
+
+        0%{
+
+            opacity: 1;
+
+        }
+
+        50%{
+
+            opacity: 0.4;
+
+        }
+
+        100%{
+
+            opacity: 1;
+
+        }
+
+    }@keyframes shake2{
+
+        0%{
+
+            opacity: 1;
+
+        }
+
+        50%{
+
+            opacity: 0.4;
+
+        }
+
+        100%{
+
+            opacity: 1;
+
+        }
+
+    }
+
+    .shake2{
+
+        -webkit-animation: shake2 2s infinite;
+
+        animation: shake2 2s infinite;
+
+    }
+
+#bg1-7{
+	    position: absolute;
+    width: 42%;
+    left: 54%;
+    margin-left: -24.5%;
+    bottom: 38%;
+}
+
+#bg1-6{
+	    position: absolute;
+    width: 42%;
+    left: 54%;
+    margin-left: -24.5%;
+    bottom: 29%;
+}
+
+
+#bg1-5{
+	    position: absolute;
+    width: 42%;
+    left: 54%;
+    margin-left: -24.5%;
+    bottom: 9.5%;
+}
+.wrapperbtn{
+	width: 100%;
+}
+
+
+#info{
+	display: none;
+}
+
+#bg2-2,
+#bg2-3{
+	position: relative;
+}
+.sendInfo{
+	position: absolute;
+	width: 80%;
+	top: 0%;
+	left: 50%;
+	margin-left: -40%;
+	
+}
+.sendInfo input{
+	width: 95%;
+	height: 35px;
+	font-size: 16px;
+	font-family: '[FZY3JW]';
+	color: #444;
+	border-radius: 12px;
+	border: 1px solid #ccc;
+	margin-top: 8px;
+	padding-left: 5%;
+	outline: none;
+}
+
+
+
+.sendInfo select{
+	width: 100%;
+	height: 35px;
+	font-size: 16px;
+	font-family: '[FZY3JW]';
+	color: #444;
+	border-radius: 12px;
+	border: 1px solid #ccc;
+	margin-top: 8px;
+	padding-left: 5%;
+	outline: none;
+}
+::-webkit-input-placeholder{
+	color: #ccc;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+　　color: #ccc;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+　　color: #ccc;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+　　color: #ccc;
+}
+
+.codebox{
+	position: relative;
+}
+.codebtn{
+	display: block;
+	position: absolute;
+	bottom: 20%;
+	right: 2%;
+	color: #ccc;
+	z-index: 2;
+	font-size: 16px;
+}
+.infobtn{
+	position: absolute;
+	width: 36%;
+	top: 10%;
+	left: 50%;
+	margin-left: -18%;
+	text-align: center;
+}
+.infobtn img{
+	margin-bottom: 10px;
+}
+.rulebtn{
+	color: #fff;
+	font-size: 16px;
+}
+
+#rule{
+	display: none;
+	background: #698bf6;
+	position: relative;
+}
+
+#prize{
+	position: absolute;
+	top: 0;
+	background: rgba(31,31,31,0.95);
+	width: 100%;
+	height: 100%;
+	background-image: url(/images/a3_1.png);
+	background-position: center 0%;
+	background-repeat: no-repeat;
+	background-size: 100% auto;
+	z-index: 3;
+	display: none;
+}
+#prize img{
+	width: 100%;
+	vertical-align: bottom;
+}
+.goods{
+	position: absolute;
+	color: #fff;
+	font-size: 16px;
+	font-family: 'FZY3JW';
+	text-align: center;
+}
+.goods p{
+	margin-top: 5%;
+}
+.prizering{
+	width: 33%;
+	left: 50%;
+	top: 22%;
+	margin-left: -16.5%;
+	display: none;
+}
+.prizeiqiyi{
+	width: 80%;
+	left: 50%;
+	top: 25%;
+	margin-left: -40%;
+	display: none;
+}
+.iqiyiimg{
+	width: 150px;
+	margin: 0 auto;
+}
+#vipnum{
+	display: inline-block;
+	padding: 5px;
+	background: rgba(16,21,37,0.6);
+	margin-top: 5%;
+	position: relative;
+	text-align: center;
+	color: #fff;
+	/*-webkit-user-select: none;
+ 	-webkit-touch-callout: none;*/
+}
+.copy{
+	width: 30%;
+	margin: 10px auto 0;
+	border: 1px solid #fff;
+	outline: none;
+}
+.att{
+	font-size: 14px;
+	text-align: left;
+}
+
+.prizex9splus,
+.prizey55{
+	width: 100%;
+	left: 0%;
+	bottom: 0%;
+	margin-left: 0%;
+	display: block;
+}
+.prizekindle{
+	width: 51%;
+    left: 50%;
+	top: 24%;
+	margin-left: -25.5%;
+	display: none;
+}
+.sure{
+    color: #fff;
+    font-size: 16px;
+    text-align: center;
+    margin-top: 50px;
+    text-decoration: underline;
+}
+
+
+#rulecontent{
+	height: 610px;
+	overflow-y: auto;
+	position: absolute;
+	top: 12%;
+	padding-left: 4%;
+}
+#rulecontent p{
+	font-size: 16px;
+	color: #fff;
+}
+.ringbol{
+	display: inline-block;
+	width: 18px;
+	height: 18px;
+	border-radius: 18px;
+	background: #fefc22;
+	line-height: 18px;
+}
+.headname{
+	font-size: 20px;
+	color: #fefc22;
+	font-family: '方正准圆简体';
+}
+.text{
+	display: inline-block;
+	padding-left: 5%;
+}
+#columLine{
+	height: 610px;
+	border-left: 2px dashed #fefc22;
+	position: absolute;
+	top: 19%;
+	left: 6%;
+}
+#close{
+	position: absolute;
+	top: 2%;
+	right: 4%;
+}
+#close img{
+	width: 40px;
+}

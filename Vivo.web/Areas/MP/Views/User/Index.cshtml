@@ -1,0 +1,248 @@
+﻿@using PagedList.Mvc;
+@using Vivo.BLLFactory;
+@using Vivo.Model;
+@using PagedList.Mvc;
+@using Vivo.IBLL;
+
+
+@model PagedList.IPagedList<Vivo.Model.UserInfo>
+@{
+    ViewBag.Title = "系统帐号管理";
+    Layout = "~/Areas/MP/Views/Shared/_Layout.cshtml";
+}
+@section head{
+    <script src="~/Scripts/select.js"></script>
+    <script type="text/javascript">
+        function BtnSch_Click() {
+            var URL = "@Url.Action("Index")";
+            URL += "?PowerGroupID=" + $("#DdlPowerGroupID").val();
+            URL += "&DepartmentID=" + $("#DdlDepartmentID").val();
+            URL += "&Name=" + $("#TxtName").val();
+            URL += "&EnableStatus=" + $("#DdlEnableStatus").val();
+            URL += "&MemberGroupID=" + $("#DdlMemberGroup").val();
+            location.href = URL;
+
+        }
+
+        function BtnExport_Click() {
+            var URL = "@Url.Action("Export")";
+            URL += "?PowerGroupID=" + $("#DdlPowerGroupID").val();
+            URL += "&DepartmentID=" + $("#DdlDepartmentID").val();
+            URL += "&Name=" + $("#TxtName").val();
+            URL += "&EnableStatus=" + $("#DdlEnableStatus").val();
+            URL += "&MemberGroupID=" + $("#DdlMemberGroup").val();
+
+            location.href = URL;
+        }
+
+        function BtnDelete_Click(ItemID) {
+            $.post("@Url.Action("Delete")", { ID: ItemID }, function (data) {
+                alert(data.ErrorMsg);
+                if (data.ErrorCode == 0) {
+                    location.reload();
+                }
+            });
+        }
+
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $("#BtnDeleteSelect").click(BtnDeleteSelect_Click);
+            $("#BtnEditSelect").click(BtnEditSelect_Click);
+        });
+        function BtnDeleteSelect_Click() {
+            var SuccessFlag = 0;
+            $("input[name='CbSelect']:checkbox:checked").each(function (index, item) {
+                console.log("Item Selected ID=" + $(this).val());
+                $.ajax({
+                    url: "@Url.Action("Delete")?ID=" + $(this).val(),
+                    async: false,
+                    type:"POST",
+                    dataType: 'json',
+                    success: function (data) {
+                        SuccessFlag++;
+                    }
+                });
+            });
+            alert(SuccessFlag + " 项数据删除成功");
+            location.reload();
+        }
+        function BtnEditSelect_Click() {
+            $("input[name='CbSelect']:checkbox:checked").each(function (index, item) {
+               Layer('@Url.Action("Edit")/'+$(this).val()+"?WithNoReflash=Yes")
+            });
+
+        }
+
+    </script>
+}
+<div class="pAdd">
+    @if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.PP系统帐户管理.PPP用户管理.添加))
+    {
+        <a href="javascript:Layer('@Url.Action("Create")')" class="btn btn-default" title="添加">
+            添加
+        </a>
+    }
+    @if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.PP系统帐户管理.PPP用户管理.导入数据))
+    {
+        <a href="javascript:Layer('@Url.Action("InportLight")')" class="btn btn-default">
+            导入数据
+        </a>
+    }
+    <input type="checkbox" name="CbALL" id="CbALL" onclick="checkAll('CbALL','CbSelect')" /> <label for="CbALL">全选</label>
+    @if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.PP系统帐户管理.PPP用户管理.删除))
+    {
+        <span class="btn btn-default" id="BtnDeleteSelect">删除选中</span>
+    }
+    @if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.PP系统帐户管理.PPP用户管理.编辑))
+    {
+        <span class="btn btn-default" id="BtnEditSelect">编辑选中</span>
+    }
+</div>
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+    <tbody>
+        <tr>
+            <td colspan="6" style="height: 30px" class="td1_1">
+                系统帐户管理
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                所属权限组
+            </td>
+            <td class="td1_3">
+                @Html.DropDownList("DdlPowerGroupID", ViewBag.listRule as IEnumerable<SelectListItem>, "不限")
+            </td>
+            <td class="td1_2">
+                部门单位
+            </td>
+            <td class="td1_3">
+                @Html.DropDownList("DdlDepartmentID", ViewBag.listDepartment as IEnumerable<SelectListItem>, "不限")
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                登录名
+            </td>
+            <td class="td1_3">
+                @Html.TextBox("TxtName")
+            </td>
+            <td class="td1_2">
+                是否可用
+            </td>
+            <td class="td1_3">
+                @Html.DropDownList("DdlEnableStatus", ViewBag.EnableStatus as IEnumerable<SelectListItem>, "不限")
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                群组
+            </td>
+            <td class="td1_3">
+                @Html.DropDownList("DdlMemberGroup", ViewBag.listMemberGroup as IEnumerable<SelectListItem>, "不限")
+            </td>
+            <td class="td1_2" colspan="2">
+                <input type="button" value="搜索" class="BigButton" onclick="BtnSch_Click();" />
+                <input type="button" value="导出搜索结果" class="BigButton" onclick="BtnExport_Click();" />
+
+            </td>
+        </tr>
+
+    </tbody>
+</table>
+<table class="table">
+    <tr>
+        <th>
+            选择
+        </th>
+        <th>
+            ID
+        </th>
+        <th>
+            登录名<br />(真实姓名)
+        </th>
+        <th>
+            部门单位
+        </th>
+        <th>
+            学科
+        </th>
+        <th>
+            角色权限
+        </th>
+        <th>
+            绑定
+        </th>
+        <th>
+            是否启用
+        </th>
+        <th style="width:95px;">操作</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.CheckBox("CbSelect", false, new { @class= "form-control",value=item.ID })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ID)
+            </td>
+            <td style="text-align:left;min-width:180px;">
+                @Html.DisplayFor(modelItem => item.Code)
+                <br />
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td style="min-width:150px;">
+                @Html.DisplayFor(modelItem => item.DepartmentInfo.Name)
+            </td>
+            <td>
+                @(string.Join("、", item.SubjectInfo.Select(p => p.Name)))
+            </td>
+            <td>
+                @(string.Join("、",item.RuleInfo.Select(p=>p.Name)))
+            </td>
+            <td>
+                @*@item.WechatOpenID*@
+                <div>
+                    @item.WechatNameNick
+                    <img src="@item.WechatHeadImg" style="width:25px;height:25px;" />
+                </div>
+            </td>
+            <td>
+                @(((bool)item.Enable) ? "启用" : "禁用")
+            </td>
+            <td>
+                @if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.PP系统帐户管理.PPP用户管理.编辑))
+                {
+                    <a href="javascript:Layer('@Url.Action("Edit", new { id = item.ID })')" title="编辑">
+                        编辑
+                    </a>
+                }
+                |
+
+                @if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.PP系统帐户管理.PPP用户管理.删除))
+                {
+                    <a href="javascript:BtnDelete_Click(@item.ID)" title="删除"
+                       onclick="return confirm('确定要删除数据吗？')">
+                        删除
+                    </a>
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+<div class="PageCotainer">
+    <p class="PageInfoMain">共 @Model.PageCount 页 | @Model.TotalItemCount 条数据</p>
+    @Html.PagedListPager(Model, page => Url.Action("Index", new
+{
+    page,
+    PowerGroupID = ViewBag.DdlPowerGroupID,
+    DepartmentID = ViewBag.DdlDepartmentID,
+    Name = ViewBag.TxtName,
+    EnableStatus = ViewBag.DdlEnableStatus,
+    Subject = ViewBag.Subject
+
+}))
+</div>

@@ -1,0 +1,49 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+@model PlanCategoryInfo
+
+@{
+    ViewBag.Title = "新建";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+}
+
+@section head{
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            alert(data.ErrorMsg);
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            location.href = "@Url.Action("Detail")/"+data.Data.ID;
+
+        }
+        function OnBegin() {
+
+        }
+    </script>
+}
+
+@using (Ajax.BeginForm("Create", "PlanCategory", new { area = "MP" }, new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="weui_cells">
+
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">名称</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "weui_input" } })
+           </div>
+        </div>
+
+        <div class="weui_cell weui_cell_switch">
+            <div class="weui_cell_hd weui_cell_primary">是否可用</div>
+            <div class="weui_cell_ft">
+                @Html.CheckBoxFor(model => model.Enable, new { @class = "weui_switch", @checked = "checked" })
+            </div>
+        </div>
+        <div class="weui_btn_area">
+            <input type="submit" value="提交" class="weui_btn weui_btn_primary" />
+        </div>
+    </div>
+}

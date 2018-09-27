@@ -1,0 +1,91 @@
+﻿@using Vivo.Model;
+
+@{
+    ViewBag.Title = "EamilSetting";
+    Layout = "~/Areas/MP/Views/Shared/_Layout.cshtml";
+
+    ProfilesInfo SenderName = (ProfilesInfo)ViewBag.SenderName;
+    ProfilesInfo SenderHostName = (ProfilesInfo)ViewBag.SenderHostName;
+    ProfilesInfo SenderEmailAddress = (ProfilesInfo)ViewBag.SenderEmailAddress;
+    ProfilesInfo SenderEmailPwd = (ProfilesInfo)ViewBag.SenderEmailPwd;
+    ProfilesInfo SenderEmailPort = (ProfilesInfo)ViewBag.SenderEmailPort;
+    ProfilesInfo ReplyAddress = (ProfilesInfo)ViewBag.ReplyAddress;
+    ProfilesInfo ReplyDisplayName = (ProfilesInfo)ViewBag.ReplyDisplayName;
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <input type="hidden" id="TimeStamp" name="TimeStamp" value="@DateTime.Now.ToString("fffff")" />
+    <table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+        <tr>
+            <td colspan="3" class="td1_1">
+                邮件服务器参数配置
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                发件人显示名
+            </td>
+            <td class="td1_3">
+                @Html.TextBox("SenderName", SenderName.Value)
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                发件邮件主机
+            </td>
+            <td class="td1_3">
+                @Html.TextBox("SenderHostName", SenderHostName.Value)
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                发件邮箱地址
+            </td>
+            <td class="td1_3">
+                @Html.TextBox("SenderEmailAddress", SenderEmailAddress.Value)
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                发件邮箱密码
+            </td>
+            <td class="td1_3">
+                @Html.TextBox("SenderEmailPwd", SenderEmailPwd.Value)
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                发件邮箱端口
+            </td>
+            <td class="td1_3">
+                @Html.TextBox("SenderEmailPort", SenderEmailPort.Value)
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                回复地址
+            </td>
+            <td class="td1_3">
+                @Html.TextBox("ReplyAddress", ReplyAddress.Value)
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                发件人显示名
+            </td>
+            <td class="td1_3">
+                @Html.TextBox("ReplyDisplayName", ReplyDisplayName.Value)
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2" colspan="2">
+                <input type="submit" value="提交" class="btn btn-default" />
+            </td>
+        </tr>
+
+    </table>
+
+}

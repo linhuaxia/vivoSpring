@@ -1,0 +1,110 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+@using Tool;
+
+@model TimeLineInfo
+
+@{
+    ViewBag.Title = "新建";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+    UserInfo CurrentUser = UserBLL.GetCurrent();
+    int CurrentUserDefaultSubjectID = CurrentUser.SubjectInfo.FirstOrDefault() == null ? 0 : CurrentUser.SubjectInfo.FirstOrDefault().ID;
+}
+
+@section head{
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            layer.open({ content: data.ErrorMsg, skin: 'msg', time: 10, shadeClose: false });
+            //alert(data.ErrorMsg);
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            window.parent.SetTimeLineID(data.Data.ID);
+            
+
+        }
+        function OnBegin() {
+
+        }
+        $(function () {
+            $("#WapHead").hide();
+            $("#DdlShareTo").change(function () {
+                var TargetID = $(this).val();
+                BtnShareTo_Click(TargetID);
+            });
+        });
+        
+        function BtnShareTo_Click(TargetID) {
+            var HTML = "";
+            if (0 == TargetID) {
+                HTML = '<div class="weui_cells_tips">请提交分享后，再点击右上角分享展开分享功能</div>';
+                $("#DivUserRander").html(HTML);
+                return;
+            }
+            var URL = "@Url.Action("APIQueue","User",new { DepartmentID = CurrentUser .DepartmentID})";
+            if (TargetID==1) {
+                URL += "&SubjectID=@CurrentUserDefaultSubjectID";
+            }
+            $.get(URL, function (data) {
+                if (data.ErrorCode!=0) {
+                    return true;
+                }
+                $(data.Data).each(function (index,item) {
+                    HTML += '<label class="weui_cell weui_check_label" for="u'+item.ID+'">';
+                    HTML += '   <div class="weui_cell_hd">';
+                    HTML += '       <input type="checkbox" class="weui_check" name="checkboxUser" value="'+item.ID+'" id="u'+item.ID+'" checked="checked">';
+                    HTML += '       <i class="weui_icon_checked"></i>';
+                    HTML += '   </div>';
+                    HTML += '   <div class="weui_cell_bd weui_cell_primary">';
+                    HTML += '       <p>' + item.Name+'</p>';
+                    HTML += '   </div>';
+                    HTML += '</label>';
+                });
+                $("#DivUserRander").html(HTML);
+            });
+        }
+    </script>
+}
+
+@using (Ajax.BeginForm("Create","TimeLine", new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+{
+    @Html.HiddenFor(model=>model.ResearchID)
+    @Html.AntiForgeryToken()
+    <div class="weui_cells weui_cells_form" style="min-height:85vh;">
+        <div class="weui_cell weui_cell_select weui_select_after">
+            <div class="weui_cell_hd">
+                <label for="" class="weui_label">分享对象</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <select class="weui_select" name="DdlShareTo" id="DdlShareTo">
+                    <option value="0">微信好友或朋友圈</option>
+                    <option value="1">我的学科</option>
+                    <option value="2">所有人</option>
+                </select>
+            </div>
+        </div>
+        <div class="weui_cells_title">分享内容</div>
+        <div class="weui_cell">
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.TextAreaFor(model => model.Detail, new { placeholder = "请输入内容" ,rows = "5", @class = "weui_textarea" })
+            </div>
+        </div>
+
+        <div class="weui_cells weui_cells_checkbox" id="DivUserRander">
+            @*<label class="weui_cell weui_check_label" for="s11">
+                <div class="weui_cell_hd">
+                    <input type="checkbox" class="weui_check" name="checkbox1" id="s11" checked="checked">
+                    <i class="weui_icon_checked"></i>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p>standard is dealt for u.</p>
+                </div>
+            </label>*@
+        </div>
+        <div style="display:none;"><input type="submit" id="BtnSubmit" /></div>
+    </div>
+
+
+}

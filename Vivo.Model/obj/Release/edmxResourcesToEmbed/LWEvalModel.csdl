@@ -1,0 +1,1367 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="LWEvalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="LWEvalEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="CityInfo" EntityType="LWEvalModel.CityInfo" />
+    <EntitySet Name="DepartmentInfo" EntityType="LWEvalModel.DepartmentInfo" />
+    <EntitySet Name="DepartmentTypeInfo" EntityType="LWEvalModel.DepartmentTypeInfo" />
+    <EntitySet Name="EvalTemplateInfo" EntityType="LWEvalModel.EvalTemplateInfo" />
+    <EntitySet Name="LogInfo" EntityType="LWEvalModel.LogInfo" />
+    <EntitySet Name="MemberGroupInfo" EntityType="LWEvalModel.MemberGroupInfo" />
+    <EntitySet Name="PowerActionInfo" EntityType="LWEvalModel.PowerActionInfo" />
+    <EntitySet Name="ProfilesInfo" EntityType="LWEvalModel.ProfilesInfo" />
+    <EntitySet Name="ProvinceInfo" EntityType="LWEvalModel.ProvinceInfo" />
+    <EntitySet Name="RepOtherInfo" EntityType="LWEvalModel.RepOtherInfo" />
+    <EntitySet Name="RepQualityMonitorInfo" EntityType="LWEvalModel.RepQualityMonitorInfo" />
+    <EntitySet Name="RepResearchNormalInfo" EntityType="LWEvalModel.RepResearchNormalInfo" />
+    <EntitySet Name="ResearchChatInfo" EntityType="LWEvalModel.ResearchChatInfo" />
+    <EntitySet Name="ResearchInfo" EntityType="LWEvalModel.ResearchInfo" />
+    <EntitySet Name="ResearchItemInfo" EntityType="LWEvalModel.ResearchItemInfo" />
+    <EntitySet Name="ResearchNoteAttachmentInfo" EntityType="LWEvalModel.ResearchNoteAttachmentInfo" />
+    <EntitySet Name="ResearchNoteInfo" EntityType="LWEvalModel.ResearchNoteInfo" />
+    <EntitySet Name="ResearchPlanAttachmentInfo" EntityType="LWEvalModel.ResearchPlanAttachmentInfo" />
+    <EntitySet Name="ResearchPlanInfo" EntityType="LWEvalModel.ResearchPlanInfo" />
+    <EntitySet Name="ResearchPlanSubjectSummaryInfo" EntityType="LWEvalModel.ResearchPlanSubjectSummaryInfo" />
+    <EntitySet Name="ResearchPlanUserInfo" EntityType="LWEvalModel.ResearchPlanUserInfo" />
+    <EntitySet Name="RuleInfo" EntityType="LWEvalModel.RuleInfo" />
+    <EntitySet Name="SubjectInfo" EntityType="LWEvalModel.SubjectInfo" />
+    <EntitySet Name="sysdiagrams" EntityType="LWEvalModel.sysdiagrams" />
+    <EntitySet Name="TemplateItemInfo" EntityType="LWEvalModel.TemplateItemInfo" />
+    <EntitySet Name="TemplateOptionInfo" EntityType="LWEvalModel.TemplateOptionInfo" />
+    <EntitySet Name="TimeLineCommonInfo" EntityType="LWEvalModel.TimeLineCommonInfo" />
+    <EntitySet Name="TimeLineInfo" EntityType="LWEvalModel.TimeLineInfo" />
+    <EntitySet Name="UserActionInfo" EntityType="LWEvalModel.UserActionInfo" />
+    <EntitySet Name="UserInfo" EntityType="LWEvalModel.UserInfo" />
+    <EntitySet Name="WechatMsgInfo" EntityType="LWEvalModel.WechatMsgInfo" />
+    <AssociationSet Name="FK_CityInfo_ProvinceInfo" Association="LWEvalModel.FK_CityInfo_ProvinceInfo">
+      <End Role="ProvinceInfo" EntitySet="ProvinceInfo" />
+      <End Role="CityInfo" EntitySet="CityInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RepOtherInfo_DepartmentInfo" Association="LWEvalModel.FK_RepOtherInfo_DepartmentInfo">
+      <End Role="DepartmentInfo" EntitySet="DepartmentInfo" />
+      <End Role="RepOtherInfo" EntitySet="RepOtherInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RepResearchNormalInfo_DepartmentInfo" Association="LWEvalModel.FK_RepResearchNormalInfo_DepartmentInfo">
+      <End Role="DepartmentInfo" EntitySet="DepartmentInfo" />
+      <End Role="RepResearchNormalInfo" EntitySet="RepResearchNormalInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchPlanInfo_DepartmentInfo" Association="LWEvalModel.FK_ResearchPlanInfo_DepartmentInfo">
+      <End Role="DepartmentInfo" EntitySet="DepartmentInfo" />
+      <End Role="ResearchPlanInfo" EntitySet="ResearchPlanInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserInfo_DepartmentInfo" Association="LWEvalModel.FK_UserInfo_DepartmentInfo">
+      <End Role="DepartmentInfo" EntitySet="DepartmentInfo" />
+      <End Role="UserInfo" EntitySet="UserInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SubjectInfo_DepartmentTypeInfo" Association="LWEvalModel.FK_SubjectInfo_DepartmentTypeInfo">
+      <End Role="DepartmentTypeInfo" EntitySet="DepartmentTypeInfo" />
+      <End Role="SubjectInfo" EntitySet="SubjectInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchPlanInfo_TemplateInfo" Association="LWEvalModel.FK_ResearchPlanInfo_TemplateInfo">
+      <End Role="EvalTemplateInfo" EntitySet="EvalTemplateInfo" />
+      <End Role="ResearchPlanInfo" EntitySet="ResearchPlanInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TemplateItemInfo_TemplateInfo1" Association="LWEvalModel.FK_TemplateItemInfo_TemplateInfo1">
+      <End Role="EvalTemplateInfo" EntitySet="EvalTemplateInfo" />
+      <End Role="TemplateItemInfo" EntitySet="TemplateItemInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TemplateOptionInfo_EvalTemplateInfo" Association="LWEvalModel.FK_TemplateOptionInfo_EvalTemplateInfo">
+      <End Role="EvalTemplateInfo" EntitySet="EvalTemplateInfo" />
+      <End Role="TemplateOptionInfo" EntitySet="TemplateOptionInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserActionInfo_ActionInfo" Association="LWEvalModel.FK_UserActionInfo_ActionInfo">
+      <End Role="PowerActionInfo" EntitySet="PowerActionInfo" />
+      <End Role="UserActionInfo" EntitySet="UserActionInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RepOtherInfo_UserInfo" Association="LWEvalModel.FK_RepOtherInfo_UserInfo">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="RepOtherInfo" EntitySet="RepOtherInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RepQualityMonitorInfo_UserInfo" Association="LWEvalModel.FK_RepQualityMonitorInfo_UserInfo">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="RepQualityMonitorInfo" EntitySet="RepQualityMonitorInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RepResearchNormalInfo_UserInfo" Association="LWEvalModel.FK_RepResearchNormalInfo_UserInfo">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="RepResearchNormalInfo" EntitySet="RepResearchNormalInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchChatInfo_ResearchPlanInfo" Association="LWEvalModel.FK_ResearchChatInfo_ResearchPlanInfo">
+      <End Role="ResearchPlanInfo" EntitySet="ResearchPlanInfo" />
+      <End Role="ResearchChatInfo" EntitySet="ResearchChatInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchChatInfo_UserInfo" Association="LWEvalModel.FK_ResearchChatInfo_UserInfo">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="ResearchChatInfo" EntitySet="ResearchChatInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchInfo_ResearchPlanInfo" Association="LWEvalModel.FK_ResearchInfo_ResearchPlanInfo">
+      <End Role="ResearchPlanInfo" EntitySet="ResearchPlanInfo" />
+      <End Role="ResearchInfo" EntitySet="ResearchInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchInfo_SubjectInfo" Association="LWEvalModel.FK_ResearchInfo_SubjectInfo">
+      <End Role="SubjectInfo" EntitySet="SubjectInfo" />
+      <End Role="ResearchInfo" EntitySet="ResearchInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchInfo_UserInfo" Association="LWEvalModel.FK_ResearchInfo_UserInfo">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="ResearchInfo" EntitySet="ResearchInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchItemInfo_ResearchInfo1" Association="LWEvalModel.FK_ResearchItemInfo_ResearchInfo1">
+      <End Role="ResearchInfo" EntitySet="ResearchInfo" />
+      <End Role="ResearchItemInfo" EntitySet="ResearchItemInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchNoteInfo_ResearchInfo" Association="LWEvalModel.FK_ResearchNoteInfo_ResearchInfo">
+      <End Role="ResearchInfo" EntitySet="ResearchInfo" />
+      <End Role="ResearchNoteInfo" EntitySet="ResearchNoteInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TimeLineInfo_ResearchInfo" Association="LWEvalModel.FK_TimeLineInfo_ResearchInfo">
+      <End Role="ResearchInfo" EntitySet="ResearchInfo" />
+      <End Role="TimeLineInfo" EntitySet="TimeLineInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchItemInfo_TemplateItemInfo" Association="LWEvalModel.FK_ResearchItemInfo_TemplateItemInfo">
+      <End Role="TemplateItemInfo" EntitySet="TemplateItemInfo" />
+      <End Role="ResearchItemInfo" EntitySet="ResearchItemInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchNoteAttachmentInfo_ResearchNoteInfo" Association="LWEvalModel.FK_ResearchNoteAttachmentInfo_ResearchNoteInfo">
+      <End Role="ResearchNoteInfo" EntitySet="ResearchNoteInfo" />
+      <End Role="ResearchNoteAttachmentInfo" EntitySet="ResearchNoteAttachmentInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchPlanAttachmentInfo_ResearchPlanInfo" Association="LWEvalModel.FK_ResearchPlanAttachmentInfo_ResearchPlanInfo">
+      <End Role="ResearchPlanInfo" EntitySet="ResearchPlanInfo" />
+      <End Role="ResearchPlanAttachmentInfo" EntitySet="ResearchPlanAttachmentInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchPlanSubjectSummaryInfo_ResearchPlanInfo" Association="LWEvalModel.FK_ResearchPlanSubjectSummaryInfo_ResearchPlanInfo">
+      <End Role="ResearchPlanInfo" EntitySet="ResearchPlanInfo" />
+      <End Role="ResearchPlanSubjectSummaryInfo" EntitySet="ResearchPlanSubjectSummaryInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchPlanUserInfo_ResearchPlanInfo" Association="LWEvalModel.FK_ResearchPlanUserInfo_ResearchPlanInfo">
+      <End Role="ResearchPlanInfo" EntitySet="ResearchPlanInfo" />
+      <End Role="ResearchPlanUserInfo" EntitySet="ResearchPlanUserInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchPlanSubjectSummaryInfo_SubjectInfo" Association="LWEvalModel.FK_ResearchPlanSubjectSummaryInfo_SubjectInfo">
+      <End Role="SubjectInfo" EntitySet="SubjectInfo" />
+      <End Role="ResearchPlanSubjectSummaryInfo" EntitySet="ResearchPlanSubjectSummaryInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchPlanSubjectSummaryInfo_UserInfo" Association="LWEvalModel.FK_ResearchPlanSubjectSummaryInfo_UserInfo">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="ResearchPlanSubjectSummaryInfo" EntitySet="ResearchPlanSubjectSummaryInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchPlanUserInfo_UserInfo" Association="LWEvalModel.FK_ResearchPlanUserInfo_UserInfo">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="ResearchPlanUserInfo" EntitySet="ResearchPlanUserInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TimeLineCommonInfo_TimeLineInfo" Association="LWEvalModel.FK_TimeLineCommonInfo_TimeLineInfo">
+      <End Role="TimeLineInfo" EntitySet="TimeLineInfo" />
+      <End Role="TimeLineCommonInfo" EntitySet="TimeLineCommonInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TimeLineCommonInfo_UserInfo" Association="LWEvalModel.FK_TimeLineCommonInfo_UserInfo">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="TimeLineCommonInfo" EntitySet="TimeLineCommonInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserActionInfo_UserInfo" Association="LWEvalModel.FK_UserActionInfo_UserInfo">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="UserActionInfo" EntitySet="UserActionInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WechatMsgInfo_UserInfo" Association="LWEvalModel.FK_WechatMsgInfo_UserInfo">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="WechatMsgInfo" EntitySet="WechatMsgInfo" />
+    </AssociationSet>
+    <AssociationSet Name="DepartmentTypeInfoDepartmentInfo" Association="LWEvalModel.DepartmentTypeInfoDepartmentInfo">
+      <End Role="DepartmentInfo" EntitySet="DepartmentInfo" />
+      <End Role="DepartmentTypeInfo" EntitySet="DepartmentTypeInfo" />
+    </AssociationSet>
+    <AssociationSet Name="MemberGroupInfoUserInfo" Association="LWEvalModel.MemberGroupInfoUserInfo">
+      <End Role="MemberGroupInfo" EntitySet="MemberGroupInfo" />
+      <End Role="UserInfo" EntitySet="UserInfo" />
+    </AssociationSet>
+    <AssociationSet Name="RuleInfoPowerActionInfo" Association="LWEvalModel.RuleInfoPowerActionInfo">
+      <End Role="PowerActionInfo" EntitySet="PowerActionInfo" />
+      <End Role="RuleInfo" EntitySet="RuleInfo" />
+    </AssociationSet>
+    <AssociationSet Name="TimeLineInfoUserInfo" Association="LWEvalModel.TimeLineInfoUserInfo">
+      <End Role="TimeLineInfo" EntitySet="TimeLineInfo" />
+      <End Role="UserInfo" EntitySet="UserInfo" />
+    </AssociationSet>
+    <AssociationSet Name="UserInfoRuleInfo" Association="LWEvalModel.UserInfoRuleInfo">
+      <End Role="RuleInfo" EntitySet="RuleInfo" />
+      <End Role="UserInfo" EntitySet="UserInfo" />
+    </AssociationSet>
+    <AssociationSet Name="UserInfoSubjectInfo" Association="LWEvalModel.UserInfoSubjectInfo">
+      <End Role="SubjectInfo" EntitySet="SubjectInfo" />
+      <End Role="UserInfo" EntitySet="UserInfo" />
+    </AssociationSet>
+    <EntitySet Name="ResearchPlanSubjectSummaryItemInfo" EntityType="LWEvalModel.ResearchPlanSubjectSummaryItemInfo" />
+    <EntitySet Name="TemplateSubjectSummaryInfo" EntityType="LWEvalModel.TemplateSubjectSummaryInfo" />
+    <AssociationSet Name="FK_TemplateSubjectSummaryInfo_EvalTemplateInfo" Association="LWEvalModel.FK_TemplateSubjectSummaryInfo_EvalTemplateInfo">
+      <End Role="EvalTemplateInfo" EntitySet="EvalTemplateInfo" />
+      <End Role="TemplateSubjectSummaryInfo" EntitySet="TemplateSubjectSummaryInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchPlanSubjectSummaryItemInfo_ResearchPlanSubjectSummaryInfo" Association="LWEvalModel.FK_ResearchPlanSubjectSummaryItemInfo_ResearchPlanSubjectSummaryInfo">
+      <End Role="ResearchPlanSubjectSummaryInfo" EntitySet="ResearchPlanSubjectSummaryInfo" />
+      <End Role="ResearchPlanSubjectSummaryItemInfo" EntitySet="ResearchPlanSubjectSummaryItemInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchPlanSubjectSummaryItemInfo_TemplateSubjectSummaryInfo" Association="LWEvalModel.FK_ResearchPlanSubjectSummaryItemInfo_TemplateSubjectSummaryInfo">
+      <End Role="TemplateSubjectSummaryInfo" EntitySet="TemplateSubjectSummaryInfo" />
+      <End Role="ResearchPlanSubjectSummaryItemInfo" EntitySet="ResearchPlanSubjectSummaryItemInfo" />
+    </AssociationSet>
+    <EntitySet Name="PlanCategoryInfo" EntityType="LWEvalModel.PlanCategoryInfo" />
+    <AssociationSet Name="FK_ResearchPlanInfo_PlanCategoryInfo" Association="LWEvalModel.FK_ResearchPlanInfo_PlanCategoryInfo">
+      <End Role="PlanCategoryInfo" EntitySet="PlanCategoryInfo" />
+      <End Role="ResearchPlanInfo" EntitySet="ResearchPlanInfo" />
+    </AssociationSet>
+    <EntitySet Name="NoticeAttachmentInfo" EntityType="LWEvalModel.NoticeAttachmentInfo" />
+    <EntitySet Name="NoticeInfo" EntityType="LWEvalModel.NoticeInfo" />
+    <EntitySet Name="NoticeUserInfo" EntityType="LWEvalModel.NoticeUserInfo" />
+    <AssociationSet Name="FK_NoticeAttachmentInfo_NoticeUserInfo" Association="LWEvalModel.FK_NoticeAttachmentInfo_NoticeUserInfo">
+      <End Role="NoticeUserInfo" EntitySet="NoticeUserInfo" />
+      <End Role="NoticeAttachmentInfo" EntitySet="NoticeAttachmentInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NoticeInfo_UserInfo" Association="LWEvalModel.FK_NoticeInfo_UserInfo">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="NoticeInfo" EntitySet="NoticeInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NoticeUserInfo_NoticeInfo" Association="LWEvalModel.FK_NoticeUserInfo_NoticeInfo">
+      <End Role="NoticeInfo" EntitySet="NoticeInfo" />
+      <End Role="NoticeUserInfo" EntitySet="NoticeUserInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NoticeUserInfo_UserInfo" Association="LWEvalModel.FK_NoticeUserInfo_UserInfo">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="NoticeUserInfo" EntitySet="NoticeUserInfo" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="CityInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ProvinceID" Type="Int32" Nullable="false" />
+    <Property Name="Enable" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="ProvinceInfo" Relationship="LWEvalModel.FK_CityInfo_ProvinceInfo" FromRole="CityInfo" ToRole="ProvinceInfo" />
+  </EntityType>
+  <EntityType Name="DepartmentInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ParentID" Type="Int32" Nullable="false" />
+    <Property Name="Enable" Type="Boolean" Nullable="false" />
+    <Property Name="OrderID" Type="Int32" Nullable="false" />
+    <Property Name="TypeEmun" Type="Int32" Nullable="false" />
+    <Property Name="Address" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="RepOtherInfo" Relationship="LWEvalModel.FK_RepOtherInfo_DepartmentInfo" FromRole="DepartmentInfo" ToRole="RepOtherInfo" />
+    <NavigationProperty Name="RepResearchNormalInfo" Relationship="LWEvalModel.FK_RepResearchNormalInfo_DepartmentInfo" FromRole="DepartmentInfo" ToRole="RepResearchNormalInfo" />
+    <NavigationProperty Name="ResearchPlanInfo" Relationship="LWEvalModel.FK_ResearchPlanInfo_DepartmentInfo" FromRole="DepartmentInfo" ToRole="ResearchPlanInfo" />
+    <NavigationProperty Name="UserInfo" Relationship="LWEvalModel.FK_UserInfo_DepartmentInfo" FromRole="DepartmentInfo" ToRole="UserInfo" />
+    <NavigationProperty Name="DepartmentTypeInfo" Relationship="LWEvalModel.DepartmentTypeInfoDepartmentInfo" FromRole="DepartmentInfo" ToRole="DepartmentTypeInfo" />
+  </EntityType>
+  <EntityType Name="DepartmentTypeInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SortID" Type="Int32" Nullable="false" />
+    <Property Name="Enable" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="SubjectInfo" Relationship="LWEvalModel.FK_SubjectInfo_DepartmentTypeInfo" FromRole="DepartmentTypeInfo" ToRole="SubjectInfo" />
+    <NavigationProperty Name="DepartmentInfo" Relationship="LWEvalModel.DepartmentTypeInfoDepartmentInfo" FromRole="DepartmentTypeInfo" ToRole="DepartmentInfo" />
+  </EntityType>
+  <EntityType Name="EvalTemplateInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SortID" Type="Int32" Nullable="false" />
+    <Property Name="Enable" Type="Boolean" Nullable="false" />
+    <Property Name="Amin" Type="Int32" Nullable="false" />
+    <Property Name="BMin" Type="Int32" Nullable="false" />
+    <Property Name="CMin" Type="Int32" Nullable="false" />
+    <Property Name="DMin" Type="Int32" Nullable="false" />
+    <Property Name="TypeFlag" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="ResearchPlanInfo" Relationship="LWEvalModel.FK_ResearchPlanInfo_TemplateInfo" FromRole="EvalTemplateInfo" ToRole="ResearchPlanInfo" />
+    <NavigationProperty Name="TemplateItemInfo" Relationship="LWEvalModel.FK_TemplateItemInfo_TemplateInfo1" FromRole="EvalTemplateInfo" ToRole="TemplateItemInfo" />
+    <NavigationProperty Name="TemplateOptionInfo" Relationship="LWEvalModel.FK_TemplateOptionInfo_EvalTemplateInfo" FromRole="EvalTemplateInfo" ToRole="TemplateOptionInfo" />
+    <NavigationProperty Name="TemplateSubjectSummaryInfo" Relationship="LWEvalModel.FK_TemplateSubjectSummaryInfo_EvalTemplateInfo" FromRole="EvalTemplateInfo" ToRole="TemplateSubjectSummaryInfo" />
+  </EntityType>
+  <EntityType Name="LogInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Category" Type="String" Nullable="false" MaxLength="3000" FixedLength="false" Unicode="true" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Detail" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="AddDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Serious" Type="Int16" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MemberGroupInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SortID" Type="Int32" Nullable="false" />
+    <Property Name="Enable" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="UserInfo" Relationship="LWEvalModel.MemberGroupInfoUserInfo" FromRole="MemberGroupInfo" ToRole="UserInfo" />
+  </EntityType>
+  <EntityType Name="PowerActionInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NewID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CategoryID" Type="Int32" Nullable="false" />
+    <Property Name="ParentID" Type="Int32" Nullable="false" />
+    <Property Name="ParentID2" Type="Int32" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Remark" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Url" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="HttpMethod" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Sort" Type="Int32" Nullable="false" />
+    <Property Name="Enable" Type="Boolean" Nullable="false" />
+    <Property Name="TypeEnum" Type="Int16" Nullable="false" />
+    <Property Name="IconURL" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RemarkTips" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="UserActionInfo" Relationship="LWEvalModel.FK_UserActionInfo_ActionInfo" FromRole="PowerActionInfo" ToRole="UserActionInfo" />
+    <NavigationProperty Name="RuleInfo" Relationship="LWEvalModel.RuleInfoPowerActionInfo" FromRole="PowerActionInfo" ToRole="RuleInfo" />
+  </EntityType>
+  <EntityType Name="ProfilesInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Key" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Value" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="ProvinceInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Enable" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="CityInfo" Relationship="LWEvalModel.FK_CityInfo_ProvinceInfo" FromRole="ProvinceInfo" ToRole="CityInfo" />
+  </EntityType>
+  <EntityType Name="RepOtherInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DepartmentID" Type="Int32" Nullable="false" />
+    <Property Name="CreateUserID" Type="Int32" Nullable="false" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Memo" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Int32" Nullable="false" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="DateEnd" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="TypeFlag" Type="Int32" Nullable="false" />
+    <Property Name="Times" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="DepartmentInfo" Relationship="LWEvalModel.FK_RepOtherInfo_DepartmentInfo" FromRole="RepOtherInfo" ToRole="DepartmentInfo" />
+    <NavigationProperty Name="UserInfo" Relationship="LWEvalModel.FK_RepOtherInfo_UserInfo" FromRole="RepOtherInfo" ToRole="UserInfo" />
+  </EntityType>
+  <EntityType Name="RepQualityMonitorInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CreateUserID" Type="Int32" Nullable="false" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Memo" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Int32" Nullable="false" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="DateEnd" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="TypeFlag" Type="Int32" Nullable="false" />
+    <Property Name="Times" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="UserInfo" Relationship="LWEvalModel.FK_RepQualityMonitorInfo_UserInfo" FromRole="RepQualityMonitorInfo" ToRole="UserInfo" />
+  </EntityType>
+  <EntityType Name="RepResearchNormalInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DepartmentID" Type="Int32" Nullable="false" />
+    <Property Name="CreateUserID" Type="Int32" Nullable="false" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Memo" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Int32" Nullable="false" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="DateEnd" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="TypeFlag" Type="Int32" Nullable="false" />
+    <Property Name="Times" Type="Int32" Nullable="false" />
+    <Property Name="Lessions" Type="Int32" Nullable="false" />
+    <Property Name="Days" Type="Int32" Nullable="false" />
+    <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Detail" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="DepartmentInfo" Relationship="LWEvalModel.FK_RepResearchNormalInfo_DepartmentInfo" FromRole="RepResearchNormalInfo" ToRole="DepartmentInfo" />
+    <NavigationProperty Name="UserInfo" Relationship="LWEvalModel.FK_RepResearchNormalInfo_UserInfo" FromRole="RepResearchNormalInfo" ToRole="UserInfo" />
+  </EntityType>
+  <EntityType Name="ResearchChatInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ResearchPlanID" Type="Int32" Nullable="false" />
+    <Property Name="GradeName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ClassName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LessionNumber" Type="Int32" Nullable="false" />
+    <Property Name="CreateUserID" Type="Int32" Nullable="false" />
+    <Property Name="Detail" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="ResearchPlanInfo" Relationship="LWEvalModel.FK_ResearchChatInfo_ResearchPlanInfo" FromRole="ResearchChatInfo" ToRole="ResearchPlanInfo" />
+    <NavigationProperty Name="UserInfo" Relationship="LWEvalModel.FK_ResearchChatInfo_UserInfo" FromRole="ResearchChatInfo" ToRole="UserInfo" />
+  </EntityType>
+  <EntityType Name="ResearchInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="ResearchPlanID" Type="Int32" Nullable="false" />
+    <Property Name="SubjectID" Type="Int32" Nullable="false" />
+    <Property Name="lectureUserID" Type="Int32" Nullable="false" />
+    <Property Name="Topic" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LessionNumber" Type="Int32" Nullable="false" />
+    <Property Name="ClassName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="GradeName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SubjectiveOpinion" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="NoteMemo" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Int32" Nullable="false" />
+    <Property Name="ScoreTotal" Type="Int32" Nullable="false" />
+    <Property Name="ScoreLever" Type="Int32" Nullable="false" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="ResearchPlanInfo" Relationship="LWEvalModel.FK_ResearchInfo_ResearchPlanInfo" FromRole="ResearchInfo" ToRole="ResearchPlanInfo" />
+    <NavigationProperty Name="SubjectInfo" Relationship="LWEvalModel.FK_ResearchInfo_SubjectInfo" FromRole="ResearchInfo" ToRole="SubjectInfo" />
+    <NavigationProperty Name="UserInfo" Relationship="LWEvalModel.FK_ResearchInfo_UserInfo" FromRole="ResearchInfo" ToRole="UserInfo" />
+    <NavigationProperty Name="ResearchItemInfo" Relationship="LWEvalModel.FK_ResearchItemInfo_ResearchInfo1" FromRole="ResearchInfo" ToRole="ResearchItemInfo" />
+    <NavigationProperty Name="ResearchNoteInfo" Relationship="LWEvalModel.FK_ResearchNoteInfo_ResearchInfo" FromRole="ResearchInfo" ToRole="ResearchNoteInfo" />
+    <NavigationProperty Name="TimeLineInfo" Relationship="LWEvalModel.FK_TimeLineInfo_ResearchInfo" FromRole="ResearchInfo" ToRole="TimeLineInfo" />
+  </EntityType>
+  <EntityType Name="ResearchItemInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ResearchID" Type="Int32" Nullable="false" />
+    <Property Name="TemplateItemID" Type="Int32" Nullable="false" />
+    <Property Name="ScoreValue" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="ResearchInfo" Relationship="LWEvalModel.FK_ResearchItemInfo_ResearchInfo1" FromRole="ResearchItemInfo" ToRole="ResearchInfo" />
+    <NavigationProperty Name="TemplateItemInfo" Relationship="LWEvalModel.FK_ResearchItemInfo_TemplateItemInfo" FromRole="ResearchItemInfo" ToRole="TemplateItemInfo" />
+  </EntityType>
+  <EntityType Name="ResearchNoteAttachmentInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ResearchNoteID" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="PathRelative" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="MineType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ResearchNoteInfo" Relationship="LWEvalModel.FK_ResearchNoteAttachmentInfo_ResearchNoteInfo" FromRole="ResearchNoteAttachmentInfo" ToRole="ResearchNoteInfo" />
+  </EntityType>
+  <EntityType Name="ResearchNoteInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ResearchID" Type="Int32" Nullable="false" />
+    <Property Name="Detail" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="ResearchInfo" Relationship="LWEvalModel.FK_ResearchNoteInfo_ResearchInfo" FromRole="ResearchNoteInfo" ToRole="ResearchInfo" />
+    <NavigationProperty Name="ResearchNoteAttachmentInfo" Relationship="LWEvalModel.FK_ResearchNoteAttachmentInfo_ResearchNoteInfo" FromRole="ResearchNoteInfo" ToRole="ResearchNoteAttachmentInfo" />
+  </EntityType>
+  <EntityType Name="ResearchPlanAttachmentInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ResearchPlanID" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="PathRelative" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="MineType" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="CreateUserID" Type="Int32" Nullable="false" />
+    <Property Name="CreateUserName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TypeEnum" Type="Int32" Nullable="false" />
+    <Property Name="SubjectID" Type="Int32" Nullable="false" />
+    <Property Name="ShowName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Memo" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ResearchPlanInfo" Relationship="LWEvalModel.FK_ResearchPlanAttachmentInfo_ResearchPlanInfo" FromRole="ResearchPlanAttachmentInfo" ToRole="ResearchPlanInfo" />
+  </EntityType>
+  <EntityType Name="ResearchPlanInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DepartmentID" Type="Int32" Nullable="false" />
+    <Property Name="Address" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TemplateID" Type="Int32" Nullable="false" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="DateEnd" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Memo" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="TypeEnum" Type="Int32" Nullable="false" />
+    <Property Name="CreateUserID" Type="Int32" Nullable="false" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Status" Type="Int32" Nullable="false" />
+    <Property Name="AreaID" Type="Int32" Nullable="false" />
+    <Property Name="SummaryDetail" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SummaryUserName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="DepartmentInfo" Relationship="LWEvalModel.FK_ResearchPlanInfo_DepartmentInfo" FromRole="ResearchPlanInfo" ToRole="DepartmentInfo" />
+    <NavigationProperty Name="EvalTemplateInfo" Relationship="LWEvalModel.FK_ResearchPlanInfo_TemplateInfo" FromRole="ResearchPlanInfo" ToRole="EvalTemplateInfo" />
+    <NavigationProperty Name="ResearchChatInfo" Relationship="LWEvalModel.FK_ResearchChatInfo_ResearchPlanInfo" FromRole="ResearchPlanInfo" ToRole="ResearchChatInfo" />
+    <NavigationProperty Name="ResearchInfo" Relationship="LWEvalModel.FK_ResearchInfo_ResearchPlanInfo" FromRole="ResearchPlanInfo" ToRole="ResearchInfo" />
+    <NavigationProperty Name="ResearchPlanAttachmentInfo" Relationship="LWEvalModel.FK_ResearchPlanAttachmentInfo_ResearchPlanInfo" FromRole="ResearchPlanInfo" ToRole="ResearchPlanAttachmentInfo" />
+    <NavigationProperty Name="ResearchPlanSubjectSummaryInfo" Relationship="LWEvalModel.FK_ResearchPlanSubjectSummaryInfo_ResearchPlanInfo" FromRole="ResearchPlanInfo" ToRole="ResearchPlanSubjectSummaryInfo" />
+    <NavigationProperty Name="ResearchPlanUserInfo" Relationship="LWEvalModel.FK_ResearchPlanUserInfo_ResearchPlanInfo" FromRole="ResearchPlanInfo" ToRole="ResearchPlanUserInfo" />
+    <Property Name="CategoryID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="PlanCategoryInfo" Relationship="LWEvalModel.FK_ResearchPlanInfo_PlanCategoryInfo" FromRole="ResearchPlanInfo" ToRole="PlanCategoryInfo" />
+  </EntityType>
+  <EntityType Name="ResearchPlanSubjectSummaryInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Detail" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ResearchPlanID" Type="Int32" Nullable="false" />
+    <Property Name="SubjectID" Type="Int32" Nullable="false" />
+    <Property Name="CreateUserID" Type="Int32" Nullable="false" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="ResearchPlanInfo" Relationship="LWEvalModel.FK_ResearchPlanSubjectSummaryInfo_ResearchPlanInfo" FromRole="ResearchPlanSubjectSummaryInfo" ToRole="ResearchPlanInfo" />
+    <NavigationProperty Name="SubjectInfo" Relationship="LWEvalModel.FK_ResearchPlanSubjectSummaryInfo_SubjectInfo" FromRole="ResearchPlanSubjectSummaryInfo" ToRole="SubjectInfo" />
+    <NavigationProperty Name="UserInfo" Relationship="LWEvalModel.FK_ResearchPlanSubjectSummaryInfo_UserInfo" FromRole="ResearchPlanSubjectSummaryInfo" ToRole="UserInfo" />
+    <NavigationProperty Name="ResearchPlanSubjectSummaryItemInfo" Relationship="LWEvalModel.FK_ResearchPlanSubjectSummaryItemInfo_ResearchPlanSubjectSummaryInfo" FromRole="ResearchPlanSubjectSummaryInfo" ToRole="ResearchPlanSubjectSummaryItemInfo" />
+  </EntityType>
+  <EntityType Name="ResearchPlanUserInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ResearchPlanID" Type="Int32" Nullable="false" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="DateCreate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="DateConfirm" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IsConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="Memo" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SumRemark" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ResearchPlanInfo" Relationship="LWEvalModel.FK_ResearchPlanUserInfo_ResearchPlanInfo" FromRole="ResearchPlanUserInfo" ToRole="ResearchPlanInfo" />
+    <NavigationProperty Name="UserInfo" Relationship="LWEvalModel.FK_ResearchPlanUserInfo_UserInfo" FromRole="ResearchPlanUserInfo" ToRole="UserInfo" />
+  </EntityType>
+  <EntityType Name="RuleInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Enable" Type="Boolean" Nullable="false" />
+    <Property Name="Remark" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Sort" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="PowerActionInfo" Relationship="LWEvalModel.RuleInfoPowerActionInfo" FromRole="RuleInfo" ToRole="PowerActionInfo" />
+    <NavigationProperty Name="UserInfo" Relationship="LWEvalModel.UserInfoRuleInfo" FromRole="RuleInfo" ToRole="UserInfo" />
+    <Property Name="EnableManageRuleIDS" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="SubjectInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DepartmentTypeID" Type="Int32" Nullable="false" />
+    <Property Name="Enable" Type="Boolean" Nullable="false" />
+    <Property Name="SortID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="DepartmentTypeInfo" Relationship="LWEvalModel.FK_SubjectInfo_DepartmentTypeInfo" FromRole="SubjectInfo" ToRole="DepartmentTypeInfo" />
+    <NavigationProperty Name="ResearchInfo" Relationship="LWEvalModel.FK_ResearchInfo_SubjectInfo" FromRole="SubjectInfo" ToRole="ResearchInfo" />
+    <NavigationProperty Name="ResearchPlanSubjectSummaryInfo" Relationship="LWEvalModel.FK_ResearchPlanSubjectSummaryInfo_SubjectInfo" FromRole="SubjectInfo" ToRole="ResearchPlanSubjectSummaryInfo" />
+    <NavigationProperty Name="UserInfo" Relationship="LWEvalModel.UserInfoSubjectInfo" FromRole="SubjectInfo" ToRole="UserInfo" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="TemplateItemInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TemplateID" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MaxScore" Type="Int32" Nullable="false" />
+    <Property Name="SortID" Type="Int32" Nullable="false" />
+    <Property Name="Enable" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="EvalTemplateInfo" Relationship="LWEvalModel.FK_TemplateItemInfo_TemplateInfo1" FromRole="TemplateItemInfo" ToRole="EvalTemplateInfo" />
+    <NavigationProperty Name="ResearchItemInfo" Relationship="LWEvalModel.FK_ResearchItemInfo_TemplateItemInfo" FromRole="TemplateItemInfo" ToRole="ResearchItemInfo" />
+  </EntityType>
+  <EntityType Name="TemplateOptionInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TemplateID" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SortID" Type="Int32" Nullable="false" />
+    <Property Name="Enable" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="EvalTemplateInfo" Relationship="LWEvalModel.FK_TemplateOptionInfo_EvalTemplateInfo" FromRole="TemplateOptionInfo" ToRole="EvalTemplateInfo" />
+  </EntityType>
+  <EntityType Name="TimeLineCommonInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TimeLineID" Type="Int32" Nullable="false" />
+    <Property Name="CreateUserID" Type="Int32" Nullable="false" />
+    <Property Name="Detail" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="IsCommon" Type="Boolean" Nullable="false" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="TimeLineInfo" Relationship="LWEvalModel.FK_TimeLineCommonInfo_TimeLineInfo" FromRole="TimeLineCommonInfo" ToRole="TimeLineInfo" />
+    <NavigationProperty Name="UserInfo" Relationship="LWEvalModel.FK_TimeLineCommonInfo_UserInfo" FromRole="TimeLineCommonInfo" ToRole="UserInfo" />
+  </EntityType>
+  <EntityType Name="TimeLineInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ResearchID" Type="Int32" Nullable="false" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Detail" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ResearchInfo" Relationship="LWEvalModel.FK_TimeLineInfo_ResearchInfo" FromRole="TimeLineInfo" ToRole="ResearchInfo" />
+    <NavigationProperty Name="TimeLineCommonInfo" Relationship="LWEvalModel.FK_TimeLineCommonInfo_TimeLineInfo" FromRole="TimeLineInfo" ToRole="TimeLineCommonInfo" />
+    <NavigationProperty Name="UserInfo" Relationship="LWEvalModel.TimeLineInfoUserInfo" FromRole="TimeLineInfo" ToRole="UserInfo" />
+  </EntityType>
+  <EntityType Name="UserActionInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="ActionID" Type="Int32" Nullable="false" />
+    <Property Name="IsPass" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="PowerActionInfo" Relationship="LWEvalModel.FK_UserActionInfo_ActionInfo" FromRole="UserActionInfo" ToRole="PowerActionInfo" />
+    <NavigationProperty Name="UserInfo" Relationship="LWEvalModel.FK_UserActionInfo_UserInfo" FromRole="UserActionInfo" ToRole="UserInfo" />
+  </EntityType>
+  <EntityType Name="UserInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DepartmentID" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PassWord" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Tel" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="LastDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Enable" Type="Boolean" Nullable="false" />
+    <Property Name="LocationX" Type="Decimal" Nullable="false" Precision="18" Scale="15" />
+    <Property Name="LocationY" Type="Decimal" Nullable="false" Precision="18" Scale="15" />
+    <Property Name="WechatOpenID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="WechatNameNick" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="WechatHeadImg" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Sex" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="true" />
+    <Property Name="IDCard" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TypeID" Type="Int32" Nullable="false" />
+    <Property Name="DefaultSubjectID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="DepartmentInfo" Relationship="LWEvalModel.FK_UserInfo_DepartmentInfo" FromRole="UserInfo" ToRole="DepartmentInfo" />
+    <NavigationProperty Name="RepOtherInfo" Relationship="LWEvalModel.FK_RepOtherInfo_UserInfo" FromRole="UserInfo" ToRole="RepOtherInfo" />
+    <NavigationProperty Name="RepQualityMonitorInfo" Relationship="LWEvalModel.FK_RepQualityMonitorInfo_UserInfo" FromRole="UserInfo" ToRole="RepQualityMonitorInfo" />
+    <NavigationProperty Name="RepResearchNormalInfo" Relationship="LWEvalModel.FK_RepResearchNormalInfo_UserInfo" FromRole="UserInfo" ToRole="RepResearchNormalInfo" />
+    <NavigationProperty Name="ResearchChatInfo" Relationship="LWEvalModel.FK_ResearchChatInfo_UserInfo" FromRole="UserInfo" ToRole="ResearchChatInfo" />
+    <NavigationProperty Name="ResearchInfo" Relationship="LWEvalModel.FK_ResearchInfo_UserInfo" FromRole="UserInfo" ToRole="ResearchInfo" />
+    <NavigationProperty Name="ResearchPlanSubjectSummaryInfo" Relationship="LWEvalModel.FK_ResearchPlanSubjectSummaryInfo_UserInfo" FromRole="UserInfo" ToRole="ResearchPlanSubjectSummaryInfo" />
+    <NavigationProperty Name="ResearchPlanUserInfo" Relationship="LWEvalModel.FK_ResearchPlanUserInfo_UserInfo" FromRole="UserInfo" ToRole="ResearchPlanUserInfo" />
+    <NavigationProperty Name="TimeLineCommonInfo" Relationship="LWEvalModel.FK_TimeLineCommonInfo_UserInfo" FromRole="UserInfo" ToRole="TimeLineCommonInfo" />
+    <NavigationProperty Name="UserActionInfo" Relationship="LWEvalModel.FK_UserActionInfo_UserInfo" FromRole="UserInfo" ToRole="UserActionInfo" />
+    <NavigationProperty Name="WechatMsgInfo" Relationship="LWEvalModel.FK_WechatMsgInfo_UserInfo" FromRole="UserInfo" ToRole="WechatMsgInfo" />
+    <NavigationProperty Name="MemberGroupInfo" Relationship="LWEvalModel.MemberGroupInfoUserInfo" FromRole="UserInfo" ToRole="MemberGroupInfo" />
+    <NavigationProperty Name="TimeLineInfo" Relationship="LWEvalModel.TimeLineInfoUserInfo" FromRole="UserInfo" ToRole="TimeLineInfo" />
+    <NavigationProperty Name="RuleInfo" Relationship="LWEvalModel.UserInfoRuleInfo" FromRole="UserInfo" ToRole="RuleInfo" />
+    <NavigationProperty Name="SubjectInfo" Relationship="LWEvalModel.UserInfoSubjectInfo" FromRole="UserInfo" ToRole="SubjectInfo" />
+    <NavigationProperty Name="NoticeInfo" Relationship="LWEvalModel.FK_NoticeInfo_UserInfo" FromRole="UserInfo" ToRole="NoticeInfo" />
+    <NavigationProperty Name="NoticeUserInfo" Relationship="LWEvalModel.FK_NoticeUserInfo_UserInfo" FromRole="UserInfo" ToRole="NoticeUserInfo" />
+  </EntityType>
+  <EntityType Name="WechatMsgInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CreateUserID" Type="Int32" Nullable="false" />
+    <Property Name="AddDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Status" Type="Int32" Nullable="false" />
+    <Property Name="ToUserName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FromUserName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="Int32" Nullable="false" />
+    <Property Name="MsgType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Content" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="MsgId" Type="Int64" Nullable="false" />
+    <Property Name="XMLDom" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="UserInfo" Relationship="LWEvalModel.FK_WechatMsgInfo_UserInfo" FromRole="WechatMsgInfo" ToRole="UserInfo" />
+  </EntityType>
+  <Association Name="FK_CityInfo_ProvinceInfo">
+    <End Type="LWEvalModel.ProvinceInfo" Role="ProvinceInfo" Multiplicity="1" />
+    <End Type="LWEvalModel.CityInfo" Role="CityInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProvinceInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CityInfo">
+        <PropertyRef Name="ProvinceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RepOtherInfo_DepartmentInfo">
+    <End Type="LWEvalModel.DepartmentInfo" Role="DepartmentInfo" Multiplicity="1" />
+    <End Type="LWEvalModel.RepOtherInfo" Role="RepOtherInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DepartmentInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="RepOtherInfo">
+        <PropertyRef Name="DepartmentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RepResearchNormalInfo_DepartmentInfo">
+    <End Type="LWEvalModel.DepartmentInfo" Role="DepartmentInfo" Multiplicity="1" />
+    <End Type="LWEvalModel.RepResearchNormalInfo" Role="RepResearchNormalInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DepartmentInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="RepResearchNormalInfo">
+        <PropertyRef Name="DepartmentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchPlanInfo_DepartmentInfo">
+    <End Type="LWEvalModel.DepartmentInfo" Role="DepartmentInfo" Multiplicity="1" />
+    <End Type="LWEvalModel.ResearchPlanInfo" Role="ResearchPlanInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DepartmentInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchPlanInfo">
+        <PropertyRef Name="DepartmentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserInfo_DepartmentInfo">
+    <End Type="LWEvalModel.DepartmentInfo" Role="DepartmentInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.UserInfo" Role="UserInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DepartmentInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="UserInfo">
+        <PropertyRef Name="DepartmentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SubjectInfo_DepartmentTypeInfo">
+    <End Type="LWEvalModel.DepartmentTypeInfo" Role="DepartmentTypeInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.SubjectInfo" Role="SubjectInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DepartmentTypeInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="SubjectInfo">
+        <PropertyRef Name="DepartmentTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchPlanInfo_TemplateInfo">
+    <End Type="LWEvalModel.EvalTemplateInfo" Role="EvalTemplateInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.ResearchPlanInfo" Role="ResearchPlanInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EvalTemplateInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchPlanInfo">
+        <PropertyRef Name="TemplateID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TemplateItemInfo_TemplateInfo1">
+    <End Type="LWEvalModel.EvalTemplateInfo" Role="EvalTemplateInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.TemplateItemInfo" Role="TemplateItemInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EvalTemplateInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="TemplateItemInfo">
+        <PropertyRef Name="TemplateID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TemplateOptionInfo_EvalTemplateInfo">
+    <End Type="LWEvalModel.EvalTemplateInfo" Role="EvalTemplateInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.TemplateOptionInfo" Role="TemplateOptionInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EvalTemplateInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="TemplateOptionInfo">
+        <PropertyRef Name="TemplateID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserActionInfo_ActionInfo">
+    <End Type="LWEvalModel.PowerActionInfo" Role="PowerActionInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.UserActionInfo" Role="UserActionInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PowerActionInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="UserActionInfo">
+        <PropertyRef Name="ActionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RepOtherInfo_UserInfo">
+    <End Type="LWEvalModel.UserInfo" Role="UserInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.RepOtherInfo" Role="RepOtherInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="RepOtherInfo">
+        <PropertyRef Name="CreateUserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RepQualityMonitorInfo_UserInfo">
+    <End Type="LWEvalModel.UserInfo" Role="UserInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.RepQualityMonitorInfo" Role="RepQualityMonitorInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="RepQualityMonitorInfo">
+        <PropertyRef Name="CreateUserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RepResearchNormalInfo_UserInfo">
+    <End Type="LWEvalModel.UserInfo" Role="UserInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.RepResearchNormalInfo" Role="RepResearchNormalInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="RepResearchNormalInfo">
+        <PropertyRef Name="CreateUserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchChatInfo_ResearchPlanInfo">
+    <End Type="LWEvalModel.ResearchPlanInfo" Role="ResearchPlanInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.ResearchChatInfo" Role="ResearchChatInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ResearchPlanInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchChatInfo">
+        <PropertyRef Name="ResearchPlanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchChatInfo_UserInfo">
+    <End Type="LWEvalModel.UserInfo" Role="UserInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.ResearchChatInfo" Role="ResearchChatInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchChatInfo">
+        <PropertyRef Name="CreateUserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchInfo_ResearchPlanInfo">
+    <End Type="LWEvalModel.ResearchPlanInfo" Role="ResearchPlanInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.ResearchInfo" Role="ResearchInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ResearchPlanInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchInfo">
+        <PropertyRef Name="ResearchPlanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchInfo_SubjectInfo">
+    <End Type="LWEvalModel.SubjectInfo" Role="SubjectInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.ResearchInfo" Role="ResearchInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SubjectInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchInfo">
+        <PropertyRef Name="SubjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchInfo_UserInfo">
+    <End Type="LWEvalModel.UserInfo" Role="UserInfo" Multiplicity="1" />
+    <End Type="LWEvalModel.ResearchInfo" Role="ResearchInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchInfo">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchItemInfo_ResearchInfo1">
+    <End Type="LWEvalModel.ResearchInfo" Role="ResearchInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.ResearchItemInfo" Role="ResearchItemInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ResearchInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchItemInfo">
+        <PropertyRef Name="ResearchID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchNoteInfo_ResearchInfo">
+    <End Type="LWEvalModel.ResearchInfo" Role="ResearchInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.ResearchNoteInfo" Role="ResearchNoteInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ResearchInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchNoteInfo">
+        <PropertyRef Name="ResearchID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TimeLineInfo_ResearchInfo">
+    <End Type="LWEvalModel.ResearchInfo" Role="ResearchInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.TimeLineInfo" Role="TimeLineInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ResearchInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="TimeLineInfo">
+        <PropertyRef Name="ResearchID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchItemInfo_TemplateItemInfo">
+    <End Type="LWEvalModel.TemplateItemInfo" Role="TemplateItemInfo" Multiplicity="1" />
+    <End Type="LWEvalModel.ResearchItemInfo" Role="ResearchItemInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TemplateItemInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchItemInfo">
+        <PropertyRef Name="TemplateItemID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchNoteAttachmentInfo_ResearchNoteInfo">
+    <End Type="LWEvalModel.ResearchNoteInfo" Role="ResearchNoteInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.ResearchNoteAttachmentInfo" Role="ResearchNoteAttachmentInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ResearchNoteInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchNoteAttachmentInfo">
+        <PropertyRef Name="ResearchNoteID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchPlanAttachmentInfo_ResearchPlanInfo">
+    <End Type="LWEvalModel.ResearchPlanInfo" Role="ResearchPlanInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.ResearchPlanAttachmentInfo" Role="ResearchPlanAttachmentInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ResearchPlanInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchPlanAttachmentInfo">
+        <PropertyRef Name="ResearchPlanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchPlanSubjectSummaryInfo_ResearchPlanInfo">
+    <End Type="LWEvalModel.ResearchPlanInfo" Role="ResearchPlanInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.ResearchPlanSubjectSummaryInfo" Role="ResearchPlanSubjectSummaryInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ResearchPlanInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchPlanSubjectSummaryInfo">
+        <PropertyRef Name="ResearchPlanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchPlanUserInfo_ResearchPlanInfo">
+    <End Type="LWEvalModel.ResearchPlanInfo" Role="ResearchPlanInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.ResearchPlanUserInfo" Role="ResearchPlanUserInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ResearchPlanInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchPlanUserInfo">
+        <PropertyRef Name="ResearchPlanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchPlanSubjectSummaryInfo_SubjectInfo">
+    <End Type="LWEvalModel.SubjectInfo" Role="SubjectInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.ResearchPlanSubjectSummaryInfo" Role="ResearchPlanSubjectSummaryInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SubjectInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchPlanSubjectSummaryInfo">
+        <PropertyRef Name="SubjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchPlanSubjectSummaryInfo_UserInfo">
+    <End Type="LWEvalModel.UserInfo" Role="UserInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.ResearchPlanSubjectSummaryInfo" Role="ResearchPlanSubjectSummaryInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchPlanSubjectSummaryInfo">
+        <PropertyRef Name="CreateUserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchPlanUserInfo_UserInfo">
+    <End Type="LWEvalModel.UserInfo" Role="UserInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.ResearchPlanUserInfo" Role="ResearchPlanUserInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchPlanUserInfo">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TimeLineCommonInfo_TimeLineInfo">
+    <End Type="LWEvalModel.TimeLineInfo" Role="TimeLineInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.TimeLineCommonInfo" Role="TimeLineCommonInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TimeLineInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="TimeLineCommonInfo">
+        <PropertyRef Name="TimeLineID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TimeLineCommonInfo_UserInfo">
+    <End Type="LWEvalModel.UserInfo" Role="UserInfo" Multiplicity="1" />
+    <End Type="LWEvalModel.TimeLineCommonInfo" Role="TimeLineCommonInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="TimeLineCommonInfo">
+        <PropertyRef Name="CreateUserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserActionInfo_UserInfo">
+    <End Type="LWEvalModel.UserInfo" Role="UserInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.UserActionInfo" Role="UserActionInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="UserActionInfo">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WechatMsgInfo_UserInfo">
+    <End Type="LWEvalModel.UserInfo" Role="UserInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.WechatMsgInfo" Role="WechatMsgInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="WechatMsgInfo">
+        <PropertyRef Name="CreateUserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="DepartmentTypeInfoDepartmentInfo">
+    <End Type="LWEvalModel.DepartmentInfo" Role="DepartmentInfo" Multiplicity="*" />
+    <End Type="LWEvalModel.DepartmentTypeInfo" Role="DepartmentTypeInfo" Multiplicity="*" />
+  </Association>
+  <Association Name="MemberGroupInfoUserInfo">
+    <End Type="LWEvalModel.MemberGroupInfo" Role="MemberGroupInfo" Multiplicity="*" />
+    <End Type="LWEvalModel.UserInfo" Role="UserInfo" Multiplicity="*" />
+  </Association>
+  <Association Name="RuleInfoPowerActionInfo">
+    <End Type="LWEvalModel.PowerActionInfo" Role="PowerActionInfo" Multiplicity="*" />
+    <End Type="LWEvalModel.RuleInfo" Role="RuleInfo" Multiplicity="*" />
+  </Association>
+  <Association Name="TimeLineInfoUserInfo">
+    <End Type="LWEvalModel.TimeLineInfo" Role="TimeLineInfo" Multiplicity="*" />
+    <End Type="LWEvalModel.UserInfo" Role="UserInfo" Multiplicity="*" />
+  </Association>
+  <Association Name="UserInfoRuleInfo">
+    <End Type="LWEvalModel.RuleInfo" Role="RuleInfo" Multiplicity="*" />
+    <End Type="LWEvalModel.UserInfo" Role="UserInfo" Multiplicity="*" />
+  </Association>
+  <Association Name="UserInfoSubjectInfo">
+    <End Type="LWEvalModel.SubjectInfo" Role="SubjectInfo" Multiplicity="*" />
+    <End Type="LWEvalModel.UserInfo" Role="UserInfo" Multiplicity="*" />
+  </Association>
+  <EntityType Name="ResearchPlanSubjectSummaryItemInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TemplateSummaryID" Type="Int32" Nullable="false" />
+    <Property Name="ResearchPlanSubjectSummaryID" Type="Int32" Nullable="false" />
+    <Property Name="Detail" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ResearchPlanSubjectSummaryInfo" Relationship="LWEvalModel.FK_ResearchPlanSubjectSummaryItemInfo_ResearchPlanSubjectSummaryInfo" FromRole="ResearchPlanSubjectSummaryItemInfo" ToRole="ResearchPlanSubjectSummaryInfo" />
+    <NavigationProperty Name="TemplateSubjectSummaryInfo" Relationship="LWEvalModel.FK_ResearchPlanSubjectSummaryItemInfo_TemplateSubjectSummaryInfo" FromRole="ResearchPlanSubjectSummaryItemInfo" ToRole="TemplateSubjectSummaryInfo" />
+  </EntityType>
+  <EntityType Name="TemplateSubjectSummaryInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TemplateID" Type="Int32" Nullable="false" />
+    <Property Name="KeyName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SortID" Type="Int32" Nullable="false" />
+    <Property Name="Enable" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="EvalTemplateInfo" Relationship="LWEvalModel.FK_TemplateSubjectSummaryInfo_EvalTemplateInfo" FromRole="TemplateSubjectSummaryInfo" ToRole="EvalTemplateInfo" />
+    <NavigationProperty Name="ResearchPlanSubjectSummaryItemInfo" Relationship="LWEvalModel.FK_ResearchPlanSubjectSummaryItemInfo_TemplateSubjectSummaryInfo" FromRole="TemplateSubjectSummaryInfo" ToRole="ResearchPlanSubjectSummaryItemInfo" />
+  </EntityType>
+  <Association Name="FK_TemplateSubjectSummaryInfo_EvalTemplateInfo">
+    <End Type="LWEvalModel.EvalTemplateInfo" Role="EvalTemplateInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.TemplateSubjectSummaryInfo" Role="TemplateSubjectSummaryInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EvalTemplateInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="TemplateSubjectSummaryInfo">
+        <PropertyRef Name="TemplateID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchPlanSubjectSummaryItemInfo_ResearchPlanSubjectSummaryInfo">
+    <End Type="LWEvalModel.ResearchPlanSubjectSummaryInfo" Role="ResearchPlanSubjectSummaryInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.ResearchPlanSubjectSummaryItemInfo" Role="ResearchPlanSubjectSummaryItemInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ResearchPlanSubjectSummaryInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchPlanSubjectSummaryItemInfo">
+        <PropertyRef Name="ResearchPlanSubjectSummaryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchPlanSubjectSummaryItemInfo_TemplateSubjectSummaryInfo">
+    <End Type="LWEvalModel.TemplateSubjectSummaryInfo" Role="TemplateSubjectSummaryInfo" Multiplicity="1" />
+    <End Type="LWEvalModel.ResearchPlanSubjectSummaryItemInfo" Role="ResearchPlanSubjectSummaryItemInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TemplateSubjectSummaryInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchPlanSubjectSummaryItemInfo">
+        <PropertyRef Name="TemplateSummaryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="PlanCategoryInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Enable" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="ResearchPlanInfo" Relationship="LWEvalModel.FK_ResearchPlanInfo_PlanCategoryInfo" FromRole="PlanCategoryInfo" ToRole="ResearchPlanInfo" />
+  </EntityType>
+  <Association Name="FK_ResearchPlanInfo_PlanCategoryInfo">
+    <End Type="LWEvalModel.PlanCategoryInfo" Role="PlanCategoryInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.ResearchPlanInfo" Role="ResearchPlanInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PlanCategoryInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchPlanInfo">
+        <PropertyRef Name="CategoryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="NoticeAttachmentInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NoticeUserID" Type="Int32" Nullable="false" />
+    <Property Name="FilePathRoot" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="FilePathRelative" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="FileNameSave" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="FileNameUpload" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="ContentLength" Type="Int64" Nullable="false" />
+    <Property Name="Extention" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ShowName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MineType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IsTemplate" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="NoticeUserInfo" Relationship="LWEvalModel.FK_NoticeAttachmentInfo_NoticeUserInfo" FromRole="NoticeAttachmentInfo" ToRole="NoticeUserInfo" />
+    <Property Name="TypeFlag" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="NoticeInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="SubName" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Detail" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CreateUserID" Type="Int32" Nullable="false" />
+    <Property Name="DateLimit" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Enable" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="UserInfo" Relationship="LWEvalModel.FK_NoticeInfo_UserInfo" FromRole="NoticeInfo" ToRole="UserInfo" />
+    <NavigationProperty Name="NoticeUserInfo" Relationship="LWEvalModel.FK_NoticeUserInfo_NoticeInfo" FromRole="NoticeInfo" ToRole="NoticeUserInfo" />
+  </EntityType>
+  <EntityType Name="NoticeUserInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NoticeID" Type="Int32" Nullable="false" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="Status" Type="Int32" Nullable="false" />
+    <Property Name="Detail" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="FinishDate" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="NoticeAttachmentInfo" Relationship="LWEvalModel.FK_NoticeAttachmentInfo_NoticeUserInfo" FromRole="NoticeUserInfo" ToRole="NoticeAttachmentInfo" />
+    <NavigationProperty Name="NoticeInfo" Relationship="LWEvalModel.FK_NoticeUserInfo_NoticeInfo" FromRole="NoticeUserInfo" ToRole="NoticeInfo" />
+    <NavigationProperty Name="UserInfo" Relationship="LWEvalModel.FK_NoticeUserInfo_UserInfo" FromRole="NoticeUserInfo" ToRole="UserInfo" />
+  </EntityType>
+  <Association Name="FK_NoticeAttachmentInfo_NoticeUserInfo">
+    <End Type="LWEvalModel.NoticeUserInfo" Role="NoticeUserInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.NoticeAttachmentInfo" Role="NoticeAttachmentInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NoticeUserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="NoticeAttachmentInfo">
+        <PropertyRef Name="NoticeUserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NoticeInfo_UserInfo">
+    <End Type="LWEvalModel.UserInfo" Role="UserInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.NoticeInfo" Role="NoticeInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="NoticeInfo">
+        <PropertyRef Name="CreateUserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NoticeUserInfo_NoticeInfo">
+    <End Type="LWEvalModel.NoticeInfo" Role="NoticeInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="LWEvalModel.NoticeUserInfo" Role="NoticeUserInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NoticeInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="NoticeUserInfo">
+        <PropertyRef Name="NoticeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NoticeUserInfo_UserInfo">
+    <End Type="LWEvalModel.UserInfo" Role="UserInfo" Multiplicity="1" />
+    <End Type="LWEvalModel.NoticeUserInfo" Role="NoticeUserInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="NoticeUserInfo">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

@@ -1,0 +1,76 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+
+@model IPagedList<Vivo.Model.MemberGroupInfo>
+
+@{
+    ViewBag.Title = "用户群组管理";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IPowerActionInfoService PowerActionBLL = (IPowerActionInfoService)ViewBag.PowerActionBLL;
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+}
+@section head{
+    <script type="text/javascript">
+        function BtnDelete_Click(ItemID) {
+            $.post("@Url.Action("Delete")", { ID: ItemID }, function (data) {
+                alert(data.ErrorMsg);
+                if (data.ErrorCode == 0) {
+                    location.reload();
+                }
+            });
+        }
+
+    </script>
+    <style type="text/css">
+        
+    </style>
+}
+<div class="bd">
+@if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.PP用户群组.PPP添加.KEY))
+{
+    <a href="@Url.Action("Create")" class="weui_btn weui_btn_primary" title="添加" style="margin:15px;">
+        添加
+    </a>
+}
+
+
+</div>
+
+<div class="weui_panel">
+    <div class="weui_panel_bd">
+        @foreach (var item in Model)
+        {
+
+        <a class="weui_media_box weui_media_text" href="@Url.Action("Detail", new { ID = item.ID })">           
+            <h4 class="weui_media_title">@item.Name</h4>
+            <p class="weui_media_desc">
+                @item.Description
+            </p>
+            <ul class="weui_media_info">
+                <li class="weui_media_info_meta">状态 @(item.Enable ? "正常" : "禁用")</li>
+                <li class="weui_media_info_meta weui_media_info_meta_extra">
+                    排序号:@item.SortID
+                </li>
+            </ul>
+        </a>
+        }
+    </div>
+</div>
+
+
+
+<div style="text-align:center">
+    @Html.PagedListPager((IPagedList)Model,
+    page => Url.Action("Index", new { page = page }),
+    new PagedListRenderOptions {
+        LinkToPreviousPageFormat = "上一页",
+        LinkToNextPageFormat = "下一页",
+        MaximumPageNumbersToDisplay = 0,
+        Display=PagedListDisplayMode.IfNeeded,
+        DisplayEllipsesWhenNotShowingAllPageNumbers=true        
+    }
+    )
+</div>

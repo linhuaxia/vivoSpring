@@ -1,0 +1,158 @@
+﻿@using Vivo.Model;
+@using Tool;
+@using Vivo.web.Areas.MP.Controllers;
+
+
+
+@{
+    ViewBag.Title = "导入";
+    Layout = "~/Areas/MP/Views/Shared/_Layout.cshtml";
+}
+
+@section head{
+    <script src="~/Scripts/jquery.form.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#uploadForm').on('submit', function (e) {
+                e.preventDefault(); // <-- important
+                $(this).ajaxSubmit({
+                    beforeSend: function () { },
+                    uploadProgress: function (event, position, total, percentComplete) { },
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data.Data);
+                        alert(data.ErrorMsg);
+                        if (data.ErrorCode != 0) {
+                            return;
+                        }
+
+                        $("#DdlWorkSheet").empty();
+                        $("#HidenFileURL").val(data.Data.FileURL);
+                        $(data.Data.sheets).each(function (index, item) {
+                            $("#DdlWorkSheet").append('<option value="' + item + '">' + item + '</option>');
+                        });
+                    }
+                });
+                return false;
+            });
+
+        });
+
+        function ConfirmOnSuccess(data) {
+
+            alert(data.ErrorMsg);
+            if (data.ErrorCode < 0) {
+                return;
+            }
+
+            if (data.ErrorCode == 0) {
+                var html = "";
+                html += '<div class="row">';
+                html += '     <div class="col-md-2"> 序号</div>';
+                html += '     <div class="col-md-2">登录名</div>';
+                html += '     <div class="col-md-2">真实姓名</div>';
+                html += '     <div class="col-md-2">初始密码</div>';
+                html += '     <div class="col-md-4">学科</div>';
+                html += '</div>';
+                $(data.Data).each(function (index, item) {
+                    html += '<div class="row">';
+                    html += '     <div class="col-md-2">' + item.序号 + '</div>';
+                    html += '     <div class="col-md-2">' + item.登录名 + '</div>';
+                    html += '     <div class="col-md-2">' + item.真实姓名 + '</div>';
+                    html += '     <div class="col-md-2">' + item.初始密码 + '</div>';
+                    html += '     <div class="col-md-4">' + item.学科 + '</div>';
+                    html += '</div>';
+
+                });
+                $("#DivTable").html(html);
+                $("#BtnInport").show();
+                return;
+            }
+            if (data.ErrorCode == 2) {
+                parent.location.reload();
+            }
+        }
+        function OnBegin() {
+        }
+
+        function BtnConfirm_Click() {
+            $("#HidenIsInport").val("false");
+            $("#BtnSubmitForm2").click();
+        }
+        function BtnInport_Click() {
+            $("#HidenIsInport").val("true");
+            $("#BtnSubmitForm2").click();
+        }
+    </script>
+    <style type="text/css">
+        .row {
+            margin: 5px auto;
+        }
+    </style>
+}
+<h2>
+    @ViewBag.Title
+    <a href="~/Content/Template/UserDemo.xls" target="_blank">导入格式模板下载</a>
+</h2>
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+    <tr>
+        <td colspan="6" style="height: 30px" class="td1_1">
+            @ViewBag.Title
+        </td>
+    </tr>
+</table>
+
+@using (Html.BeginForm("InportPost1", "User", FormMethod.Post, new { id = "uploadForm", @class = "form-horizontal", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+        <tr>
+            <td class="td1_2" style="width:20%;">
+                step1: 选择文件
+            </td>
+            <td class="td1_3" style="width:50%;">
+                <input type="file" name="FileMain" id="FileMain" class="form-control" />
+            </td>
+            <td class="td1_2" style="width:30%;">
+                <input type="submit" value="上传" class="btn btn-default" />
+            </td>
+        </tr>
+    </table>
+}
+@using (Ajax.BeginForm("InportLightPost2", "User", new AjaxOptions { HttpMethod = "post", OnSuccess = "ConfirmOnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+            {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.Hidden("HidenIsInport", "false")
+    @Html.Hidden("HidenFileURL")
+    <table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+        <tr>
+            <td class="td1_2" style="width:20%;">
+                step2: 选择工作簿
+            </td>
+            <td class="td1_3" style="width:50%;">
+                <select name="DdlWorkSheet" id="DdlWorkSheet" class="form-control"></select>
+            </td>
+            <td class="td1_2" style="width:30%;">
+                <input type="submit" id="BtnSubmitForm2" value="submit" class="btn btn-default" style="display:none;" />
+                <input type="button" value="查看工作簿内容" class="btn btn-success" onclick="BtnConfirm_Click();" />
+                <input type="button" value="确定导入" class="btn btn-success" id="BtnInport" style="display:none;" onclick="BtnInport_Click()" />
+            </td>
+        </tr>
+    </table>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"></div>
+                        <div class="panel-body">
+                            <div id="DivTable" class="container-fluid"></div>
+                        </div>
+                        <input type="button" value="确定导入" class="btn btn-success" style="display:none;" />
+                    </div>
+                </div>
+            </div>
+        </div>
+}

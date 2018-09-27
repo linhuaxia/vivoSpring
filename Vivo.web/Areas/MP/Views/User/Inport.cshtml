@@ -1,0 +1,159 @@
+﻿@using Vivo.Model;
+@using Tool;
+@using Vivo.web.Areas.MP.Controllers;
+
+
+
+@{
+    ViewBag.Title = "导入";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section head{
+    <script src="~/Scripts/jquery.form.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#uploadForm').on('submit', function (e) {
+                e.preventDefault(); // <-- important
+                $(this).ajaxSubmit({
+                    beforeSend: function () { },
+                    uploadProgress: function (event, position, total, percentComplete) { },
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data.Data);
+                        alert(data.ErrorMsg);
+                        if (data.ErrorCode != 0) {
+                            return;
+                        }
+
+                        $("#DdlWorkSheet").empty();
+                        $("#HidenFileURL").val(data.Data.FileURL);
+                        $(data.Data.sheets).each(function (index, item) {
+                            $("#DdlWorkSheet").append('<option value="' + item + '">' + item + '</option>');
+                        });
+                    }
+                });
+                return false;
+            });
+
+        });
+
+        function ConfirmOnSuccess(data) {
+
+            console.log(data);
+            if (data.ErrorCode < 0) {
+                alert(data.ErrorMsg);
+                return;
+            }
+            if (data.ErrorCode == 0) {
+                var html = "";
+                html += '<div class="row">';
+                html += '     <div class="col-md-2"> 序号</div>';
+                html += '     <div class="col-md-5">子项目名称</div>';
+                html += '     <div class="col-md-5">备注</div>';
+                html += '</div>';
+                $(data.Data).each(function (index, item) {
+                    html += '<div class="row">';
+                    html += '     <div class="col-md-2">' + item.序号 + '</div>';
+                    html += '     <div class="col-md-5">' + item.子项目名称 + '</div>';
+                    html += '     <div class="col-md-5">' + item.备注 + '</div>';
+                    html += '</div>';
+
+                });
+                $("#DivTable").html(html);
+                $("#BtnInport").show();
+                return;
+            }
+            var html = "";
+            $(data.Data).each(function (index, item) {
+                html += '<blockquote>';
+                html += '     <p>' + item + '</p>';
+                html += '</blockquote>';
+            });
+            $("#DivTable").html(html);
+            $("#BtnInport").hide();
+        }
+        function OnBegin() {
+        }
+
+        function BtnConfirm_Click() {
+            $("#HidenIsInport").val("false");
+            $("#BtnSubmitForm2").click();
+        }
+        function BtnInport_Click() {
+            $("#HidenIsInport").val("true");
+            $("#BtnSubmitForm2").click();
+        }
+    </script>
+    <style type="text/css">
+        .row {
+            margin: 5px auto;
+        }
+    </style>
+}
+<h2>
+    @ViewBag.Title
+    <a href="#">导入模板跟系统导出数据格式完全一致</a>
+</h2>
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+    <tr>
+        <td colspan="6" style="height: 30px" class="td1_1">
+            @ViewBag.Title
+        </td>
+    </tr>
+</table>
+
+@using (Html.BeginForm("InportPost1", "User", FormMethod.Post, new { id = "uploadForm", @class = "form-horizontal", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+        <tr>
+            <td class="td1_2" style="width:20%;">
+                step1: 选择文件
+            </td>
+            <td class="td1_3" style="width:50%;">
+                <input type="file" name="FileMain" id="FileMain" class="form-control" />
+            </td>
+            <td class="td1_2" style="width:30%;">
+                <input type="submit" value="上传" class="btn btn-default" />
+            </td>
+        </tr>
+    </table>
+}
+@using (Ajax.BeginForm("InportPost2", "User", new AjaxOptions { HttpMethod = "post", OnSuccess = "ConfirmOnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+            {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.Hidden("HidenIsInport", "false")
+    @Html.Hidden("HidenFileURL")
+    <table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+        <tr>
+            <td class="td1_2" style="width:20%;">
+                step2: 选择工作簿
+            </td>
+            <td class="td1_3" style="width:50%;">
+                <select name="DdlWorkSheet" id="DdlWorkSheet" class="form-control"></select>
+            </td>
+            <td class="td1_2" style="width:30%;">
+                <input type="submit" id="BtnSubmitForm2" value="submit" class="btn btn-default" style="display:none;" />
+                <input type="button" value="查看工作簿内容" class="btn btn-success" onclick="BtnConfirm_Click();" />
+                <input type="button" value="确定导入" class="btn btn-success" id="BtnInport" style="display:none;" onclick="BtnInport_Click()" />
+            </td>
+        </tr>
+    </table>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"></div>
+                        <div class="panel-body">
+                            <div id="DivTable" class="container-fluid"></div>
+                        </div>
+                        <input type="button" value="确定导入" class="btn btn-success" style="display:none;" />
+                    </div>
+                </div>
+            </div>
+        </div>
+}

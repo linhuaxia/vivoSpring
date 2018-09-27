@@ -1,0 +1,136 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+
+@model ResearchPlanInfo
+
+@{
+    ViewBag.Title = "课表管理";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IPowerActionInfoService PowerActionBLL = AbstractFactory.CreatePowerActionInfoService();
+
+
+}
+@section head{
+
+    <script type="text/javascript">
+
+    wx.ready(function () {
+        //选择图片上传
+        $(".weui_uploader_input").click(function () {
+            wx.chooseImage({
+                count: 9, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    UploadImgToWeiXinServer(res);
+                }
+            });
+        });
+    });
+
+    function UploadImgToWeiXinServer(res) {
+        $(res.localIds).each(function (index, item) {
+            wx.uploadImage({
+                localId: item, // 需要上传的图片的本地ID，由chooseImage接口获得
+                isShowProgressTips: 1, // 默认为1，显示进度提示
+                success: function (res) {
+                    UploadImgToSelfServer(res.serverId);
+                    //serverIds.push({ serverId: res.serverId, localId: item });
+                },
+                fail: function (res) {
+                    alert("上传图片失败了，请重试");
+                    ReflashImageList();
+                    return false;
+                }
+            });
+
+        });
+    }
+    var listImagesJSON=@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.ImageJSON));
+    function InitImagesList() {
+        var HTML = '';
+        $(listImagesJSON).each(function (index,item) {
+          HTML += '<li class="weui_uploader_file" style="background-image:url(' + item.FullPath + ')" onclick="Image_Delete(\'' + item.ID + '\')"></li>';
+        });
+        console.log("HTML=" + HTML);
+        if (''==HTML) {
+            $("#H2NoData").show();
+        }
+        $(".weui_uploader_files").html(HTML);
+   }
+        $(function () {
+            InitImagesList();
+        });
+    function UploadImgToSelfServer(serverId) {
+        var postData = {
+            ResearchPlanID:@Model.ID,
+            Name:serverId
+        };
+        console.log(postData);
+        $.post("@Url.Action("index")", postData, function (data) {
+            layer.open({ content: data.ErrorMsg, skin: 'msg', time: 1 });
+            console.log(data.Data);
+            listImagesJSON = data.Data;
+            InitImagesList();
+        });
+    }
+
+    //删除已选图片
+        function Image_Delete(ID) {
+            if ("@(PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP课表管理.PPP删除.KEY)?"true":"false")"=="true")
+            {
+                if (!confirm("确定要删除图片吗？"))
+                { return;}
+                $.post("@Url.Action("Delete")", {ID:ID}, function (data) {
+                    layer.open({ content: data.ErrorMsg, skin: 'msg', time: 1 });
+                    console.log(data.Data);
+                    listImagesJSON = data.Data;
+                    InitImagesList();
+                });
+            }
+            else {
+                $(listImagesJSON).each(function (index,item) {
+                    if (item.ID==ID) {
+                        //信息框
+                        layer.open({
+                            content: '<img src="' + item.FullPath+'" style="width:100%;" />'
+                            , btn: '好的'
+                        });
+                    }
+                });
+               
+            }
+
+    }
+
+    </script>
+
+
+}
+
+
+<div class="weui_cells weui_cells_form">
+    <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+            <div class="weui_uploader">
+                <div class="weui_uploader_hd weui_cell">
+                    <div class="weui_cell_bd weui_cell_primary">课表管理</div>
+                </div>
+                <div class="weui_uploader_bd">
+                    <ul class="weui_uploader_files">
+                        @*<li class="weui_uploader_file" style="background-image:url(http://shp.qpic.cn/weixinsrc_pic/pScBR7sbqjOBJomcuvVJ6iacVrbMJaoJZkFUIq4nzQZUIqzTKziam7ibg/)"></li>
+                            <li class="weui_uploader_file" style="background-image:url(http://shp.qpic.cn/weixinsrc_pic/pScBR7sbqjOBJomcuvVJ6iacVrbMJaoJZkFUIq4nzQZUIqzTKziam7ibg/)"></li>*@
+                    </ul>
+                    @if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP课表管理.PPP添加.KEY))
+                    {
+                    <div class="weui_uploader_input_wrp">
+                        <div class="weui_uploader_input" type="file" accept="image/*" multiple=""></div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <h2 id="H2NoData" style="display:none;" class="weui_msg_title">暂没有相关资料</h2>
+</div>

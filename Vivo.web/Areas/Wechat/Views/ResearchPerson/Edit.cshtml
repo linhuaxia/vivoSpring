@@ -1,0 +1,935 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+
+@model Vivo.Model.ResearchInfo
+
+@{
+    ViewBag.Title = "个人听课";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IPowerActionInfoService PowerActionBLL = AbstractFactory.CreatePowerActionInfoService();
+    IResearchInfoService ResearchBLL = AbstractFactory.CreateResearchInfoService();
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+    UserInfo CurrentUser = ViewBag.CurrentUser;
+
+
+}
+@section head{
+    <script type="text/javascript" _HelpText="这是教研专用的代码段">
+
+        $(function () {
+            InitPlanImagesList();
+            $("#UlResearchPlanAttachment .weui_uploader_file").click(function () {
+                var _PlanAttachmentID = $(this).attr("_PlanAttachmentID");
+                var src = $(this).css("background-image");
+                var contentBody3 = "<img src='" + src + "' style='width:100%;' />";
+                layer.open({
+                    content: contentBody3,
+                    btn: ['删除', '好的'],
+                    yes: function (index) {
+                        if ("@(PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP教案管理.PPP删除.KEY)?"true":"")" == "true")
+                        {
+                            $.post("@Url.Action("Delete", "ResearchPlanAttachment")", {ID:ID}, function (data) {
+                                layer.open({ content: data.ErrorMsg, skin: 'msg', time: 1 });
+                                InitPlanImagesList(data.Data);
+                            });
+                        }
+                        else {
+                            layer.open({
+                                content: '抱歉，您当前没有权限删除。'
+                                , skin: 'msg'
+                                , time: 2 //2秒后自动关闭
+                            });
+                            layer.close(index);
+                        }
+                        
+                    }
+                });
+            });
+        });
+    wx.ready(function () {
+        //选择图片上传
+        $("#BtnUploadImageResearchPlan").click(function () {
+            wx.chooseImage({
+                count: 9, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    UploadPlanImgToWeiXinServer(res);
+                }
+            });
+        });
+    });
+        function UploadPlanImgToWeiXinServer(res) {
+        $(res.localIds).each(function (index, item) {
+            wx.uploadImage({
+                localId: item, // 需要上传的图片的本地ID，由chooseImage接口获得
+                isShowProgressTips: 1, // 默认为1，显示进度提示
+                success: function (res) {
+                    UploadPlanImgToSelfServer(res.serverId);
+                },
+                fail: function (res) {
+                    alert("上传图片失败了，请重试");
+                    return false;
+                }
+            });
+
+        });
+    }
+    function UploadPlanImgToSelfServer(serverId) {
+        var postData = {
+                ResearchPlanID:@Model.ResearchPlanID,
+                Name:serverId
+            };
+        var postURL = "@Url.Action("CreatePersonal", "ResearchPlanAttachment")";
+        $.post(postURL, postData, function (data) {
+            layer.open({ content: data.ErrorMsg, skin: 'msg', time: 1 });
+            console.log("data.Data=");
+            console.log(data);
+            InitPlanImagesList(data.Data);
+        });
+    }
+
+
+    function InitPlanImagesList(listImagesResearchPlanJSON) {
+        if (!listImagesResearchPlanJSON) {
+            listImagesResearchPlanJSON =@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.listImagesResearchPlanJSON));
+        }
+        var HTML = '';
+        $(listImagesResearchPlanJSON).each(function (index, item) {
+            if (item.FullPath.toLowerCase().indexOf(".jpg") != -1 ||
+                item.FullPath.toLowerCase().indexOf(".gif") != -1 ||
+                item.FullPath.toLowerCase().indexOf(".png") != -1 ||
+                item.FullPath.toLowerCase().indexOf(".bmp") != -1 ) {
+                HTML += '<li class="weui_uploader_file" style="background-image:url(' + item.FullPath + ')" _PlanAttachmentID="' + item.ID + '" ></li>';
+            }
+            else {
+                HTML += '<a class="weui_uploader_file" style="background-image:url(/images/logo.png)" href="' + item.FullPath + '" target="_blank" ></a>';
+
+            }
+        });
+        $("#UlResearchPlanAttachment").html(HTML);
+    }
+
+
+    </script>
+
+    <style type="text/css">
+        .DivLeftManager {
+            float: left;
+            width: 20%;
+        }
+
+        .DivRightManager {
+            float: left;
+            width: 75%;
+        }
+    </style>
+    <script type="text/javascript">
+    wx.ready(function () {
+        WX_Ready();
+        wx.onVoiceRecordEnd({
+            // 录音时间超过一分钟没有停止的时候会执行 complete 回调
+            complete: function (res) {
+                UploadAudioRecordToWeiXinServer(res.localId);
+            }
+        });
+
+    });
+    function WX_Ready() {
+        console.warn("wx_Rready被执行了");
+        //选择图片上传
+        $("#BtnUploadImage").click(function () {
+            wx.chooseImage({
+                count: 9, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    UploadImgToWeiXinServer(res);
+                }
+            });
+        });
+        $("#BtnAudioRecord").click(function () {
+            console.log("BtnAudioRecord click");
+            console.log($("#BtnAudioRecord").html());
+            if ($("#BtnAudioRecord").html() != "录音") {
+                wx.stopRecord({
+                    success: function (res) {
+                        UploadAudioRecordToWeiXinServer(res.localId);
+                    }
+                });
+                return;
+            }
+            $("#BtnAudioRecord").html("正在录音中");
+            wx.startRecord();
+
+        });
+
+    }
+    /*录音相关功能 Begin*/
+    var ListResearchNote;
+    function InitResearchNote() {
+        var HasEditPower =@(PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP听评课记录管理.PPP修改.KEY)? "true":"false");
+        $.get("@Url.Action("Index", "ResearchNote",new { ResearchID=Model.ID})", function (data) {
+            var HTML = "";
+            ListResearchNote = data.Data;
+            $(ListResearchNote).each(function (index, item) {
+                HTML += '<item>';
+                if (HasEditPower) {
+                    HTML += '<div class="DivLeftManager">';
+                    HTML += '   <div class="button_sp_area">';
+                    HTML += '       <a href="javascript:BtnResearchNote_Edit(' + item.ID + ')" class="weui_btn weui_btn_mini weui_btn_primary">管理</a>';
+                    HTML += '       <a href="javascript:BtnResearchNote_Delete(' + item.ID + ')" class="weui_btn weui_btn_mini weui_btn_default">删除</a>';
+                    HTML += '   </div>';
+                    HTML += '</div>';
+                }
+                HTML += '<div class="DivRightManager">';
+                HTML += '   <p>';
+                HTML += item.Detail;
+                HTML += '   <span class="badge">';
+                HTML += item.CreateDate;
+                HTML += '    </span>';
+                HTML += '    </p>';
+                $(item.ImageJSON).each(function (indexImage, itemImage) {
+                    HTML += '<ImgContainerThumb>';
+                    HTML += '   <img class="img-thumbnail" src="' + itemImage.FullPath + '" />';
+                    HTML += '   <span>' + itemImage.CreateDate + '</span>';
+                    HTML += '</ImgContainerThumb>';
+                });
+                HTML += '   <div style="clear:both"></div>';
+                $(item.AudioJSON).each(function (indexAudio, itemAudio) {
+                    HTML += '<div class="well well-sm" onclick="AudioPlay(\'' + itemAudio.ID + '\')">'
+                    HTML += itemAudio.CreateDate + '.mp3';
+                    HTML += '<audio id="Audio' + itemAudio.ID + '" src="' + itemAudio.FullPath + '" style="display:none;"></audio>';
+                    HTML += '</div>';
+                });
+                HTML += '   <div style="clear:both"></div>';
+                HTML += '</div>';
+                HTML += '<div style="clear:both"></div>';
+               HTML += '</item>';
+            });
+            if (HTML=="") {
+                HTML = '<div class="well well-sm">没有课堂记录内容</div>';
+            }
+            $("#DivListResearchNoteRecord").html(HTML);
+        });
+
+    }
+   function UploadAudioRecordToWeiXinServer(res) {
+        wx.uploadVoice({
+            localId: res, // 需要上传的音频的本地ID，由stopRecord接口获得
+            isShowProgressTips: 1, // 默认为1，显示进度提示
+            success: function (res) {
+                var serverId = res.serverId; // 返回音频的服务器端ID
+                $("#BtnAudioRecord").html("保存中");
+                UploadAudioToSelfServer(res.serverId);
+            }
+        });
+    }
+    function UploadAudioToSelfServer(serverId) {
+        var postData = {
+            ResearchID:@Model.ID,
+            ResearchNoteID:$("#HidenResearchNoteID").val(),
+            Name: serverId,
+            MineType:"audio"
+        };
+        console.log("UploadAudioToSelfServer post Data=");
+        console.log(postData);
+        $.post("@Url.Action("Create","ResearchNoteAttachment")", postData, function (data) {
+            layer.open({ content: data.ErrorMsg, skin: 'msg', time: 1 });
+            console.log(data.Data);
+            InitAudioList(data.Data);
+            $("#BtnAudioRecord").html("录音");
+        });
+
+    }
+    function AudioPlay(ID) {
+        document.getElementById("Audio" + ID).play();
+    }
+    $(function () {
+        InitResearchNote();
+    });
+    /*录音相关功能 End*/
+
+
+
+    function UploadImgToWeiXinServer(res) {
+        $(res.localIds).each(function (index, item) {
+            wx.uploadImage({
+                localId: item, // 需要上传的图片的本地ID，由chooseImage接口获得
+                isShowProgressTips: 1, // 默认为1，显示进度提示
+                success: function (res) {
+                    UploadImgToSelfServer(res.serverId);
+                },
+                fail: function (res) {
+                    alert("上传图片失败了，请重试");
+                    ReflashImageList();
+                    return false;
+                }
+            });
+
+        });
+    }
+    function UploadImgToSelfServer(serverId) {
+        var postData = {
+            ResearchID:@Model.ID,
+            ResearchNoteID:$("#HidenResearchNoteID").val(),
+            Name: serverId,
+            MineType:"image"
+        };
+        $.post("@Url.Action("Create","ResearchNoteAttachment")", postData, function (data) {
+            layer.open({ content: data.ErrorMsg, skin: 'msg', time: 1 });
+            console.log(data.Data);
+            InitImagesList(data.Data);
+        });
+    }
+    //删除已选图片
+    function Attachment_Delete(ID) {
+        //询问框
+        layer.open({
+            content: '确定要删除吗？'
+            , btn: ['确定', '取消']
+            , yes: function (index) {
+                layer.close(index);
+                $.post("@Url.Action("Delete","ResearchNoteAttachment")", {ID:ID}, function (data) {
+                    layer.open({ content: data.ErrorMsg, skin: 'msg', time: 1 });
+                    console.log(data.Data);
+                    InitImagesList(data.Data.listImage);
+                    InitAudioList(data.Data.listAudio);
+                });
+
+            }
+        });
+    }
+
+    </script>
+    <style type="text/css">
+        .BarFocus {
+            color: #F60;
+            background-color: #4310f3;
+        }
+
+        .GreenConfirm {
+            color: green;
+        }
+
+        .weui_uploader_file {
+            margin-bottom: 40px;
+        }
+
+        timeStamp {
+            position: relative;
+            top: 70px;
+            font-size: 6px;
+        }
+    </style>
+    <script type="text/javascript">
+    $(function () {
+        $(".weui_tabbar_item").click(function () {
+            $(".DivTabBodys").hide();
+            $(".weui_tabbar_item").removeClass("BarFocus");
+            var EleID = $(this).attr("id") + "BD";
+            $("#" + EleID).show();
+            $(this).addClass("BarFocus");
+        });
+    });
+
+
+    </script>
+    <script type="text/javascript">
+    $(function () {
+        $(".weui_uploader_file").click(function () {
+            var src = $(this).css("background-image");
+            var contentBody3 = "<img src='" + src + "' style='width:100%;' />";
+            layer.open({
+                content: contentBody3,
+                btn: '好的'
+            });
+        });
+    });
+    </script>
+
+
+
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            console.log("data=");
+            console.log(data);
+            layer.open({ content: data.ErrorMsg, skin: 'msg', time: 2, shadeClose: false });
+            if (data.ErrorCode <= 0) {
+                $('#ModalTemplateItem').modal('hide');
+                $('#ModalSubjectiveOpinion').modal('hide');
+            }
+            // location.href = location.href;
+
+        }
+        function OnBegin() {
+            return true;
+        }
+
+    </script>
+
+}
+
+<div class="tabbar">
+    <div class="weui_tab">
+        <div class="weui_tab_bd">
+            <!------------------------------------------>
+            <div id="DivItem1BD" class="DivTabBodys">
+                <div class="weui_cells">
+                    <div class="weui_cells_title">调研情况</div>
+
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">
+                            <label for="" class="weui_label">区域</label>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            @SysEnum.GetName(typeof(SysEnum.ResearchArea), Model.ResearchPlanInfo.AreaID)
+                        </div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">
+                            <label for="" class="weui_label">学校</label>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            @Model.ResearchPlanInfo.DepartmentInfo.Name
+                        </div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">
+                            <label for="" class="weui_label">评价模板</label>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            @Model.ResearchPlanInfo.EvalTemplateInfo.Name
+                        </div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">
+                            <label for="" class="weui_label">听课时间</label>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            @Model.ResearchPlanInfo.DateBegin.ToString("yyyy-MM-dd")
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="weui_cells">
+
+                    <div class="weui_cells_title">听评课信息</div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">
+                            <label for="" class="weui_label">调研学科</label>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            @Model.SubjectInfo.Name
+                        </div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">
+                            <label for="" class="weui_label">听课对象</label>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            @{ UserInfo infoLecture = UserBLL.GetList(a => a.ID == Model.lectureUserID).FirstOrDefault();}
+                            @if (null != infoLecture)
+                            {
+                            <span>@infoLecture.Name</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">
+                            <label for="" class="weui_label">听课课题</label>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            @Model.Topic
+                        </div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">
+                            <label for="" class="weui_label">听课节次</label>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            @Model.LessionNumber
+                        </div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">
+                            <label for="" class="weui_label">听课年级</label>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            @Model.GradeName
+                        </div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">
+                            <label for="" class="weui_label">听课班级</label>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            @Model.ClassName
+                        </div>
+                    </div>
+                    <div class="weui_cells_title">备注</div>
+                    <div class="weui_cells weui_cells_form">
+                        <div class="weui_cell">
+                            <div class="weui_cell_bd weui_cell_primary">
+                                @Model.ResearchPlanInfo.Memo
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!------------------------------------------>
+            <div id="DivItem2BD" class="DivTabBodys" style="display:none;">
+                <div class="weui_cells weui_cells_form">
+                    <div class="weui_cell">
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <div class="weui_uploader">
+                                <div class="weui_uploader_hd weui_cell">
+                                    <div class="weui_cell_bd weui_cell_primary">教案图片上传</div>
+                                </div>
+                                <div class="weui_uploader_bd">
+                                    <ul class="weui_uploader_files" id="UlResearchPlanAttachment">
+                                        @*<li class="weui_uploader_file" style="background-image:url(http://shp.qpic.cn/weixinsrc_pic/pScBR7sbqjOBJomcuvVJ6iacVrbMJaoJZkFUIq4nzQZUIqzTKziam7ibg/)"></li>*@
+                                    </ul>
+                                    @if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP听评课资源管理.PPP添加上传.KEY))
+                                    {
+                                    <div class="weui_uploader_input_wrp">
+                                        <div class="weui_uploader_input" id="BtnUploadImageResearchPlan"></div>
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!------------------------------------------>
+            <div id="DivItem3BD" class="DivTabBodys" style="display:none;">
+
+                <style type="text/css">
+                    #DivListResearchNoteRecord item {
+                        margin: 2px;
+                        padding: 3px;
+                        border: 1px solid #CCC;
+                        clear: both;
+                        display: block;
+                        min-height: 26px;
+                    }
+
+                        #DivListResearchNoteRecord item p {
+                            margin: 0;
+                            padding: 0;
+                        }
+
+                        #DivListResearchNoteRecord item ImgContainerThumb {
+                            width: 45%;
+                            float: left;
+                            margin: 2%;
+                            display: block;
+                        }
+
+                        #DivListResearchNoteRecord item img {
+                            width: 100%;
+                            height: auto;
+                        }
+                </style>
+                <script type="text/javascript">
+                    function BtnResearchNote_Edit(ResearchNoteID) {
+                        //ListResearchNote
+                        var pageii = layer.open({
+                            type: 1,
+                            content: $("#ScriptResearchNoteEdit").html(),
+                            anim: 'up',
+                            style: 'position:fixed; left:0; top:0; width:100%; height:100%; border: none; -webkit-animation-duration: .5s; animation-duration: .5s;overflow-y:scroll;'
+                        });
+                        WX_Ready();
+                        var infoResearchNoteExist = null;
+                        $(ListResearchNote).each(function (index, item) {
+                            $("#HidenResearchNoteID").val(ResearchNoteID);
+                            if (item.ID == ResearchNoteID)
+                            {
+                                InitAudioList(item.AudioJSON);
+                                InitImagesList(item.ImageJSON);
+                                $("#TxtResearchNote_Detail").val(item.Detail);
+                                infoResearchNoteExist = item;
+                            }
+                        });
+                        if (null==infoResearchNoteExist) {
+                            $.post("@Url.Action("Create", "ResearchNote", new { ResearchID=@Model.ID })", function (data) {
+                                $("#HidenResearchNoteID").val(data.Data);
+                            });
+                        }
+                    }
+                    ///修改时显示已有的录音
+                    function InitAudioList(listAudioJSON) {
+                        var HTML = '';
+                        $(listAudioJSON).each(function (index, item) {
+                            HTML += '<div class="weui_cell">';
+                            HTML += '   <div class="weui_cell_bd weui_cell_primary">';
+                            HTML += '         <p onclick="AudioPlay(\'' + item.ID + '\')">' + item.CreateDate + '.amr</p>'
+                            HTML += '   <audio id="Audio' + item.ID + '" src="' + item.FullPath + '" style="display:none;"></audio>';
+                            HTML += '   </div>'
+                            HTML += '   <div class="weui_cell_ft">'
+                            HTML += '       <span class="weui_icon_cancel" onclick="Attachment_Delete(' + item.ID + ')"></span>'
+                            HTML += '   </div>'
+                            HTML += '</div>'
+                        });
+                        console.log("AudioHTML=" + HTML);
+                        $("#DivAudioRecord").html(HTML);
+                    }
+                    ///修改时显示已有的图片
+                    function InitImagesList(listImagesJSON) {
+                        var HTML = '';
+                        $(listImagesJSON).each(function (index, item) {
+                            HTML += '<li class="weui_uploader_file" style="background-image:url(' + item.FullPath + ')" onclick="Attachment_Delete(\'' + item.ID + '\')">';
+                            HTML += '<timeStamp>' + item.CreateDate + '</timeStamp>';
+                            HTML += '</li>';
+                        });
+                        console.log("HTML=" + HTML);
+                        $("#UlResearchNoteImage").html(HTML);
+                    }
+                    ///提交保存记录
+                    function BtnResearchNote_EditSubmit()
+                    {
+                        var postData = {
+                            ResearchID:@Model.ID,
+                            ID: $("#HidenResearchNoteID").val(),
+                            Detail: $("#TxtResearchNote_Detail").val(),
+                        };
+                        $.post("@Url.Action("Edit","ResearchNote")", postData, function (data) {
+                            alert(data.ErrorMsg);
+                            if (data.ErrorCode == 0) {
+                                InitResearchNote();
+                                layer.closeAll();
+                            }
+                        });
+                    }
+
+                    ///删除听评记录
+                    function BtnResearchNote_Delete(ResearchNoteID) {
+                        if (!ResearchNoteID) {
+                            ResearchNoteID = $("#HidenResearchNoteID").val();
+                        }
+                        if (!confirm("确定要删除当前听课记录吗？"))
+                        { return;}
+                        var postData = {
+                            ID: ResearchNoteID
+                        };
+                        $.post("@Url.Action("Delete","ResearchNote")", postData, function (data) {
+                            alert(data.ErrorMsg);
+                            if (data.ErrorCode == 0) {
+                                InitResearchNote();
+                                layer.closeAll();
+                            }
+                        });
+                    }
+                </script>
+                <div class="weui_btn_area">
+                    <a class="weui_btn weui_btn_primary" href="javascript:BtnResearchNote_Edit(0);" id="showTooltips">添加记录</a>
+                </div>
+                <div id="DivListResearchNoteRecord" style="padding:10px;">
+                    <item>
+                        <p>
+                            fasdfasdfa
+                        </p>
+                        <img class="img-thumbnail" src="~/images/logo.jpg" />
+                        <img class="img-thumbnail" src="~/images/logo.jpg" />
+                        <img class="img-thumbnail" src="~/images/logo.jpg" />
+                        <img class="img-thumbnail" src="~/images/logo.jpg" />
+                        <div style="clear:both"></div>
+                        <div class="well well-sm">...</div>
+                        <div style="clear:both"></div>
+                    </item>
+                </div>
+
+                <script type="text/html" id="ScriptResearchNoteEdit">
+                    <div class="weui_cells_title">过程记录
+                        <a href="javascript:layer.closeAll();" class="btn btn-default pull-right">返回</a>
+                    </div>
+                    <div class="weui_cells weui_cells_form">
+                        <div class="weui_cell">
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <input type="hidden" id="HidenResearchNoteID" />
+                                <textarea id="TxtResearchNote_Detail" class="weui_textarea" placeholder="请输入记录内容" rows="6"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix" style="text-align:center;">
+                        @if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP听评课资源管理.PPP添加上传.KEY))
+                        {
+
+                            <a href="javascript:;" id="BtnUploadImage" class="btn btn-info btn-sm">拍照</a>
+                            <a href="javascript:;" id="BtnAudioRecord" class="btn btn-info btn-sm">录音</a>
+
+                        }
+                        <a href="javascript:BtnResearchNote_EditSubmit();" class="btn btn-success">确定</a>
+                        <a href="javascript:BtnResearchNote_Delete();" class="btn btn-warning">删除并返回</a>
+                    </div>
+                    <div class="weui_cells weui_cells_form">
+                        <div class="weui_cell">
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <div class="weui_uploader">
+                                    <div class="weui_uploader_hd weui_cell">
+                                        <div class="weui_cell_bd weui_cell_primary">媒体记录</div>
+                                    </div>
+                                    <div class="weui_uploader_bd">
+                                        <ul class="weui_uploader_files" id="UlResearchNoteImage"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weui_cells" id="DivAudioRecord">
+                        @*<div class="weui_cell">
+                                <div class="weui_cell_bd weui_cell_primary">
+                                    <p onclick="AudioPlay(ID)">标题文字</p>
+                                </div>
+                                <div class="weui_cell_ft"><span class="weui_icon_cancel" onclick="Attachment_Delete(ID)"></span></div>
+                            </div>*@
+                    </div>
+
+                </script>
+            </div>
+            <!------------------------------------------>
+            <div id="DivItem4BD" class="DivTabBodys" style="display:none;">
+                <div style="margin:15px;">
+                    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#ModalTemplateItem" style="margin:15px 0px;width:100%;">
+                        <span class="glyphicon glyphicon-indent-left" aria-hidden="true"></span>量化评价
+                    </button>
+                    <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#ModalSubjectiveOpinion" style="margin:15px 0px;width:100%;">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>   主观评价
+                    </button>
+                    @if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP收获反思.KEY))
+                    {
+                        <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#ModalTimeLine" style="margin:15px 0px;width:100%;">
+                            <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>分享收获反思
+                        </button>
+                    }
+                </div>
+                <div class="modal fade" id="ModalTemplateItem" tabindex="-1" role="dialog" aria-labelledby="ModalTemplateItemLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="gridSystemModalLabel">量化评价</h4>
+                            </div>
+                            @using (Ajax.BeginForm("Edit", "Research", new AjaxOptions { HttpMethod = "post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+                            {
+                                var listTemplateItem = Model.ResearchPlanInfo.EvalTemplateInfo.TemplateItemInfo
+                                       .Where(a => a.Enable)
+                                       .OrderByDescending(a => a.SortID)
+                                       .ThenBy(a => a.ID)
+                                       .Distinct();
+                                @Html.Hidden("EditProp", "TemplateItem")
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                @Html.HiddenFor(model => model.ID)
+
+                                @Html.HiddenFor(model => model.NoteMemo)
+                                @Html.Hidden("HidenIsConfirm", Model.Status == (int)SysEnum.ResearchStatus.已确认 ? "true" : "false")
+                                <div class="modal-body">
+                                    <div class="weui_cells_title">量化评价</div>
+                                    @if (Model.ResearchPlanInfo.EvalTemplateInfo.TypeFlag == (int)SysEnum.TemplateTypeFlag.分值模板)
+                                    {
+                                        <div class="weui_cells weui_cells_form">
+
+                                            @foreach (var item in listTemplateItem)
+                                            {
+                                                var ExistValue = Model.ResearchItemInfo.FirstOrDefault(a => a.TemplateItemID == item.ID);
+                                                <div class="weui_cell">
+                                                    <div class="weui_cell_hd"><label class="weui_label">@item.Name</label></div>
+                                                    <div class="weui_cell_bd weui_cell_primary">
+                                                        <input class="weui_input"
+                                                               id="@("TxtEvalTemplate" + item.ID)"
+                                                               name="@("TxtEvalTemplate" + item.ID)"
+                                                               _MaxScore="@item.MaxScore"
+                                                               value="@(ExistValue == null ? "" : ExistValue.ScoreValue.ToString())"
+                                                               placeholder="@string.Format("0至{0}分", item.MaxScore)"
+                                                               type="number" pattern="[0-9]*">
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="weui_cells weui_cells_form">
+                                            @foreach (var item in listTemplateItem)
+                                            {
+                                                var ExistValue = Model.ResearchItemInfo.FirstOrDefault(a => a.TemplateItemID == item.ID);
+                                                <div class="weui_cell weui_cell_select weui_select_after">
+                                                    <div class="weui_cell_hd">
+                                                        <label for="" class="weui_label">@item.Name</label>
+                                                    </div>
+                                                    <div class="weui_cell_bd weui_cell_primary">
+                                                        <select class="weui_select" id="@("TxtEvalTemplate" + item.ID)" name="@("TxtEvalTemplate" + item.ID)">
+                                                            @foreach (var itemTemplateOption in Model.ResearchPlanInfo.EvalTemplateInfo.TemplateOptionInfo)
+                                                            {
+                                                                <option value="@itemTemplateOption.ID" @((null != ExistValue && ExistValue.ScoreValue == itemTemplateOption.ID) ? "selected" : "")>
+                                                                    @itemTemplateOption.Name
+                                                                </option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                    @if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP组织调研.PPP听评课管理.修改及提交)
+&& Model.UserID == CurrentUser.ID && Model.Status != (int)SysEnum.ResearchStatus.已确认)
+                                    { <input type="submit" class="btn btn-primary" value="保存" />}
+                                </div>
+                            }
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+
+                <div class="modal fade" id="ModalSubjectiveOpinion" tabindex="-1" role="dialog" aria-labelledby="ModalSubjectiveOpinionLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="gridSystemModalLabel">主观评价</h4>
+                            </div>
+                            @using (Ajax.BeginForm("Edit", "Research", new AjaxOptions { HttpMethod = "post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+                            {
+                                @Html.Hidden("EditProp", "SubjectiveOpinion")
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                @Html.HiddenFor(model => model.ID)
+
+                                @Html.HiddenFor(model => model.NoteMemo)
+                                @Html.Hidden("HidenIsConfirm", Model.Status == (int)SysEnum.ResearchStatus.已确认 ? "true" : "false")
+                                <div class="modal-body">
+                                    <div class="weui_cells_title">主观评价</div>
+                                    <div class="weui_cells weui_cells_form">
+                                        <div class="weui_cell">
+                                            <div class="weui_cell_bd weui_cell_primary">
+                                                @Html.TextAreaFor(model => model.SubjectiveOpinion, new { @class = "weui_textarea", placeholder = "请输入评价意见", rows = "12" })
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                    @if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP组织调研.PPP听评课管理.修改及提交)
+&& Model.UserID == CurrentUser.ID && Model.Status != (int)SysEnum.ResearchStatus.已确认)
+                                    {     <input type="submit" class="btn btn-primary" value="保存" />}
+                                </div>
+                            }
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+
+                <div class="modal fade" id="ModalTimeLine" tabindex="-1" role="dialog" aria-labelledby="ModalTimeLineLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="gridSystemModalLabel">分享收获反思</h4>
+                            </div>
+                            <div class="modal-body" style="padding:2px;">
+                                <input type="hidden" id="HidenTimeLineID" data-Description="" value="0" />
+                                <script type="text/javascript">
+
+                                    function SetTimeLineID(_TimeLineID) {
+                                        $("#HidenTimeLineID").val(_TimeLineID);
+                                        InitShareLink();
+                                    }
+                                    wx.ready(function () {
+
+                                    });
+                                    function InitShareLink() {
+                                       wx.showMenuItems({
+                                            menuList: ['menuItem:share:appMessage', // 发送给朋友
+                                                'menuItem:share:timeline'//分享到朋友圈
+                                            ] // 要显示的菜单项，所有menu项见附录3
+                                        });
+                                        var ShareLink = '@(Tool.ConfigHelper.GetAppendSettingValue("WEBDoMain")+ "/Wechat/TimeLineP/Detail/")' + $("#HidenTimeLineID").val();
+                                        var ShareImgURL = '@(Tool.ConfigHelper.GetAppendSettingValue("WEBDoMain"))/images/logo.jpg';
+
+                                        wx.onMenuShareTimeline({
+                                            title: '收获反思', // 分享标题
+                                            link: ShareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                                            imgUrl: ShareImgURL, // 分享图标
+                                            success: function () {
+                                                // 用户确认分享后执行的回调函数
+                                            },
+                                            cancel: function () {
+                                                // 用户取消分享后执行的回调函数
+                                            }
+                                        });
+
+                                        wx.onMenuShareAppMessage({
+                                            title: '收获反思', // 分享标题
+                                            desc: '我在进行听课调研时分享了收获反思，点我进来看看吧', // 分享描述
+                                            link: ShareLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                                            imgUrl: ShareImgURL, // 分享图标
+                                            type: 'link', // 分享类型,music、video或link，不填默认为link
+                                            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                                            success: function () {
+                                                // 用户确认分享后执行的回调函数
+                                            },
+                                            cancel: function () {
+                                                // 用户取消分享后执行的回调函数
+                                            }
+                                        });
+                                    }
+
+                                </script>
+                                <iframe id="NoPermissioniframe" name="NoPermissioniframe" src="@Url.Action("Create","TimeLine",new { ResearchID=Model.ID})"
+                                        style="min-height:65vh;" width="100%" height="100%" frameborder="0"></iframe>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                @*<input type="button" class="btn btn-primary" onclick="BtnShareToTimeLine_Click();" value="分享" />*@
+                                <input type="button" class="btn btn-primary" onclick='$(window.frames["NoPermissioniframe"].document).find("#BtnSubmit").click();' value="分享" />
+                            </div>
+
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </div>
+        </div>
+        <div style="height:70px"></div>
+        <div class="weui_tabbar" style="position:fixed;bottom:0;">
+            <a href="javascript:;" id="DivItem1" class="weui_tabbar_item BarFocus">
+                <div class="weui_tabbar_icon">
+                    <img src="~/images/icon4/10.png" alt="">
+                </div>
+                <p class="weui_tabbar_label">基础信息</p>
+            </a>
+            <a href="javascript:;" id="DivItem2" class="weui_tabbar_item">
+                <div class="weui_tabbar_icon">
+                    <img src="~/images/icon4/9.png" alt="">
+                </div>
+                <p class="weui_tabbar_label">教案</p>
+            </a>
+            @if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP听评课记录管理.KEY))
+            {
+
+            <a href="javascript:;" id="DivItem3" class="weui_tabbar_item">
+                <div class="weui_tabbar_icon">
+                    <img src="~/images/icon4/10.png" alt="">
+                </div>
+                <p class="weui_tabbar_label">课堂记录</p>
+            </a>
+            }
+            <a href="javascript:;" id="DivItem4" class="weui_tabbar_item">
+                <div class="weui_tabbar_icon">
+                    <img src="~/images/icon4/5.png" alt="">
+                </div>
+                <p class="weui_tabbar_label">课堂评价</p>
+            </a>
+        </div>
+    </div>
+</div>

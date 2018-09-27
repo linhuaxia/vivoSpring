@@ -1,0 +1,92 @@
+﻿@using Vivo.Model
+@using Tool;
+@{
+    ViewBag.Title = "系统帐户绑定";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+}
+
+@section head{
+    <script language="javascript" type="text/javascript">
+        $(document).ready(function () { $("#TxtName").focus(); });
+    </script>
+    <style type="text/css">
+    </style>
+    <script type="text/javascript">
+        function LoginOnSuccess(data) {
+            // console.log(data);
+            if (data.ErrorCode == 0) {
+                location.href = "@Url.Action("index","home")";
+                return;
+            }
+            $("#ErrorMsg").html(data.ErrorMsg);
+        }
+        function LoginOnBegin() {
+            $("#ErrorMsg").html("");
+        }
+    </script>
+}
+@using (Ajax.BeginForm("Index", "Login", new AjaxOptions { HttpMethod = "post", OnSuccess = "LoginOnSuccess", OnBegin = "LoginOnBegin", LoadingElementId = "loadingToast" }))
+{
+    @Html.Hidden("OpenID", Function.GetRequestString("OpenID"))
+    <div style="height:50px;"></div>
+    <div class="cell">
+        <div class="bd">
+
+            <div class="weui_cells_title">请输入帐号密码</div>
+            <div class="weui_cells weui_cells_form">
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">
+                        <label class="weui_label">
+                            <img src="~/images/icon4/4.png" style="width:20px;" align="absmiddle" />
+                            帐号
+                        </label>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        @Html.TextBox("TxtName", "", new { placeholder = "请输入帐号", MaxLength = "26", @class = "weui_input" })
+                    </div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">
+                        <label class="weui_label">
+                            <img src="~/images/icon4/58.png" style="width:20px;" align="absmiddle" />
+                            密码
+                        </label>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        @Html.Password("TxtPwd", "",
+                       new Dictionary<string, object>() { { "placeholder", "密码" }, { "MaxLength", 16 }, { "class", "weui_input" } })
+                    </div>
+                </div>
+                <div class="weui_cell weui_vcode">
+                    <div class="weui_cell_hd"><label class="weui_label">验证码</label></div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        @Html.TextBox("TxtCode", "",
+                               new Dictionary<string, object>() { { "placeholder", "验证码" },
+                                   { "MaxLength", 4 },
+                                   { "class", "weui_input" }, })
+
+
+                    </div>
+                    <div class="weui_cell_ft">
+                        <img width="108" height="44" style="cursor: pointer;" align="absmiddle" alt="点击更新新图" src="/MP/sys/randimg"
+                             onclick="this.src = '/MP/sys/randimg?' + Math.random();" />
+                    </div>
+                </div>
+            </div>
+            <div style="height:30px;line-height:30px;">
+                <span id="ErrorMsg">请输入用户名、密码</span>
+            </div>
+            <input type="submit" value="登录" class="weui_btn weui_btn_primary" />
+        </div>
+    </div>
+}
+
+
+@{
+    var data = new ViewDataDictionary();
+    data.Add("LoadingToast", "正在登录");
+    Html.RenderPartial("_LoadingToastPartial", data);
+}
+
+
+

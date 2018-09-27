@@ -1,0 +1,63 @@
+﻿@using Vivo.Model;
+
+@{
+    ViewBag.Title = "全局设置";
+    Layout = "~/Areas/MP/Views/Shared/_Layout.cshtml";
+
+    ProfilesInfo DefaultRuleIDWhenInport = (ProfilesInfo)ViewBag.DefaultRuleIDWhenInport;
+    var ifnoa = (ProfilesInfo)ViewBag.ifnoa;
+    var infoAiQiYiRate = (ProfilesInfo)ViewBag.infoAiQiYiRate;
+    var infoEnableAgenterName = (ProfilesInfo)ViewBag.infoEnableAgenterName;
+
+}
+@section head{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+        });
+    </script>
+}
+
+
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <input type="hidden" id="TimeStamp" name="TimeStamp" value="@DateTime.Now.ToString("fffff")" />
+    <table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+        <tr>
+            <td class="td1_2">
+                活动期间爱奇艺中奖概率
+            </td>
+            <td class="td1_3">
+                @Html.TextBox("TxtinfoAiQiYiRate", infoAiQiYiRate.Value, new { type = "number" }) %
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                手机在出售后多少小时内能抽奖
+            </td>
+            <td class="td1_3">
+                @Html.TextBox("Txtinfoa", ifnoa.Value, new { type = "number" }) 小时
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                可参与抽奖的区域
+            </td>
+            <td class="td1_3">
+                @Html.TextBox("TxtinfoEnableAgenterName", infoEnableAgenterName.Value, new { }) 
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2" colspan="2">
+                <input type="submit" value="提交" class="btn btn-default" />
+            </td>
+        </tr>
+
+    </table>
+
+}

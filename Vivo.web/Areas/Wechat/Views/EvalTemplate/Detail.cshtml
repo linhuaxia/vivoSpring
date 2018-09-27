@@ -1,0 +1,128 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+
+@model Vivo.Model.EvalTemplateInfo
+
+@{
+    ViewBag.Title = "详细信息";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IPowerActionInfoService PowerActionBLL = AbstractFactory.CreatePowerActionInfoService();
+}
+@section head{
+
+<script type="text/javascript">
+        $(function () {
+            $("#BtnDelete").click(function () {
+                if (!confirm("确定要删除数据吗？")) {
+                    return;
+                }
+                APINormalGet('@Url.Action("Delete",new { id=Model.ID})',
+                    '@Url.Action("index")');
+            });
+       });
+
+</script>
+
+
+}
+
+
+
+
+<div class="weui_cells">
+    <div class="weui_cell">
+        <div class="weui_cell_hd"><label class="weui_label">名称</label></div>
+        <div class="weui_cell_bd weui_cell_primary">
+            @Model.Name
+        </div>
+    </div>
+    <div class="weui_cell weui_cell_switch">
+        <div class="weui_cell_hd weui_cell_primary">是否可用</div>
+        <div class="weui_cell_ft">
+            @(Model.Enable?"正常":"禁用")
+        </div>
+    </div>
+    <div class="weui_cell weui_cell_select weui_select_after">
+        <div class="weui_cell_hd">
+            <label for="" class="weui_label">排序号</label>
+        </div>
+        <div class="weui_cell_bd weui_cell_primary">
+            @Model.SortID
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-primary" style="margin:10px;">
+    <div class="panel-heading">
+        <h3 class="panel-title ">标准设置</h3>
+    </div>
+    <div class="panel-body">
+        <div class="weui_cells">
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><label class="weui_label">优秀下限</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Model.Amin
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><label class="weui_label">良好下限</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Model.BMin
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><label class="weui_label">合格下限</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Model.CMin
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><label class="weui_label">不合格下限</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Model.DMin
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-primary" style="margin:10px;">
+    <div class="panel-heading clearfix">
+        <h3 class="panel-title pull-left">评价项目</h3>
+    </div>
+    <div class="panel-body">
+        <div class="weui_cells">
+            @foreach (var item in Model.TemplateItemInfo)
+                {
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">
+                        <i class="weui_icon_cancel" ></i>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p >@item.Name</p>
+                    </div>
+                    <div class="weui_cell_ft">
+                        @item.MaxScore
+
+                    |@(item.Enable?"":"禁用")
+                </div>
+            </div>
+                }
+        </div>
+    </div>
+</div>
+
+@if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.PP评价模板.PPP编辑.KEY))
+{ 
+    <a href="@Url.Action("Edit",new { ID=Model.ID})" class="weui_btn weui_btn_primary" title="添加" style="margin:15px;">
+        前住修改
+    </a>
+}
+@if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.PP评价模板.PPP删除.KEY))
+{
+    <a href="javascript:" id="BtnDelete" class="weui_btn weui_btn_warn"  style="margin:15px;">
+    删除</a>
+}
+
+

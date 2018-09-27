@@ -1,0 +1,120 @@
+﻿@using Vivo.BLLFactory;
+@using Vivo.Model;
+@using PagedList.Mvc;
+@using Vivo.IBLL;
+
+@model Vivo.Model.UserInfo
+
+@{
+    ViewBag.Title = "添加帐户";
+    Layout = "~/Areas/MP/Views/Shared/_Layout.cshtml";
+}
+@section head{
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            if (data.ErrorCode != 0) {
+                alert(data.ErrorMsg);
+                return;
+            }
+            location.href = "@Url.Action("Edit")/" + data.Data.ID + "?SubmitWithName=" + SubmitWithName;
+           
+        }
+        var SubmitWithName = '';
+        function SubmitWith(WithWhat) {
+            SubmitWithName = WithWhat;
+            $("#BtnSubmit").click();
+        }
+        function OnBegin() {
+            //do something before post data
+
+        }
+        $(function () {
+            // $("#PassWord").val("qwe123");
+        });
+    </script>
+}
+<h2>@ViewBag.Title</h2>
+<div>
+    @using (Ajax.BeginForm("Create", new AjaxOptions
+    {
+        HttpMethod = "post",
+        OnSuccess = "OnSuccess",
+        OnBegin = "OnBegin",
+        LoadingElementId = "loadingToast"
+    }))
+    {
+        @Html.AntiForgeryToken()
+
+
+
+        <table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+            <tr>
+                <td class="td1_2">
+                    姓名
+                </td>
+                <td class="td1_3">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                </td>
+            </tr>
+            <tr>
+                <td class="td1_2">
+                    登录名
+                </td>
+                <td class="td1_3">
+                    @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control" } })
+                </td>
+            </tr>
+            <tr>
+                <td class="td1_2">
+                    密码
+                </td>
+                <td class="td1_3">
+                    @Html.EditorFor(model => model.PassWord, new { htmlAttributes = new { @class = "form-control" } })
+                    (密码不填写时，将默认用lw123456作为密码)
+                </td>
+            </tr>
+            <tr>
+                <td class="td1_2">
+                    学校/部门
+                </td>
+                <td class="td1_3">
+                    @Html.DropDownList("DepartmentID", ViewBag.listDepartment as IEnumerable<SelectListItem>, "请选择", htmlAttributes: new { @class = "form-control" })
+                </td>
+            </tr>
+            <tr>
+                <td class="td1_2">
+                    是否启用
+                </td>
+                <td class="td1_3">
+                    @Html.CheckBoxFor(model => model.Enable, new { @checked = "checked" })
+                </td>
+            </tr>
+            <tr>
+                <td class="td1_2" colspan="2">
+                    @if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.PP系统帐户管理.PPP用户管理.查看用户角色))
+                {
+                        <a href="javascript:SubmitWith('Rule')" class="btn btn-default">
+
+                            角色配置
+                        </a>
+                    }
+
+                    @if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.PP系统帐户管理.PPP用户管理.管理用户学科))
+                {
+                        <a href="javascript:SubmitWith('Subject')" class="btn btn-default">
+
+                            学科配置
+                        </a>
+                    }
+
+                    <a href="javascript:SubmitWith('')" class="btn btn-default">
+                        提交
+                    </a>
+
+                    <input type="submit" id="BtnSubmit" value="提交" class="btn btn-default" style="display:none" />
+                </td>
+            </tr>
+
+        </table>
+    }
+</div>

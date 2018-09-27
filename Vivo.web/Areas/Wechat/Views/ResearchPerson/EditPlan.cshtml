@@ -1,0 +1,188 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+@using Tool;
+@model ResearchPlanInfo
+
+@{
+    ViewBag.Title = "修改基础信息";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+
+}
+
+@section head{
+    <link href="~/Scripts/jquery-autocomplete/jquery.autocomplete.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-autocomplete/jquery.autocomplete.js"></script>
+
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            alert(data.ErrorMsg);
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            location.href = "@Url.Action("Detail",new { PlanID = Model.ID })";
+
+        }
+        function OnBegin() {
+            return confirm("请仔细检查信息，是否确认无误？");
+        }
+        $(function () {
+            BindEvent();
+        });
+        function BindEvent() {
+            BindDepartmentID();
+        }
+
+        var SelectUserJson = null;
+
+        ///设置选中学校的值，并做相关的后续事件
+        function BindDepartmentID() {
+            $("#TxtLectureUserID").autocomplete("@Url.Action("APIQueue","User")/" + @Model.DepartmentID,
+                {
+                    dataType: "json",
+                    minChars: 0,
+                    delay: 10,
+                    autoFill: true,
+                    matchContains: true,
+                    formatItem: function (row, i, max) {
+                        return row.Name;
+                    },
+                    formatMatch: function (row, i, max) {
+                        return row.ID;
+                    },
+                    parse: function (data) {
+                        return $.map(data, function (row) {
+                            return {
+                                data: row,
+                                value: row.Name,
+                                result: row.Name
+                            }
+                        });
+                    }
+                }).result(
+                function (event, row, formatted) {
+                    $("#lectureUserID").val(row.ID);
+                    return true;
+                }
+            );
+
+        }
+
+    </script>
+}
+@using (Ajax.BeginForm("EditPlan", new { }, new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+{
+    int lectureUserID = Model.ResearchInfo.FirstOrDefault().lectureUserID;
+    UserInfo infoUserLecture = UserBLL.GetList(a => a.ID == lectureUserID).FirstOrDefault();
+    string lectureUserName = string.Empty;
+    if (null!= infoUserLecture)
+    {
+        lectureUserName = infoUserLecture.Name;
+        if (lectureUserName.IndexOf("|")>0)
+        {
+            lectureUserName = infoUserLecture.Name.Substring(infoUserLecture.Name.LastIndexOf("|"));
+        }
+    }
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.ID)
+    @Html.HiddenFor(model => model.ResearchInfo.FirstOrDefault().lectureUserID)
+    <div class="weui_cells">
+        <div class="weui_cells_title">调研情况</div>
+        <div class="weui_cell" >
+            <div class="weui_cell_hd">
+                <label for="" class="weui_label">学校</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Model.DepartmentInfo.Name
+            </div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd">
+                <label for="" class="weui_label">评价模板</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Model.EvalTemplateInfo.Name
+            </div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label for="" class="weui_label">听课时间</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.TextBoxFor(model => model.DateBegin, "{0:yyyy-MM-dd}",  new { @class = "weui_input", type = "date",value=DateTime.Now.ToString("yyyy-MM-dd")})
+            </div>
+        </div>
+    </div>
+        <div class="weui_cells">
+            <div class="weui_cells_title">听评课信息</div>
+            <div class="weui_cell weui_cell_select weui_select_after">
+                <div class="weui_cell_hd">
+                    <label for="" class="weui_label">调研学科</label>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.DropDownListFor(model => model.ResearchInfo.FirstOrDefault().SubjectID, ViewBag.listSubject as IEnumerable<SelectListItem>, new { @class = "weui_select" })
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><label class="weui_label">听课对象</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.TextBox("TxtLectureUserID", lectureUserName,  new { @class = "weui_input", type = "text", placeholder = "授课老师姓名关键字" })
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><label class="weui_label">听课课题</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.EditorFor(model => model.ResearchInfo.FirstOrDefault().Topic, new { htmlAttributes = new { @class = "weui_input", type = "text", placeholder = "请填写课题" } })
+                </div>
+            </div>
+            <div class="weui_cell weui_cell_select weui_select_after">
+                <div class="weui_cell_hd">
+                    <label for="" class="weui_label">听课节次</label>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.DropDownListFor(model => model.ResearchInfo.FirstOrDefault().LessionNumber, ViewBag.listLessionNumber as IEnumerable<SelectListItem>, new { @class = "weui_select" })
+                </div>
+            </div>
+            <div class="weui_cell weui_cell_select weui_select_after">
+                <div class="weui_cell_hd">
+                    <label for="" class="weui_label">听课年级</label>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.DropDownListFor(model => model.ResearchInfo.FirstOrDefault().GradeName, ViewBag.listGrade as IEnumerable<SelectListItem>, new { @class = "weui_select" })
+                </div>
+            </div>
+            <div class="weui_cell weui_cell_select weui_select_after">
+                <div class="weui_cell_hd">
+                    <label for="" class="weui_label">听课班级</label>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.DropDownListFor(model => model.ResearchInfo.FirstOrDefault().ClassName, ViewBag.listClass as IEnumerable<SelectListItem>, new { @class = "weui_select" })
+                </div>
+            </div>
+
+
+        </div>
+        <div class="weui_cells">
+
+            <div class="weui_cells_title">备注</div>
+            <div class="weui_cells weui_cells_form">
+                <div class="weui_cell">
+                    <div class="weui_cell_bd weui_cell_primary">
+                        @Html.TextAreaFor(model => model.Memo, new
+               {
+                   @class = "weui_textarea",
+                   placeholder = "非必填项",
+                   rows = "3"
+               })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="weui_btn_area">
+            <input type="submit" value="提交" class="weui_btn weui_btn_primary" />
+        </div>
+
+}

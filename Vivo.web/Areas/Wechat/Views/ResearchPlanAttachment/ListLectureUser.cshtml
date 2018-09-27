@@ -1,0 +1,60 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+@using PagedList;
+@using PagedList.Mvc;
+
+@model PagedList.IPagedList<ResearchPlanInfo>
+
+@{
+    ViewBag.Title = "教案准备情况";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IPowerActionInfoService PowerActionBLL = AbstractFactory.CreatePowerActionInfoService();
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+    UserInfo CurrentUser = ViewBag.CurrentUser;
+
+}
+@section head{
+}
+<div class="weui_cells_title">Tips：此处仅供查看您的教案上传情况，不提供管理，如需管理请转到电脑操作</div>
+
+@foreach (var item in Model)
+{
+    var CurrentCount = item.ResearchPlanAttachmentInfo
+        .Count(a => a.TypeEnum == (int)SysEnum.ResearchPlanAttachmentType.教案 && a.CreateUserID == CurrentUser.ID);
+    <div class="weui_cells weui_cells_access">
+        <a class="weui_cell" href="@Url.Action("DetailLectureUser",new { PlanID=item.ID})">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>@item.Name</p>
+            </div>
+            <div class="weui_cell_ft">
+                @(CurrentCount>0?("已上传 "+CurrentCount):"未上传")
+            </div>
+        </a>
+
+    </div>
+}
+<div style="text-align:center">
+    @Html.PagedListPager((IPagedList)Model,
+    page => Url.Action("ListLectureUser", new { page = page }),
+    new PagedListRenderOptions
+    {
+        LinkToPreviousPageFormat = "上一页",
+        LinkToNextPageFormat = "下一页",
+        MaximumPageNumbersToDisplay = 0,
+        Display = PagedListDisplayMode.IfNeeded,
+        DisplayEllipsesWhenNotShowingAllPageNumbers = true
+    }
+    )
+</div>
+
+
+
+
+
+
+
+
+
+
+

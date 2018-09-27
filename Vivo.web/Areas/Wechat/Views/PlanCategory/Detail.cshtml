@@ -1,0 +1,62 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+@model PlanCategoryInfo
+
+@{
+    ViewBag.Title = "详细信息";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IPowerActionInfoService PowerActionBLL = AbstractFactory.CreatePowerActionInfoService();
+}
+@section head{
+
+    <script type="text/javascript">
+        function BtnDelete_Click() {
+            if (!confirm("确定要删除吗？")) {
+                return;
+            }
+            $.post("@Url.Action("Delete",new { area="MP",ID=Model.ID})", function (data) {
+                alert(data.ErrorMsg);
+                if (data.ErrorCode == 0) {
+                    location.href = "@Url.Action("Index")";
+                }
+            });
+        }
+
+    </script>
+
+}
+
+
+
+
+<div class="weui_cells">
+    <div class="weui_cell">
+        <div class="weui_cell_hd weui_cell_primary"><label class="weui_label">名称</label></div>
+        <div class="weui_cell_ft">
+            @Model.Name
+        </div>
+    </div>
+    <div class="weui_cell">
+        <div class="weui_cell_hd weui_cell_primary">是否可用</div>
+        <div class="weui_cell_ft">
+            @(Model.Enable ? "正常" : "禁用")
+        </div>
+    </div>
+</div>
+<div style="height:40vh;"></div>
+@if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP组织调研.PPP分组管理.编辑))
+{
+    <a href="@Url.Action("Edit",new { ID=Model.ID})" class="weui_btn weui_btn_primary" style="margin:15px;">
+        前住修改
+    </a>
+}
+@if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP组织调研.PPP分组管理.删除))
+{
+    <a href="javascript:BtnDelete_Click();" class="weui_btn weui_btn_warn" style="margin:15px;">
+        删除
+    </a>
+}
+
+
+

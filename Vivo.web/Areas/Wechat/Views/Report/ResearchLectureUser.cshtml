@@ -1,0 +1,287 @@
+﻿@using PagedList
+@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+@using PagedList.Mvc;
+@using System.Linq;
+@model IQueryable<ResearchInfo>
+@{
+    ViewBag.Title = "学校教师调研报表";
+    Layout = "~/Areas/MP/Views/Shared/_Layout.cshtml";
+
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+    IPowerActionInfoService PowerActionBLL = (IPowerActionInfoService)ViewBag.PowerActionBLL;
+    var infoEvalTemplate = (EvalTemplateInfo)ViewBag.infoEvalTemplate;
+}
+@section head{
+<link href="~/Scripts/jquery-autocomplete/jquery.autocomplete.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-autocomplete/jquery.autocomplete.js"></script>
+
+    <script type="text/javascript">
+        function BtnSearch_Click() {
+            var URL = "@Url.Action("ResearchLectureUser")";
+            URL += "?DepartmentID=" + $("#DdlDepartmentID").val();
+            URL += "&SubjectID=" + $("#DdlSubjectID").val();
+            URL += "&LectureUserID=" + $("#LectureUserID").val();
+            URL += "&EvalTemplateID=" + $("#DdlEvalTemplateID").val();
+            URL += "&DateBegin=" + $("#TxtDateBegin").val();
+            URL += "&DateEnd=" + $("#TxtDateEnd").val();
+            location.href = URL;
+        }
+        function BtnExport_Click() {
+            var URL = "@Url.Action("ResearchLectureUser", "PDF")";
+            URL += "?DepartmentID=" + $("#DdlDepartmentID").val();
+            URL += "&SubjectID=" + $("#DdlSubjectID").val();
+            URL += "&LectureUserID=" + $("#LectureUserID").val();
+            URL += "&EvalTemplateID=" + $("#DdlEvalTemplateID").val();
+            URL += "&DateBegin=" + $("#TxtDateBegin").val();
+            URL += "&DateEnd=" + $("#TxtDateEnd").val();
+
+            var URLFinally = "@Url.Action("Print", "PDF")?URL=" + URL;
+            window.open(URLFinally, "_black");
+        }
+
+        $(function () {
+            $("#DdlDepartmentID").change(function () {
+                var ID = $(this).val();
+                $("#DdlSubjectID").empty();
+                $("#DdlSubjectID").append("<option value='0'>请选择</option>");
+                var URL = "@Url.Action("APIQueue", "Subject",new {})";
+                URL += "?DepartmentID=" + ID;
+                $.get(URL, function (data) {
+                    $(data.Data).each(function (index, item) {
+                        var IsSelected = "";
+                        if (item.ID == "@ViewBag.DdlSubjectID") {
+                            IsSelected = " selected='selected' ";
+                        }
+                        $("#DdlSubjectID").append("<option value='" + item.ID + "'" + IsSelected + ">" + item.Name + "</option>");
+                    });
+                    $("#DdlSubjectID").change();
+                });                
+            });
+            $("#DdlSubjectID").change(function () {
+                InitAutoComplete();
+            });
+            $("#DdlDepartmentID").change();
+            InitAutoComplete();
+        });
+
+        function InitAutoComplete() {
+            var URL = "@Url.Action("APIQueueAutoComplete", "User",new {area="Wechat"})";
+            URL += "?DepartmentID=" + $("#DdlDepartmentID").val();
+            URL += "&SubjectID=" + $("#DdlSubjectID").val();
+            $("#TxtLectureUserID").autocomplete(URL,
+                {
+                    dataType: "json",
+                    minChars: 0,
+                    delay: 10,
+                    autoFill:false,
+                    matchContains: true,
+                    formatItem: function (row, i, max) {
+                        return row.Name;
+                    },
+                    formatMatch: function (row, i, max) {
+                        return row.ID;
+                    },
+                    parse: function (data) {
+                        return $.map(data, function (row) {
+                            return {
+                                data: row,
+                                value: row.Name,
+                                result: row.Name
+                            }
+                        });
+                    }
+                }).result(
+                function (event, row, formatted) {
+                    $("#LectureUserID").val(row.ID);
+                    return true;
+                }
+                );
+        }
+
+
+    </script>
+
+}
+
+
+
+
+
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+    <tr>
+        <td colspan="7" style="height: 30px" class="td1_1">
+            @ViewBag.Title
+        </td>
+    </tr>
+    <tr>
+        <td class="td1_2">
+            学校
+        </td>
+        <td class="td1_3">
+            @Html.DropDownList("DdlDepartmentID", ViewBag.listDepartment as IEnumerable<SelectListItem>, "请选择", new { @class = "form-control" })
+        </td>
+        <td class="td1_2">
+            学科
+        </td>
+        <td class="td1_3">
+            @Html.DropDownList("DdlSubjectID", new List<SelectListItem>(), "请选择", new { @class = "form-control" })
+        </td>
+        <td class="td1_2">
+            教师
+        </td>
+        <td class="td1_3">
+            @Html.TextBox("TxtLectureUserID", (null== ViewBag.TxtLectureUserID?"":(string)ViewBag.TxtLectureUserID), new { @class = "form-control", autocomplete = "off" })
+            @Html.Hidden("LectureUserID")
+        </td>
+        <td class="td1_2" rowspan="2">
+            <div class="btn-group" role="group" aria-label="...">
+                <button class="btn btn-default" onclick="BtnSearch_Click();">搜索</button>
+                <button class="btn btn-default" onclick="BtnExport_Click();">导出PDF</button>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="td1_2">
+            评价模板
+        </td>
+        <td class="td1_3">
+            @Html.DropDownList("DdlEvalTemplateID", ViewBag.listEvalTempate as IEnumerable<SelectListItem>, new { @class = "form-control" })
+        </td>
+        <td class="td1_2">
+            开始日期
+        </td>
+        <td class="td1_3">
+            @Html.TextBox("TxtDateBegin", null, new { @class = "form-control", type = "date" })
+        </td>
+        <td class="td1_2">
+            结束日期
+        </td>
+        <td class="td1_3">
+            @Html.TextBox("TxtDateEnd", null, new { @class = "form-control", type = "date" })
+        </td>
+    </tr>
+
+</table>
+
+
+<table class="table table-bordered">
+    <tr>
+        <th rowspan="@(infoEvalTemplate.TypeFlag == (int)SysEnum.TemplateTypeFlag.等级模板?2:1)" style="vertical-align:middle;width:150px;">
+            调研日期
+        </th>
+        <th rowspan="@(infoEvalTemplate.TypeFlag == (int)SysEnum.TemplateTypeFlag.等级模板?2:1)" style="vertical-align:middle;width:150px;">
+            评课人员
+        </th>
+        <th rowspan="@(infoEvalTemplate.TypeFlag == (int)SysEnum.TemplateTypeFlag.等级模板?2:1)" style="vertical-align:middle;width:150px;">
+            课题
+        </th>
+        <th rowspan="@(infoEvalTemplate.TypeFlag == (int)SysEnum.TemplateTypeFlag.等级模板?2:1)" style="vertical-align:middle;width:150px;">
+            年级
+        </th>
+        @foreach (var item in infoEvalTemplate.TemplateItemInfo)
+        {
+        <th colspan="@(infoEvalTemplate.TemplateOptionInfo.Count())">
+            @item.Name
+        </th>
+        }
+    </tr>
+    @if (infoEvalTemplate.TypeFlag == (int)SysEnum.TemplateTypeFlag.等级模板)
+    {
+        <tr>
+            @foreach (var item in infoEvalTemplate.TemplateItemInfo)
+            {
+                foreach (var itemOption in infoEvalTemplate.TemplateOptionInfo)
+                {
+            <th>
+                @itemOption.Name
+            </th>
+                }
+            }
+        </tr>
+    }
+
+    @foreach (var item in Model)
+    {
+        <tr style="cursor:pointer" onclick="LayerCustomertSize('@Url.Action("Detail","Research",new { ID =item.ID})','',false,'100%','100%')">
+            <td>
+                @item.ResearchPlanInfo.DateBegin.ToString("yyyy-MM-dd")
+            </td>
+            <td>
+                @item.UserInfo.Name
+            </td>
+            <td>
+                @item.Topic
+            </td>
+            <td>
+                @SysEnum.GetName(typeof(SysEnum.LessionGrade), item.GradeName)
+            </td>
+            @if (item.ResearchPlanInfo.TemplateID == infoEvalTemplate.ID)
+            {
+
+                foreach (var itemTemplateItem in infoEvalTemplate.TemplateItemInfo)
+                {
+                    var listResearchItemInfoTemplate = item.ResearchItemInfo;
+                    if (infoEvalTemplate.TypeFlag == (int)SysEnum.TemplateTypeFlag.等级模板)
+                    {
+                        foreach (var itemOption in infoEvalTemplate.TemplateOptionInfo)
+                        {
+                            <td>
+                                @listResearchItemInfoTemplate.Count(a => a.TemplateItemID == itemTemplateItem.ID && a.ScoreValue == itemOption.ID)
+                            </td>
+                        }
+                    }
+                    else
+                    {
+                        <td>
+                            @{
+                                var ScoreArrage = listResearchItemInfoTemplate.Where(a => a.TemplateItemID == itemTemplateItem.ID).Select(a => a.ScoreValue);
+                            }
+                            @if (ScoreArrage != null && ScoreArrage.Count() > 0)
+                            {
+                                <text>@ScoreArrage.Average()</text>
+                            }
+                        </td>
+                    }
+                }
+            }
+
+        </tr>
+    }
+    <tr>
+        <td colspan="3">
+            合计（节）
+        </td>
+        <td>
+            @Model.Count()
+        </td>
+        @if (!Model.Any(a => a.ResearchPlanInfo.TemplateID != infoEvalTemplate.ID))
+        {
+
+            foreach (var itemTemplateItem in infoEvalTemplate.TemplateItemInfo)
+            {
+                if (infoEvalTemplate.TypeFlag == (int)SysEnum.TemplateTypeFlag.等级模板)
+                {
+                    foreach (var itemOption in infoEvalTemplate.TemplateOptionInfo)
+                    {
+                    <td>
+                        @Model.SelectMany(a=>a.ResearchItemInfo).Count(a => a.TemplateItemID == itemTemplateItem.ID && a.ScoreValue == itemOption.ID)
+                    </td>
+                    }
+                }
+                else
+                {
+                <td>
+                    @{ var arrays = Model.SelectMany(a => a.ResearchItemInfo).Where(a => a.TemplateItemID == itemTemplateItem.ID).Select(a => a.ScoreValue);}
+                    @if (arrays.Count() > 0)
+                    {
+                        <text>@arrays.Average()</text>
+                    }
+                </td>
+                }
+            }
+        }
+
+    </tr>
+</table>

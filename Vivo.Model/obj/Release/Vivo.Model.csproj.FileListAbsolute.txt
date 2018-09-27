@@ -1,0 +1,15 @@
+D:\Develop\Vivo\src\Vivo.Model\bin\Release\Vivo.Model.dll.config
+D:\Develop\Vivo\src\Vivo.Model\bin\Release\Vivo.Model.dll
+D:\Develop\Vivo\src\Vivo.Model\bin\Release\Vivo.Model.pdb
+D:\Develop\Vivo\src\Vivo.Model\bin\Release\EntityFramework.dll
+D:\Develop\Vivo\src\Vivo.Model\bin\Release\EntityFramework.SqlServer.dll
+D:\Develop\Vivo\src\Vivo.Model\bin\Release\Newtonsoft.Json.dll
+D:\Develop\Vivo\src\Vivo.Model\bin\Release\EntityFramework.xml
+D:\Develop\Vivo\src\Vivo.Model\bin\Release\EntityFramework.SqlServer.xml
+D:\Develop\Vivo\src\Vivo.Model\bin\Release\Newtonsoft.Json.xml
+D:\Develop\Vivo\src\Vivo.Model\bin\Release\zh-Hans\EntityFramework.resources.dll
+D:\Develop\Vivo\src\Vivo.Model\bin\Release\zh-Hans\EntityFramework.SqlServer.resources.dll
+D:\Develop\Vivo\src\Vivo.Model\obj\Release\Vivo.Model.csprojResolveAssemblyReference.cache
+D:\Develop\Vivo\src\Vivo.Model\obj\Release\Vivo.Model.csproj.CoreCompileInputs.cache
+D:\Develop\Vivo\src\Vivo.Model\obj\Release\Vivo.Model.dll
+D:\Develop\Vivo\src\Vivo.Model\obj\Release\Vivo.Model.pdb

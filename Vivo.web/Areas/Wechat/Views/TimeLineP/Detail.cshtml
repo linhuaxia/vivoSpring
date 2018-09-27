@@ -1,0 +1,160 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+@using Tool;
+
+@model TimeLineInfo
+
+@{
+    ViewBag.Title = "收获反思";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    
+}
+
+@section head{
+    <script type="text/javascript">
+        $(function () {
+            $(".ImgContainerThumb").click(function () {
+                var HTML = '<img src="' + $(this).children("img").attr("src") +'" style="width:100%;max-height:90vh;" />';
+                layer.open({
+                    content: HTML,
+                    skin: 'footer'
+                });
+            });
+        });
+    </script>
+    <style type="text/css">
+        .weui_tab_bd {
+            overflow-x: hidden !important;
+        }
+
+        .Myweui_media_hd {
+            min-height: inherit !important;
+            vertical-align: top !important;
+            height: 100% !important;
+            float: left;
+            width: 70px;
+        }
+
+            .Myweui_media_hd img {
+                position: absolute;
+                top: 26px;
+                width: 60px !important;
+                height: 60px;
+                
+            }
+
+        .weui_media_info {
+            list-style: none;
+            color: #CCC;
+        }
+
+        .DivCommonContainer {
+            margin: 5px;
+            background-color: #f2f2f2;
+            padding: 2px;
+        }
+
+        .DivHeart {
+            color: #576B95;
+        }
+
+            .DivHeart span {
+                padding-right: 7px;
+            }
+
+        .UlCommon {
+            margin: 5px 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+            .UlCommon span {
+                color: #576B95;
+            }
+
+        .linker {
+            color: #105af3 !important;
+        }
+
+        .ImgContainerThumb {
+            width: 20vw !important;
+            height: 20vw !important;
+            overflow:hidden;
+            margin: 5px 5px 0px 0px;
+            float:left;
+        }
+            .ImgContainerThumb img {
+                width:100%;height:auto;
+            }
+    </style>
+
+    <script type="text/javascript">
+        function AudioPlay(ID) {
+            document.getElementById("Audio" + ID).play();
+        }
+        $(function () {
+            $("#WapHead").hide();
+
+        });
+
+    </script>
+}
+<div class="msg">
+    <div class="weui_msg">
+
+        <div class="weui_text_area">
+            <h2 class="weui_msg_title">
+                @SysEnum.GetName(typeof(SysEnum.LessionGrade), Tool.Function.ConverToInt(Model.ResearchInfo.GradeName))
+                @Model.ResearchInfo.ClassName
+                第 @Model.ResearchInfo.LessionNumber 节
+            </h2>
+            <p class="weui_msg_desc">@Model.Detail</p>
+        </div>
+
+        <div>
+            <div class="DivHeart">
+                @if (Model.TimeLineCommonInfo.Count(a => !a.IsCommon) > 0)
+                {
+                    <img src="/images/TimeLineHeart.png" />
+                }
+                @foreach (var item in Model.TimeLineCommonInfo.Where(a => !a.IsCommon))
+                {
+
+                    <span>@item.UserInfo.Name </span>
+                }
+            </div>
+            <div class="DivCommonContainer">
+                <ul class="UlCommon">
+                    @foreach (var item in Model.TimeLineCommonInfo.Where(a => a.IsCommon))
+                    {
+                        <li>
+                            <span>@item.UserInfo.Name+'：</span>
+                            @item.Detail
+                        </li>
+                    }
+                </ul>
+                <div class="ResearchImageContainer">
+                    @foreach (var item in Model.ResearchInfo.ResearchNoteInfo.SelectMany(a => a.ResearchNoteAttachmentInfo).Where(a => a.MineType == "image"))
+                    {
+                        <div class="ImgContainerThumb">
+                            <img src="@(item.PathRelative+item.Name)" class="img-thumbnail">
+                        </div>
+                    }
+                    <div style="clear:both"></div>
+                </div>
+                @foreach (var item in Model.ResearchInfo.ResearchNoteInfo.SelectMany(a => a.ResearchNoteAttachmentInfo).Where(a => a.MineType == "audio"))
+                {
+                    <div class="well well-sm" onclick="AudioPlay(@item.ID)">
+                        @item.CreateDate<text>.mp3</text>
+                    </div>
+                        <audio id="@("Audio"+item.ID)" src="@(item.PathRelative+item.Name)" style="display:none;"></audio>
+                }
+            </div>
+        </div>
+
+        <div class="weui_extra_area">
+            <a href="wx.closeWindow();">关闭</a>
+        </div>
+    </div>
+</div>

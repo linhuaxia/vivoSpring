@@ -1,0 +1,413 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+
+@model Vivo.Model.ResearchInfo
+
+@{
+    ViewBag.Title = "组织调研详细信息";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IPowerActionInfoService PowerActionBLL = AbstractFactory.CreatePowerActionInfoService();
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+    IResearchInfoService ResearchBLL = AbstractFactory.CreateResearchInfoService();
+    UserInfo CurrentUser = ViewBag.CurrentUser;
+    var infoPlan = (ResearchPlanInfo)ViewBag.infoPlan;
+    var listResearch = (IEnumerable<ResearchInfo>)ViewBag.listResearch;
+
+}
+@section head{
+
+
+    <style type="text/css">
+        .weui_bar_item_on {
+            color: #F60;
+            background-color: #4310f3;
+        }
+
+        .GreenConfirm {
+            color: green;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            $(".weui_navbar_item").click(function () {
+                $(".DivTabBodys").hide();
+                $(".weui_navbar_item").removeClass("weui_bar_item_on");
+                var EleID = $(this).attr("id") + "BD";
+                $("#" + EleID).show();
+                $(this).addClass("weui_bar_item_on");
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        //body3
+        $(function () {
+            $(".weui_uploader_file").click(function () {
+                var src = $(this).attr("attID");
+                location.href = src;
+                //var contentBody3 = "<img src='"+src+"' style='width:100%;' />";
+                //layer.open({
+                //    content: contentBody3,
+                //    btn: '好的'
+                //});
+            });
+        });
+    </script>
+
+
+    <script type="text/javascript">
+                //body4
+        $(function () {
+            $("#SubjectID").change(function () {
+                var SubjectID = $(this).val();
+                $("#lectureUserID").empty();
+                $("#lectureUserID").append("<option value='0'>请选择</option>");
+                if (SubjectID=="") {
+                    return;
+                }
+            var URL = "@Url.Action("APIQueue", "User", new { DepartmentID = infoPlan.DepartmentID })";
+                URL += "&SubjectID=" + SubjectID;
+                $.get(URL, function (data) {
+                    $(data.Data).each(function(index,item) {
+                        $("#lectureUserID").append("<option value='" + item.ID+"'>"+item.Name+"</option>");
+                    });
+                });
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            alert(data.ErrorMsg);
+            if (data.ErrorCode < 0) {
+                return;
+            }
+            location.href = "@Url.Action("Edit")/"+data.Data.ID;
+        }
+        function OnBegin() {
+            return true;
+        }
+
+
+    </script>
+
+
+}
+
+
+
+<div class="navbar">
+    <div class="bd" style="height: 100%;">
+        <div class="weui_tab">
+            <div class="weui_navbar">
+                <div class="weui_navbar_item" id="DivItem2">
+                    课表
+                </div>
+                @if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP组织调研.PPP听评课管理.添加)
+        && infoPlan.ResearchPlanUserInfo.Any(plan => plan.UserID == CurrentUser.ID)
+        && DateTime.Now.Date <= infoPlan.DateBegin.Date
+        )
+                {
+                <div class="weui_navbar_item" id="DivItem4">
+                    听评课
+                </div>
+                }
+                <div class="weui_navbar_item weui_bar_item_on" id="DivItem3">
+                    听课反馈
+                </div>
+                <div class="weui_navbar_item" id="DivItem1">
+                    调研情况
+                </div>
+            </div>
+            <div class="weui_tab_bd">
+                <!------------------------------------------>
+                <div id="DivItem2BD" class="DivTabBodys" style="display:none;">
+                    <div class="weui_cell">
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <div class="weui_uploader">
+                                <div class="weui_uploader_bd">
+                                    <ul class="weui_uploader_files">
+                                        @foreach (var item in infoPlan.ResearchPlanAttachmentInfo.Where(a => a.TypeEnum == (int)SysEnum.ResearchPlanAttachmentType.课表 && a.MineType.Contains("images")))
+                                        {
+                                        <li class="weui_uploader_file" attID="@(item.PathRelative+item.Name)" style="background-image:url(@(item.PathRelative+item.Name))"></li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weui_panel">
+                        <div class="weui_panel_bd">
+                            @foreach (var item in infoPlan.ResearchPlanAttachmentInfo.Where(a => a.TypeEnum == (int)SysEnum.ResearchPlanAttachmentType.课表 && !a.MineType.Contains("images")))
+                            {
+                                var Icon = "logo.png";
+                                if (item.MineType.ToLower().Contains("image"))
+                                {
+                                    Icon = "image.png";
+                                }
+                                else if (item.MineType.ToLower().Contains("doc") || item.MineType.ToLower().Contains("word"))
+                                {
+                                    Icon = "doc.png";
+                                }
+                                else if (item.MineType.ToLower().Contains("powerpoint") || item.MineType.ToLower().Contains("officedocument.presentationml.presentation"))
+                                {
+                                    Icon = "ppt.png";
+                                }
+                                else if (item.MineType.ToLower().Contains("excel"))
+                                {
+                                    Icon = "xls.png";
+                                }
+                                else if (item.MineType.ToLower().Contains("pdf"))
+                                {
+                                    Icon = "pdf.png";
+                                }
+                            <a href="javascript:ResearchPlanAttachment_Click('@(item.PathRelative+item.Name)','@Icon')" class="weui_media_box weui_media_appmsg">
+                                <div class="weui_media_hd">
+                                    <img class="weui_media_appmsg_thumb" src="~/images/document/@Icon" alt="">
+                                </div>
+                                <div class="weui_media_bd">
+                                    <h4 class="weui_media_title">@item.ShowName</h4>
+                                    <p class="weui_media_desc">@item.Memo</p>
+                                </div>
+                            </a>
+                            }
+
+                            <script type="text/javascript">
+                                    function ResearchPlanAttachment_Click(SRC, ICON) {
+                                        var HTML = "";
+                                        if (ICON == "image.png") {
+                                            HTML = '<img src="' + SRC + '" style="width:100%;max-height:100vh;"/>';
+                                            layer.open({
+                                                type: 1
+                                                , content: HTML,
+                                                anim: 'up',
+                                                style: 'position:fixed; bottom:0; left:0; width: 100%; height: 90%; padding:0; border:none;'
+                                            });
+                                        }
+                                        else {
+                                            window.open(SRC, "_black");
+                                        }
+                                    }
+                            </script>
+
+                        </div>
+                    </div>
+
+                    @if (infoPlan.ResearchPlanAttachmentInfo.Count(a => a.TypeEnum == (int)SysEnum.ResearchPlanAttachmentType.课表) == 0)
+                    {
+                    <div class="DivNoData">
+                        没有数据
+                    </div>
+                    }
+
+
+
+                </div>
+                <!------------------------------------------>
+                <div id="DivItem3BD" class="DivTabBodys">
+                    <div class="panel panel-primary" style="margin:10px;">
+                        <div class="panel-heading clearfix">
+                            <h3 class="panel-title pull-left">听课反馈记录搜索</h3>
+                            <span class="badge pull-right">
+                                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                            </span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="weui_cells weui_cells_form" style="margin:0;">
+                                <div class="weui_cell weui_cell_select weui_select_after">
+                                    <div class="weui_cell_hd">
+                                        <label for="" class="weui_label">年级</label>
+                                    </div>
+                                    <div class="weui_cell_bd weui_cell_primary">
+                                        @Html.DropDownList("DdlGradeS", ViewBag.listGrade as IEnumerable<SelectListItem>, "不限", new { @class = "weui_select" })
+                                    </div>
+                                </div>
+                                <div class="weui_cell weui_cell_select weui_select_after">
+                                    <div class="weui_cell_hd">
+                                        <label for="" class="weui_label">学科</label>
+                                    </div>
+                                    <div class="weui_cell_bd weui_cell_primary">
+                                        @Html.DropDownList("DdlSubjectID", ViewBag.listSubject as IEnumerable<SelectListItem>, "不限", new { @class = "weui_select" })
+                                    </div>
+                                </div>
+                                <div class="weui_cell">
+                                    <div class="weui_cell_hd">教师姓名</div>
+                                    <div class="weui_cell_bd weui_cell_primary">
+                                        @Html.TextBox("TxtNameS", ViewBag.TxtNameS == null ? "" : (string)ViewBag.TxtNameS, new { placeholder = "", @class = "weui_input" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix">
+                                <a href="javascript:BtnSch_Click();" class="weui_btn weui_btn_plain_primary">搜索</a>
+                                <script type="text/javascript">
+                                    function BtnSch_Click(pernex) {
+                                        var URL = "@Url.Action("index")";
+                                        URL += "?PlanID=@infoPlan.ID";
+                                        URL += "&SubjectID=" + $("#DdlSubjectID").val();;
+                                        URL += "&NameS=" + $("#TxtNameS").val();
+                                        URL += "&GradeS=" + $("#DdlGradeS").val();
+                                        location.href = URL;
+                                    }
+
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="weui_panel">
+                        <div class="weui_panel_bd">
+                            @foreach (var item in listResearch)
+                            {
+                                var infoLectureUser = UserBLL.GetList(a => a.ID == item.lectureUserID).FirstOrDefault();
+                                <a class="weui_media_box weui_media_text" href="@Url.Action("Detail",new { ID=item.ID})">
+                                    <h4 class="weui_media_title">
+                                        @(null == infoLectureUser ? "" : infoLectureUser.Name)
+                                        by @item.UserInfo.Name
+                                    </h4>
+                                    <p class="weui_media_desc">课题：@item.Topic</p>
+                                    <ul class="weui_media_info">
+                                        <li class="weui_media_info_meta">
+                                            @SysEnum.GetName(typeof(SysEnum.LessionGrade), Tool.Function.ConverToInt(item.GradeName))
+                                            @item.ClassName
+                                        </li>
+                                        <li class="weui_media_info_meta weui_media_info_meta_extra">
+                                            第 @item.LessionNumber 节
+                                        </li>
+                                    </ul>
+                                </a>
+                            }
+
+                        </div>
+                    </div>
+                    @if (listResearch.Count() == 0)
+                    {
+                        <div class="msg">
+                            <div class="weui_msg">
+                                <div class="weui_text_area">
+                                    <h2 class="weui_msg_title">没有记录</h2>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <!------------------------------------------>
+                <div id="DivItem4BD" class="DivTabBodys" style="display:none;">
+                    @using (Ajax.BeginForm("Create", new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+                    {
+                        @Html.HiddenFor(model => model.ResearchPlanID, new { Value = infoPlan.ID })
+                        <div class="weui_cells">
+                            <div class="weui_cell weui_cell_select weui_select_after">
+                                <div class="weui_cell_hd">
+                                    <label for="" class="weui_label">调研学科</label>
+                                </div>
+                                <div class="weui_cell_bd weui_cell_primary">
+                                    @Html.DropDownListFor(model => model.SubjectID, ViewBag.listSubject as IEnumerable<SelectListItem>, "请选择", new { @class = "weui_select" })
+                                </div>
+                            </div>
+                            <div class="weui_cell weui_cell_select weui_select_after">
+                                <div class="weui_cell_hd">
+                                    <label for="" class="weui_label">听课节次</label>
+                                </div>
+                                <div class="weui_cell_bd weui_cell_primary">
+                                    @Html.DropDownListFor(model => model.LessionNumber, ViewBag.listLessionNumber as IEnumerable<SelectListItem>, new { @class = "weui_select" })
+                                </div>
+                            </div>
+                            <div class="weui_cell weui_cell_select weui_select_after">
+                                <div class="weui_cell_hd">
+                                    <label for="" class="weui_label">听课年级</label>
+                                </div>
+                                <div class="weui_cell_bd weui_cell_primary">
+                                    @Html.DropDownListFor(model => model.GradeName, ViewBag.listGrade as IEnumerable<SelectListItem>, new { @class = "weui_select" })
+                                </div>
+                            </div>
+                            <div class="weui_cell weui_cell_select weui_select_after">
+                                <div class="weui_cell_hd">
+                                    <label for="" class="weui_label">听课班级</label>
+                                </div>
+                                <div class="weui_cell_bd weui_cell_primary">
+                                    @Html.DropDownListFor(model => model.ClassName, ViewBag.listClass as IEnumerable<SelectListItem>, new { @class = "weui_select" })
+                                </div>
+                            </div>
+                            <div class="weui_cell">
+                                <div class="weui_cell_hd"><label class="weui_label">听课课题</label></div>
+                                <div class="weui_cell_bd weui_cell_primary">
+                                    @Html.EditorFor(model => model.Topic, new { htmlAttributes = new { @class = "weui_input", type = "text", placeholder = "请填写课题" } })
+                                </div>
+                            </div>
+                            <div class="weui_cell weui_cell_select weui_select_after">
+                                <div class="weui_cell_hd"><label class="weui_label">听课对象</label></div>
+                                <div class="weui_cell_bd weui_cell_primary">
+                                    @Html.DropDownListFor(model => model.lectureUserID, new List<SelectListItem>(), "请选择", new { @class = "weui_select" })
+                                </div>
+                            </div>
+                        </div>
+                        if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP组织调研.PPP听评课管理.添加))
+                        {
+                            <div class="weui_btn_area">
+                                <input type="submit" class="weui_btn weui_btn_primary" value="确定" />
+                            </div>
+                        }
+                    }
+                </div>
+                <!------------------------------------------>
+                <div id="DivItem1BD" class="DivTabBodys" style="display:none;">
+                    <div class="weui_cells">
+                        <div class="weui_cell">
+                            <div class="weui_cell_hd"><label class="weui_label">名称</label></div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                @infoPlan.Name
+                            </div>
+                        </div>
+                        <div class="weui_cell">
+                            <div class="weui_cell_hd">
+                                <label for="" class="weui_label">学校</label>
+                            </div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                @infoPlan.DepartmentInfo.Name
+                            </div>
+                        </div>
+                        <div class="weui_cell">
+                            <div class="weui_cell_hd"><label for="" class="weui_label">计划日期</label></div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                @infoPlan.DateBegin.ToString("yyyy-MM-dd")
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weui_cells">
+                        <div class="weui_cells_title">备注</div>
+                        <div class="weui_cells weui_cells_form">
+                            <div class="weui_cell">
+                                <div class="weui_cell_bd weui_cell_primary">
+                                    @infoPlan.Memo
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="list-group">
+                        @if (PowerActionBLL.PowerCheck(PowerInfo.P_统计报表.PP集体调研汇总.PPP查看整体汇总.KEY))
+                        {
+                            <a href="@Url.Action("ReportA","Report",new { PlanID=infoPlan.ID})"
+                               class="list-group-item list-group-item-success">查看整体汇总</a>
+                        }
+                        @if (PowerActionBLL.PowerCheck(PowerInfo.P_统计报表.PP集体调研汇总.PPP查看学科汇总.KEY))
+                        {
+                            var listSubjectCurent = infoPlan.DepartmentInfo.DepartmentTypeInfo
+                                .SelectMany(dt => dt.SubjectInfo).ToList()
+                                .Where(s => CurrentUser.SubjectInfo.Select(UserSubject => UserSubject.ID).Contains(s.ID));
+                            foreach (var item in listSubjectCurent)
+                            {
+                                <a href="@Url.Action("Report3","Report",new { PlanID=infoPlan.ID,SubjectID=item.ID})"
+                                   class="list-group-item list-group-item-info">@item.Name 学科汇总</a>
+
+                            }
+                        }
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

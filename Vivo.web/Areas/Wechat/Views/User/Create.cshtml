@@ -1,0 +1,137 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+
+
+@model Vivo.Model.UserInfo
+
+@{
+    ViewBag.Title = "系统帐户-创建";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+
+}
+
+@section head{
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            alert(data.ErrorMsg);
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            location.href = "@Url.Action("Edit", "User")/"+data.Data.ID;
+
+        }
+        function OnBegin() {
+            return true;
+        }
+        //$(function () {
+        //    $("#BtnAddRule").click(BtnAddRule_Click);
+        //});
+        //function BtnAddRule_Click() {
+        //    var NewID = $("#DdlRule").val();
+        //    var Currentjson = JSON.parse($("#HidenRule").val());
+        //    var IsExist = false;
+        //    $(Currentjson).each(function (index, item) {
+        //        if (item.ID == NewID)
+        //        {
+        //            IsExist = true;
+        //            return true;
+        //        }
+        //    });
+        //    if (IsExist) { alert('当前项已被添加'); return; }
+        //    var NewItem = {
+        //        ID: NewID,
+        //        Name: $("#DdlRule").find("option:selected").text()
+        //    };
+        //    Currentjson.push(NewItem);
+        //    SetAndShowRule(Currentjson);
+        //}
+        //function BtnDelRule_Click(_ID) {
+        //    console.log(_ID);
+        //    var Currentjson = JSON.parse($("#HidenRule").val());
+        //    $(Currentjson).each(function (index, item) {
+        //        if (item.ID == _ID) {
+        //            Currentjson.splice(index, 1);
+        //            return true;
+        //        }
+        //    });
+        //    SetAndShowRule(Currentjson);
+        //}
+        //function SetAndShowRule(jsonResult) {
+        //    var JsonString = JSON.stringify(jsonResult);
+        //    $("#HidenRule").val(JsonString);
+        //    var HTML = "";
+        //    $(jsonResult).each(function (index, item) {
+        //        HTML += '<div class="weui_cell">';
+        //        HTML += '   <div class="weui_cell_bd weui_cell_primary">';
+        //        HTML += '       <p>' + item.Name + '</p>';
+        //        HTML += '   </div>';
+        //        HTML += '   <div class="weui_cell_ft">';
+        //        HTML += '       <i class="weui_icon_cancel BtnDelRule" onclick="BtnDelRule_Click('+item.ID+')" ></i>';
+        //        HTML += '   </div>';
+        //        HTML += '</div>';
+        //    });
+        //    $("#DivRule").html(HTML);
+        //}
+    </script>
+
+
+
+}
+
+<div class="bd">
+    @using (Ajax.BeginForm("Create", new { area = "MP" }, new AjaxOptions { HttpMethod = "post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="weui_cells">
+
+            <div class="weui_cell">
+                <div class="weui_cell_hd">
+                    <label for="" class="weui_label">姓名</label>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.TextBoxFor(model => model.Name, new { @class = "weui_input", placeholder = "必填项" })
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd">
+                    <label for="" class="weui_label">登录名</label>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.TextBoxFor(model => model.Code, new { @class = "weui_input", placeholder = "必填项" })
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd">
+                    <label for="" class="weui_label">密码</label>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.PasswordFor(model => model.PassWord, new { @class = "weui_input", placeholder = "必填项" })
+                </div>
+            </div>
+                <div class="weui_cell weui_cell_switch">
+                    <div class="weui_cell_hd weui_cell_primary">是否启用</div>
+                    <div class="weui_cell_ft">
+                        @Html.CheckBoxFor(model => model.Enable, new { @class = "weui_switch",@checked= "checked" })
+                    </div>
+                </div>
+            <div class="weui_cell weui_cell_select weui_select_after">
+                <div class="weui_cell_hd">
+                    <label for="" class="weui_label">学校/部门</label>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.DropDownListFor(model => model.DepartmentID, ViewBag.listDepartment as List<SelectListItem>,
+                           "请选择", new { @class = "weui_select" })
+                </div>
+            </div>
+        </div>
+
+
+
+
+            <div style="margin:5px 20px;">
+                <input type="submit" value="提交" class="weui_btn weui_btn_primary" id="BtnSubmit" />
+            </div>
+
+    }
+</div>

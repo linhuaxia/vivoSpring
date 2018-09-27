@@ -1,0 +1,25 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@model APIJson
+@{
+    ViewBag.Title = "PowerLimit";
+    Layout = "~/Areas/MP/Views/Shared/_Layout.cshtml";
+}
+
+<div class="msg">
+    <div class="weui_msg">
+        <div class="weui_icon_area"><i class="weui_icon_safe weui_icon_safe_warn"></i></div>
+        <div class="weui_text_area">
+            <h2 class="weui_msg_title">出现错误</h2>
+            <p class="weui_msg_desc">@Model.ErrorMsg</p>
+        </div>
+        <div class="weui_opr_area">
+            <p class="weui_btn_area">
+                <a href="javascript:location.href='@Url.Action("index","home")';" class="weui_btn weui_btn_primary">确定</a>
+            </p>
+        </div>
+        <div class="weui_extra_area">
+            <a href="">@Newtonsoft.Json.JsonConvert.SerializeObject(Model)</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,365 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+
+
+
+@{
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IPowerActionInfoService PowerActionBLL = (IPowerActionInfoService)ViewBag.PowerActionBLL;
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+}
+@section head{
+    <script src="/scripts/jquery.endless-scroll-1.3.js"></script>
+
+    <style type="text/css">
+        .weui_tab_bd {
+            overflow-x:hidden !important;
+        }
+        .Myweui_media_hd {
+            min-height: inherit !important;
+            vertical-align: top !important;
+            height: 100% !important;
+            float: left;
+            width: 70px;
+        }
+            .Myweui_media_hd img {
+                position: absolute;
+                top: 26px;
+                width: 60px !important;
+                height: 60px;
+            }
+        .weui_media_info {
+            list-style: none;
+            color: #CCC;
+        }
+        .DivCommonContainer {
+            margin: 5px;
+            background-color: #f2f2f2;
+            padding:2px;
+        }
+        .DivHeart {
+            color: #576B95;
+        }
+            .DivHeart span {
+                padding-right:7px;
+            }
+        .UlCommon {
+            margin:5px 0px;padding:0px;list-style:none;
+        }
+            .UlCommon span {
+                color: #576B95;
+            }
+        .linker {
+            color: #105af3 !important;
+        }
+        .ImgContainerThumb {
+            width: 20vw !important;
+            height: 20vw !important;
+            overflow: hidden;
+            margin: 5px 5px 0px 0px;
+            float: left;
+        }
+
+            .ImgContainerThumb img {
+                width: 100%;
+                height: auto;
+            }
+   </style>
+
+    <script type="text/javascript">
+        $(function () {
+            $(".ImgContainerThumb").click(function () {
+                var HTML = '<img src="' + $(this).children("img").attr("src") + '" style="width:100%;max-height:90vh;" />';
+                layer.open({
+                    content: HTML,
+                    skin: 'footer'
+                });
+            });
+        });
+
+
+        var itemIndex = 1;
+        $(function () {
+            $(".weui_tabbar_item").click(function () {
+                $(".DivTabBodys").hide();
+                $(".weui_tabbar_item").removeClass("BarFocus");
+                var EleID = $(this).attr("id") + "BD";
+                $("#" + EleID).show();
+                $(this).addClass("BarFocus");
+                itemIndex = $(this).attr("id").substring(7,8);
+            });
+            InitData(0);
+            InitData(1);
+            InitData(2);
+            BindScroll();
+        });
+
+
+        var pageIndexA = 1;
+        var pageIndexB = 1;
+        var pageIndexC = 1;
+        function InitData(TypeFlag) {
+            var page = 1;
+            if (TypeFlag == 0) {
+                page = pageIndexA;
+            }
+            else if (TypeFlag == 1) {
+                page = pageIndexB;
+            }
+            else {
+                page = pageIndexC;
+            }
+
+            var URL = "@Url.Action("GetListData")?TypeFlag=" + TypeFlag + "&page=" + page;
+            console.log("InitPage URL=" + URL);
+            $.get(URL, function (data) {
+                var HTML = GetItemHTML(data);
+                console.log("#DivItem" + (TypeFlag + 1) + "BD");
+                console.log("--------------------------");
+                $("#DivItem" + (TypeFlag + 1) + "BD").append(HTML);
+                if (data.length > 0)
+                {
+                    if (TypeFlag == 0) {
+                        pageIndexA++;
+                    }
+                    else if (TypeFlag == 1) {
+                        pageIndexB++;
+                    }
+                    else {
+                        pageIndexC++;
+                    }
+                }
+                IsLoadingData = false;
+            });
+        }
+        function GetItemHTML(list) {
+            var HTML = '';
+            $(list).each(function (index, item) {
+                //var htmlHREF = "location.href='/Wechat/" + item.TypeEnum + "/Detail/" + item.ResearchID + "?PlanID=" + item.ResearchPlanID + "'";
+                HTML += '<div  class="weui_media_box weui_media_appmsg">';
+                HTML += '   <div class="Myweui_media_hd">';
+                HTML += '       <img class="weui_media_appmsg_thumb" src="' + item.WechatHeadImg + '" alt="" />';
+                HTML += '   </div>';
+                HTML += '   <div class="weui_media_bd" >';
+                HTML += '       <h4 class="weui_media_title">' + item.Name + '</h4>';
+                //HTML += '       <h4 class="weui_media_title" onclick="' + htmlHREF + '">' + item.Topic + "|" + item.DepartmentName + "|" + item.SubjectName + '</h4>';
+                HTML += '       <h4 class="weui_media_title" >' + item.Topic + "|" + item.DepartmentName + "|" + item.SubjectName + '</h4>';
+                HTML += '       <p class="weui_media_desc">' + item.Detail + '</p>';
+                HTML += GetImageHTML(item.listImage);
+                HTML += '       <ul class="weui_media_info">';
+                HTML += '           <li class="weui_media_info_meta" style="float:left;">' + item.CreateDate + '</li>';
+                HTML += '           <li class="weui_media_info_meta" style="float:right;" >';
+                HTML += '                 <img src= "/images/TimeLineComm.png" onclick="Common_Click(' + item.ID + ')"/> ';
+                HTML += '           </li>';
+                HTML += '       </ul>';
+                HTML += '       <div style="clear:both;" id="DivCommonBigContainer' + item.ID + '">';
+                HTML += GetHeartHTML(item.listCommon);
+                HTML += GetCommonHTML(item.listCommon);
+                HTML += '       </div>';
+                HTML += '   </div>';
+                HTML += '</div>';
+            });
+            return HTML;
+        }
+        function GetImageHTML(listImage) {
+            if (listImage.length<=0) {
+                return "";
+            }
+            var HTML = '';
+            HTML += '<div class="ResearchImageContainer">';
+            $(listImage).each(function (index,item) {
+                HTML += '<div class="ImgContainerThumb">';
+                HTML += '   <img src="'+item.src+'" class="img-thumbnail">';
+                HTML += '</div>';
+            });
+            HTML += '</div>';
+            HTML += '<div style="clear:both;"></div>';
+            return HTML;
+      }
+        function GetHeartHTML(listHeart) {
+            var IsAnything = false;
+            var HTML = '<div class="DivHeart">';
+            HTML += '   <img src="/images/TimeLineHeart.png" />';
+            $(listHeart).each(function (indexHeart, itemHeart) {
+                if (!itemHeart.IsCommon) {
+                    IsAnything = true;
+                    HTML += '<span> ' + itemHeart.Name + '</span>';
+                }
+            });
+            HTML += '</div>';
+            if (!IsAnything) {
+                return "";
+            }
+            return HTML;
+        }
+        function GetCommonHTML(listCommon) {
+            var IsAnything = false;
+            var HTML = '<div class="DivCommonContainer">';
+            HTML += '  <ul class="UlCommon">';
+            $(listCommon).each(function (index, item) {
+                if (item.IsCommon) {
+                    IsAnything = true;
+                    HTML += '<li><span>'+item.Name+'：</span>'+item.Detail+'</li>';
+                }
+            });
+            HTML += '   </ul>';
+            HTML += '</div>';
+            if (!IsAnything) {
+                return "";
+            }
+           return HTML;
+        }
+
+        var CurrentTimeLineID;
+        function Common_Click(_ID) {
+            //底部对话框
+            layer.open({
+                content: ''
+                , btn: ['赞', '评论']
+                , skin: 'footer'
+                , yes: function (index) {
+                    BtnCommonSubmit_Click(_ID, '', false);
+                }, no: function (index) {
+                    CurrentTimeLineID = _ID;
+                    layer.close(index);
+                    layer.open({
+                        type: 1
+                        , content: $("#PageCommonDetail").html()
+                        , anim: 'up'
+                        , style: 'position:fixed; bottom:0; left:0; width: 100%; height: 200px; padding:10px 0; border:none;'
+                    });
+                }
+            });
+        }
+        function BtnCommonSubmit_Click(_ID, _Detail, _IsCommon) {
+            var postData = {
+                TimeLineID: _ID,
+                Detail: _Detail,
+                IsCommon: _IsCommon
+            };
+            $.post("@Url.Action("Create","TimeLineCommon")", postData, function (data) {
+                layer.closeAll();
+                layer.open({ content: data.ErrorMsg, skin: 'msg', time: 2 });
+                if (data.ErrorCode == 0)
+                {
+                    var htmlHeart = GetHeartHTML(data.Data);
+                    var htmlCommon = GetCommonHTML(data.Data);
+                    $("#DivCommonBigContainer" + _ID).html(htmlHeart + htmlCommon);
+                }
+            });
+        }
+    </script>
+
+    <script type="text/javascript">
+        var IsLoadingData = false;
+        function BindScroll() {
+            console.log("ItemIndex=" + itemIndex);
+            $(".weui_tab_bd").endlessScroll({
+                bottomPixels: 0,
+                fireDelay: 10,
+                fireOnce: true,
+                callback: function (p) {
+                    if (IsLoadingData) { return; }
+                    IsLoadingData = true;
+                    console.log(".DivItem" + itemIndex +"BD");
+                    InitData((itemIndex-1));
+                }
+            });
+        }
+
+    </script>
+}
+
+
+<script type="text/html" id="PageCommonDetail">
+    <div class="weui_cells weui_cells_form">
+        <div class="weui_cell">
+            <div class="weui_cell_bd weui_cell_primary">
+                <textarea class="weui_textarea" id="TextAreaCommonDetail" placeholder="请输入评论" rows="3"></textarea>
+            </div>
+        </div>
+    </div>
+    <div style="margin:10px;text-align:center">
+        <a href="javascript:BtnCommonSubmit_Click(CurrentTimeLineID, $('#TextAreaCommonDetail').val(), true);" class="weui_btn weui_btn_mini weui_btn_primary">评论</a>
+    </div>
+</script>
+<div class="tabbar">
+    <div class="weui_tab">
+        <div class="weui_tab_bd">
+            <!------------------------------------------>
+            @*<div id="DivItem1BD" class="DivTabBodys">
+                <div class="weui_panel weui_panel_access" style="display:none;">
+                    <div class="weui_panel_bd">
+                        <div class="weui_media_box weui_media_appmsg">
+                            <div class="Myweui_media_hd">
+                                <img class="weui_media_appmsg_thumb"
+                                     src="==" alt="">
+                            </div>
+                            <div class="weui_media_bd">
+                                <h4 class="weui_media_title">张三</h4>
+                                <p class="weui_media_desc"></p>
+                                <ul class="weui_media_info">
+                                    <li class="weui_media_info_meta">时间</li>
+                                    <li class="weui_media_info_meta" style="float:right;"><img src="/images/TimeLineComm.png" /></li>
+                                </ul>
+                                <div>
+                                    <div class="DivHeart">
+                                        <img src="~/images/TimeLineHeart.png" />
+                                        <span> 张三</span>
+                                        <span> 张三</span>
+                                        <span> 张三</span>
+                                        <span> 张三</span>
+                                        <span> 张三</span>
+                                        <span> 张三</span>
+                                        <span> 张三</span>
+                                        <span> 张三</span>
+                                        <span> 张三</span>
+                                        <span> 张三</span>
+                                        <span> 张三</span>
+                                        <span> 张三</span>
+                                        <span> 张三</span>
+                                        <span> 张三</span>
+                                        <span> 张三</span>
+                                    </div>
+                                    <div class="DivCommonContainer">
+                                        <ul class="UlCommon">
+                                            <li><span>李四：</span>我说了什么</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>*@
+            <!------------------------------------------>
+            <div id="DivItem2BD" class="DivTabBodys">
+
+            </div>
+            <!------------------------------------------>
+            <div id="DivItem3BD" class="DivTabBodys"  style="display:none;">
+
+            </div>
+        </div>
+        <div style="height:70px"></div>
+        <div class="weui_tabbar" style="position:fixed;bottom:0;">
+            <a href="javascript:;" id="DivItem2" class="weui_tabbar_item BarFocus">
+                <div class="weui_tabbar_icon">
+                    <img src="~/images/icon4/5.png" alt="">
+                </div>
+                <p class="weui_tabbar_label">Hello</p>
+            </a>
+            <a href="javascript:;" id="DivItem3" class="weui_tabbar_item">
+                <div class="weui_tabbar_icon">
+                    <img src="~/images/icon4/6.png" alt="">
+                </div>
+                <p class="weui_tabbar_label">我的</p>
+            </a>
+        </div>
+    </div>
+</div>
+

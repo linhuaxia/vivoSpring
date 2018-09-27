@@ -1,0 +1,213 @@
+﻿@using PagedList
+@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+@using PagedList.Mvc;
+@using System.Linq;
+@model IQueryable<ResearchPlanInfo>
+@{
+    ViewBag.Title = "学校调研报表";
+    Layout = "~/Areas/MP/Views/Shared/_Layout.cshtml";
+
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+    IPowerActionInfoService PowerActionBLL = (IPowerActionInfoService)ViewBag.PowerActionBLL;
+    var infoEvalTemplate = (EvalTemplateInfo)ViewBag.infoEvalTemplate;
+
+    /// 当前调研中所有有效评分项
+    var listResearchItem = Model.SelectMany(a => a.ResearchInfo).Where(a => a.UserInfo.SubjectInfo.Select(u => u.ID).Contains(a.SubjectID)).SelectMany(a => a.ResearchItemInfo);
+}
+@section head{
+    <style type="text/css">
+        .ItemSum {
+            color: #F60;
+        }
+
+        .itemNormal {
+            color: #0d61e6;
+            cursor: pointer;
+        }
+    </style>
+    <script type="text/javascript">
+        function BtnSearch_Click() {
+            var URL = "@Url.Action("ResearchDepartment")";
+            URL += "?DepartmentID=" + $("#DdlDepartmentID").val();
+            URL += "&EvalTemplateID=" + $("#DdlEvalTemplateID").val();
+            URL += "&DateBegin=" + $("#TxtDateBegin").val();
+            URL += "&DateEnd=" + $("#TxtDateEnd").val();
+            location.href = URL;
+        }
+        function BtnExport_Click() {
+            var URL = "@Url.Action("ResearchDepartment","PDF")";
+            URL += "?DepartmentID=" + $("#DdlDepartmentID").val();
+            URL += "&EvalTemplateID=" + $("#DdlEvalTemplateID").val();
+            URL += "&DateBegin=" + $("#TxtDateBegin").val();
+            URL += "&DateEnd=" + $("#TxtDateEnd").val();
+
+            var URLFinally = "@Url.Action("Print", "PDF")?URL=" + URL;
+            window.open(URLFinally, "_black");
+        }
+    </script>
+
+}
+
+
+
+
+
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+    <tr>
+        <td colspan="6" style="height: 30px" class="td1_1">
+            @ViewBag.Title
+        </td>
+    </tr>
+    <tr>
+        <td class="td1_2">
+            学校
+        </td>
+        <td class="td1_3">
+            @Html.DropDownList("DdlDepartmentID", ViewBag.listDepartment as IEnumerable<SelectListItem>, "请选择", new { @class = "form-control" })
+        </td>
+        <td class="td1_2">
+            评价模板
+        </td>
+        <td class="td1_3">
+            @Html.DropDownList("DdlEvalTemplateID", ViewBag.listEvalTempate as IEnumerable<SelectListItem>, new { @class = "form-control" })
+        </td>
+        <td class="td1_2" rowspan="2">
+            <div class="btn-group" role="group" aria-label="...">
+                <button class="btn btn-default" onclick="BtnSearch_Click();">搜索</button>
+                <button class="btn btn-default" onclick="BtnExport_Click();">导出PDF</button>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="td1_2">
+            开始日期
+        </td>
+        <td class="td1_3">
+            @Html.TextBox("TxtDateBegin", null, new { @class = "form-control", type = "date" })
+        </td>
+        <td class="td1_2">
+            结束日期
+        </td>
+        <td class="td1_3">
+            @Html.TextBox("TxtDateEnd", null, new { @class = "form-control", type = "date" })
+        </td>
+    </tr>
+</table>
+
+
+<table class="table table-bordered">
+    <tr>
+        <th rowspan="@(infoEvalTemplate.TypeFlag == (int)SysEnum.TemplateTypeFlag.等级模板?2:1)" style="vertical-align:middle;width:150px;">
+            调研日期
+        </th>
+        <th rowspan="@(infoEvalTemplate.TypeFlag == (int)SysEnum.TemplateTypeFlag.等级模板?2:1)" style="vertical-align:middle;width:150px;">
+            学校
+        </th>
+        <th rowspan="@(infoEvalTemplate.TypeFlag == (int)SysEnum.TemplateTypeFlag.等级模板?2:1)" style="vertical-align:middle;width:150px;">
+            听课节数
+        </th>
+        @foreach (var item in infoEvalTemplate.TemplateItemInfo)
+        {
+        <th colspan="@(infoEvalTemplate.TemplateOptionInfo.Count())">
+            @item.Name
+        </th>
+        }
+    </tr>
+    @if (infoEvalTemplate.TypeFlag == (int)SysEnum.TemplateTypeFlag.等级模板)
+    {
+        <tr>
+            @foreach (var item in infoEvalTemplate.TemplateItemInfo)
+            {
+                foreach (var itemOption in infoEvalTemplate.TemplateOptionInfo)
+                {
+            <th>
+                @itemOption.Name
+            </th>
+                }
+            }
+        </tr>
+    }
+
+    @foreach (var item in Model)
+    {
+        var listValuableSubjectResearch = item.ResearchInfo.Where(a => a.UserInfo.SubjectInfo.Select(u => u.ID).Contains(a.SubjectID));
+        <tr style="cursor:pointer" onclick="LayerCustomertSize('@Url.Action("ReportA",new { PlanID =item.ID})','@item.Name',false,'100%','100%')">
+            <td>
+                @item.DateBegin.ToString("yyyy-MM-dd")
+            </td>
+            <td>
+                @item.DepartmentInfo.Name
+            </td>
+            <td>
+                @listValuableSubjectResearch.Count()
+            </td>
+            @if (item.TemplateID == infoEvalTemplate.ID)
+            {
+
+                foreach (var itemTemplateItem in infoEvalTemplate.TemplateItemInfo)
+                {
+                    var listResearchItemInfoTemplate = listValuableSubjectResearch.SelectMany(a => a.ResearchItemInfo);
+                    if (infoEvalTemplate.TypeFlag == (int)SysEnum.TemplateTypeFlag.等级模板)
+                    {
+                        foreach (var itemOption in infoEvalTemplate.TemplateOptionInfo)
+                        {
+                            <td>
+                                @listResearchItemInfoTemplate.Count(a => a.TemplateItemID == itemTemplateItem.ID && a.ScoreValue == itemOption.ID)
+                            </td>
+                        }
+                    }
+                    else
+                    {
+                        <td>
+                            @{
+                                var ScoreArrage = listResearchItemInfoTemplate.Where(a => a.TemplateItemID == itemTemplateItem.ID).Select(a => a.ScoreValue);
+                            }
+                            @if (ScoreArrage != null && ScoreArrage.Count() > 0)
+                            {
+                                <text>@ScoreArrage.Average()</text>
+                            }
+                        </td>
+                    }
+                }
+            }
+
+        </tr>
+    }
+    <tr>
+        <td colspan="2">
+            合计（节）
+        </td>
+        <td>
+            @Model.SelectMany(a => a.ResearchInfo).Where(a => a.UserInfo.SubjectInfo.Select(u => u.ID).Contains(a.SubjectID)).Count()
+        </td>
+        @if (!Model.Any(a => a.TemplateID != infoEvalTemplate.ID))
+        {
+
+            foreach (var itemTemplateItem in infoEvalTemplate.TemplateItemInfo)
+            {
+                if (infoEvalTemplate.TypeFlag == (int)SysEnum.TemplateTypeFlag.等级模板)
+                {
+                    foreach (var itemOption in infoEvalTemplate.TemplateOptionInfo)
+                    {
+                    <td>
+                        @listResearchItem.Count(a => a.TemplateItemID == itemTemplateItem.ID && a.ScoreValue == itemOption.ID)
+                    </td>
+                    }
+                }
+                else
+                {
+                <td>
+                    @{ var arrays = listResearchItem.Where(a => a.TemplateItemID == itemTemplateItem.ID).Select(a => a.ScoreValue);}
+                    @if (arrays.Count() > 0)
+                    {
+                        <text>@arrays.Average()</text>
+                    }
+                </td>
+                }
+            }
+        }
+
+    </tr>
+</table>

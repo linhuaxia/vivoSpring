@@ -1,0 +1,131 @@
+﻿@using PagedList
+@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+@using PagedList.Mvc;
+@using System.Linq;
+@using Tool;
+@model IQueryable<ResearchInfo>
+@{
+    ViewBag.Title = "调研统计";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+    IPowerActionInfoService PowerActionBLL = (IPowerActionInfoService)ViewBag.PowerActionBLL;
+    var infoSubject = (SubjectInfo)ViewBag.SubjectInfo;
+    var UserInfo = (UserInfo)ViewBag.UserInfo;
+    var researchPlanType=(SysEnum.ResearchPlanType)ViewBag.researchPlanType;
+}
+@section head{
+}
+
+
+
+
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+    <tr>
+        <td colspan="6" style="height: 30px" class="td1_1">
+            @ViewBag.Title
+        </td>
+    </tr>
+    <tr>
+        <td class="td1_2">
+            学科
+        </td>
+        <td class="td1_3">
+            @infoSubject.Name
+        </td>
+        <td class="td1_2">
+            姓名
+        </td>
+        <td class="td1_3">
+            @UserInfo.Name
+        </td>
+        <td class="td1_2">
+            听课类型
+        </td>
+        <td class="td1_3">
+            @researchPlanType.ToString()
+        </td>
+
+    </tr>
+    <tr>
+        <td class="td1_2">
+            开始日期
+        </td>
+        <td class="td1_3">
+            @if (Function.GetRequestDateTime("DateBegin")>DicInfo.DateZone)
+            {
+                <text>@Function.GetRequestDateTime("DateBegin").ToString("yyyy-MM-dd")</text>
+            }
+            
+        </td>
+        <td class="td1_2">
+            结束日期
+        </td>
+        <td class="td1_3">
+            @if (Function.GetRequestDateTime("DateEnd") > DicInfo.DateZone)
+            {
+                <text>@Function.GetRequestDateTime("DateEnd").ToString("yyyy-MM-dd")</text>
+}
+        </td>
+        <td class="td1_2">
+            合计
+        </td>
+        <td class="td1_3">
+            @Model.Count()
+        </td>
+    </tr>
+</table>
+<table class="table table-bordered">
+    <tr>
+        <th>
+            日期
+        </th>
+        <th>
+            听课学校
+        </th>
+        <th>
+            课题名称
+        </th>
+        <th>
+            班级
+        </th>
+        <th>
+            听评课人员
+        </th>
+        <th>
+            调研对象
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        var infolectureUser = UserBLL.GetList(a => a.ID == item.lectureUserID).FirstOrDefault();
+        <tr onclick="location.href='@Url.Action("Detail",item.ResearchPlanInfo.TypeEnum==(int)SysEnum.ResearchPlanType.组织调研?"Research":"ResearchPerson",new { ID=item.ID,PlanID=item.ResearchPlanID})'">
+            <td>
+                @item.ResearchPlanInfo.DateBegin.ToString("yyyy-MM-dd")
+            </td>
+            <td style="text-align:left;">
+                @item.ResearchPlanInfo.DepartmentInfo.Name
+            </td>
+            <td style="text-align:left;">
+                @item.Topic
+            </td>
+            <td>
+                @SysEnum.GetName(typeof(SysEnum.LessionGrade),item.GradeName)
+                @item.ClassName
+            </td>
+            <td>
+                @item.UserInfo.Name
+            </td>
+            <td>
+                @if (null!= infolectureUser)
+                {
+                    <text>@infolectureUser.Name</text>
+}
+            </td>
+        </tr>
+    }
+
+</table>

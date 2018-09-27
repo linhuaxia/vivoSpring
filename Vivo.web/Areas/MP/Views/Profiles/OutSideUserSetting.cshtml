@@ -1,0 +1,58 @@
+﻿@using Vivo.Model;
+
+@{
+    ViewBag.Title = "EamilSettingFeedBack";
+    Layout = "~/Areas/MP/Views/Shared/_Layout.cshtml";
+
+    ProfilesInfo OutSideUserSetting_DepartmentID = (ProfilesInfo)ViewBag.OutSideUserSetting_DepartmentID;
+    ProfilesInfo OutSideUserSetting_RuleID = (ProfilesInfo)ViewBag.OutSideUserSetting_RuleID;
+
+}
+@section head{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+        });
+    </script>
+}
+
+
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <input type="hidden" id="TimeStamp" name="TimeStamp" value="@DateTime.Now.ToString("fffff")" />
+    <table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+        <tr>
+            <td colspan="3" class="td1_1">
+                院外人员设置
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                院外人员归到哪个单位
+            </td>
+            <td class="td1_3">
+                @Html.TextBox("OutSideUserSetting_DepartmentID", OutSideUserSetting_DepartmentID.Value, new { type = "number" })
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                院外人员归到哪个部门角色
+            </td>
+            <td class="td1_3">
+                @Html.TextBox("OutSideUserSetting_RuleID", OutSideUserSetting_RuleID.Value, new { type = "number" })
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2" colspan="2">
+                <input type="submit" value="提交" class="btn btn-default" />
+            </td>
+        </tr>
+
+    </table>
+
+}

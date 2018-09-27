@@ -1,0 +1,68 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+
+
+@model Vivo.Model.UserInfo
+
+@{
+    ViewBag.Title = "系统帐户-创建";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+
+}
+
+@section head{
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            alert(data.ErrorMsg);
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            parent.SeUserSelected(data.Data);
+            parent.ModalHide('ModalUser');
+
+        }
+        function OnBegin() {
+            return true;
+        }
+        $(function () {
+            $("#WapHead").hide();
+
+        });
+
+    </script>
+
+
+
+}
+@using (Ajax.BeginForm("Create", new { area = "MP" }, new AjaxOptions { HttpMethod = "post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+            {
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.DepartmentID, new { Value = Tool.Function.GetRequestInt("DepartmentID") })
+    @Html.HiddenFor(model => model.DefaultSubjectID, new { Value = Tool.Function.GetRequestInt("SubjectID") })
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title" id="ModalUserLabel">创建外区教师</h4>
+        </div>
+        <div class="modal-body">
+            <div class="weui_cells">
+
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">
+                        <label for="" class="weui_label">姓名</label>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        @Html.TextBoxFor(model => model.Name, new { @class = "weui_input", placeholder = "必填项" })
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" onclick="parent.ModalHide('ModalUser')">关闭</button>
+            <button type="submit" class="btn btn-primary">提交</button>
+        </div>
+    </div>
+
+}

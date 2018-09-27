@@ -1,0 +1,878 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="LWEvalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="CityInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ProvinceID" Type="int" Nullable="false" />
+    <Property Name="Enable" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DepartmentInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ParentID" Type="int" Nullable="false" />
+    <Property Name="Enable" Type="bit" Nullable="false" />
+    <Property Name="OrderID" Type="int" Nullable="false" />
+    <Property Name="TypeEmun" Type="int" Nullable="false" />
+    <Property Name="Address" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DepartmentTypeInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="SortID" Type="int" Nullable="false" />
+    <Property Name="Enable" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DepartmentTypeInfoDepartmentInfo">
+    <Key>
+      <PropertyRef Name="DepartmentTypeInfo_ID" />
+      <PropertyRef Name="DepartmentInfo_ID" />
+    </Key>
+    <Property Name="DepartmentTypeInfo_ID" Type="int" Nullable="false" />
+    <Property Name="DepartmentInfo_ID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="LogInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Category" Type="nvarchar" MaxLength="3000" Nullable="false" />
+    <Property Name="UserName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Detail" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="AddDate" Type="datetime" Nullable="false" />
+    <Property Name="Serious" Type="smallint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MemberGroupInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Description" Type="ntext" Nullable="false" />
+    <Property Name="SortID" Type="int" Nullable="false" />
+    <Property Name="Enable" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MemberGroupInfoUserInfo">
+    <Key>
+      <PropertyRef Name="MemberGroupInfo_ID" />
+      <PropertyRef Name="UserInfo_ID" />
+    </Key>
+    <Property Name="MemberGroupInfo_ID" Type="int" Nullable="false" />
+    <Property Name="UserInfo_ID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PowerActionInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NewID" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="CategoryID" Type="int" Nullable="false" />
+    <Property Name="ParentID" Type="int" Nullable="false" />
+    <Property Name="ParentID2" Type="int" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Remark" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Url" Type="nvarchar" MaxLength="500" Nullable="false" />
+    <Property Name="HttpMethod" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Sort" Type="int" Nullable="false" />
+    <Property Name="Enable" Type="bit" Nullable="false" />
+    <Property Name="TypeEnum" Type="smallint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProfilesInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Key" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Value" Type="ntext" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProvinceInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Enable" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ResearchAttachmentInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ResearchID" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="PathRelative" Type="nvarchar" MaxLength="500" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+    <Property Name="MineType" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ResearchInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="ResearchPlanID" Type="int" Nullable="false" />
+    <Property Name="SubjectID" Type="int" Nullable="false" />
+    <Property Name="lectureUserID" Type="int" Nullable="false" />
+    <Property Name="Tipic" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="LessionNumber" Type="int" Nullable="false" />
+    <Property Name="ClassName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="GradeName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="SubjectiveOpinion" Type="ntext" Nullable="false" />
+    <Property Name="NoteMemo" Type="ntext" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ResearchItemInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ResearchID" Type="int" Nullable="false" />
+    <Property Name="TemplateItemID" Type="int" Nullable="false" />
+    <Property Name="ScoreValue" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ResearchPlanAttachmentInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ResearchPlanID" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="PathRelative" Type="nvarchar" MaxLength="500" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+    <Property Name="MineType" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="CreateUserID" Type="int" Nullable="false" />
+    <Property Name="TypeEnum" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ResearchPlanInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="DepartmentID" Type="int" Nullable="false" />
+    <Property Name="Address" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="TemplateID" Type="int" Nullable="false" />
+    <Property Name="DateBegin" Type="datetime" Nullable="false" />
+    <Property Name="DateEnd" Type="datetime" Nullable="false" />
+    <Property Name="Memo" Type="ntext" Nullable="false" />
+    <Property Name="TypeEnum" Type="int" Nullable="false" />
+    <Property Name="CreateUserID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ResearchPlanUserInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ResearchPlanID" Type="int" Nullable="false" />
+    <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="DateCreate" Type="datetime" Nullable="false" />
+    <Property Name="DateConfirm" Type="datetime" Nullable="false" />
+    <Property Name="IsConfirmed" Type="bit" Nullable="false" />
+    <Property Name="Memo" Type="ntext" Nullable="false" />
+    <Property Name="SumRemark" Type="ntext" Nullable="false" />
+  </EntityType>
+  <EntityType Name="RuleInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Enable" Type="bit" Nullable="false" />
+    <Property Name="Remark" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Sort" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="RuleInfoPowerActionInfo">
+    <Key>
+      <PropertyRef Name="RuleInfo_ID" />
+      <PropertyRef Name="PowerActionInfo_ID" />
+    </Key>
+    <Property Name="RuleInfo_ID" Type="int" Nullable="false" />
+    <Property Name="PowerActionInfo_ID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SubjectInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="DepartmentTypeID" Type="int" Nullable="false" />
+    <Property Name="Enable" Type="bit" Nullable="false" />
+    <Property Name="SortID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="TemplateInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="SortID" Type="int" Nullable="false" />
+    <Property Name="Enable" Type="bit" Nullable="false" />
+    <Property Name="Amin" Type="int" Nullable="false" />
+    <Property Name="BMin" Type="int" Nullable="false" />
+    <Property Name="CMin" Type="int" Nullable="false" />
+    <Property Name="DMin" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TemplateItemInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="TemplateID" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="MaxScore" Type="int" Nullable="false" />
+    <Property Name="SortID" Type="int" Nullable="false" />
+    <Property Name="Enable" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TimeLineCommonInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="TimeLineID" Type="int" Nullable="false" />
+    <Property Name="CreateUserID" Type="int" Nullable="false" />
+    <Property Name="Detail" Type="ntext" Nullable="false" />
+    <Property Name="IsCommon" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TimeLineInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ResearchID" Type="int" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+    <Property Name="Detail" Type="ntext" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserActionInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="ActionID" Type="int" Nullable="false" />
+    <Property Name="IsPass" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DepartmentID" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="PassWord" Type="nvarchar" MaxLength="32" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Tel" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+    <Property Name="LastDate" Type="datetime" Nullable="false" />
+    <Property Name="Enable" Type="bit" Nullable="false" />
+    <Property Name="LocationX" Type="decimal" Precision="18" Scale="15" Nullable="false" />
+    <Property Name="LocationY" Type="decimal" Precision="18" Scale="15" Nullable="false" />
+    <Property Name="WechatOpenID" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="WechatNameNick" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="WechatHeadImg" Type="nvarchar" MaxLength="500" Nullable="false" />
+    <Property Name="Sex" Type="nvarchar" MaxLength="2" Nullable="false" />
+    <Property Name="IDCard" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="TypeID" Type="int" Nullable="false" />
+    <Property Name="SubjectID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserInfoRuleInfo">
+    <Key>
+      <PropertyRef Name="UserInfo_ID" />
+      <PropertyRef Name="RuleInfo_ID" />
+    </Key>
+    <Property Name="UserInfo_ID" Type="int" Nullable="false" />
+    <Property Name="RuleInfo_ID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="WechatMsgInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreateUserID" Type="int" Nullable="false" />
+    <Property Name="AddDate" Type="datetime" Nullable="false" />
+    <Property Name="Status" Type="int" Nullable="false" />
+    <Property Name="ToUserName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="FromUserName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="CreateTime" Type="int" Nullable="false" />
+    <Property Name="MsgType" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Content" Type="ntext" Nullable="false" />
+    <Property Name="MsgId" Type="bigint" Nullable="false" />
+    <Property Name="XMLDom" Type="ntext" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_CityInfo_ProvinceInfo">
+    <End Role="ProvinceInfo" Type="Self.ProvinceInfo" Multiplicity="1" />
+    <End Role="CityInfo" Type="Self.CityInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProvinceInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CityInfo">
+        <PropertyRef Name="ProvinceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DepartmentTypeInfoDepartmentInfo_DepartmentInfo1">
+    <End Role="DepartmentInfo" Type="Self.DepartmentInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="DepartmentTypeInfoDepartmentInfo" Type="Self.DepartmentTypeInfoDepartmentInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DepartmentInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="DepartmentTypeInfoDepartmentInfo">
+        <PropertyRef Name="DepartmentInfo_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DepartmentTypeInfoDepartmentInfo_DepartmentTypeInfo1">
+    <End Role="DepartmentTypeInfo" Type="Self.DepartmentTypeInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="DepartmentTypeInfoDepartmentInfo" Type="Self.DepartmentTypeInfoDepartmentInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DepartmentTypeInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="DepartmentTypeInfoDepartmentInfo">
+        <PropertyRef Name="DepartmentTypeInfo_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MemberGroupInfoUserInfo_MemberGroupInfo1">
+    <End Role="MemberGroupInfo" Type="Self.MemberGroupInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="MemberGroupInfoUserInfo" Type="Self.MemberGroupInfoUserInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MemberGroupInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="MemberGroupInfoUserInfo">
+        <PropertyRef Name="MemberGroupInfo_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MemberGroupInfoUserInfo_UserInfo1">
+    <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="MemberGroupInfoUserInfo" Type="Self.MemberGroupInfoUserInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="MemberGroupInfoUserInfo">
+        <PropertyRef Name="UserInfo_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchAttachmentInfo_ResearchInfo">
+    <End Role="ResearchInfo" Type="Self.ResearchInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ResearchAttachmentInfo" Type="Self.ResearchAttachmentInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ResearchInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchAttachmentInfo">
+        <PropertyRef Name="ResearchID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchInfo_ResearchPlanInfo">
+    <End Role="ResearchPlanInfo" Type="Self.ResearchPlanInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ResearchInfo" Type="Self.ResearchInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ResearchPlanInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchInfo">
+        <PropertyRef Name="ResearchPlanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchInfo_SubjectInfo">
+    <End Role="SubjectInfo" Type="Self.SubjectInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ResearchInfo" Type="Self.ResearchInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SubjectInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchInfo">
+        <PropertyRef Name="SubjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchInfo_UserInfo">
+    <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+    <End Role="ResearchInfo" Type="Self.ResearchInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchInfo">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchItemInfo_ResearchInfo1">
+    <End Role="ResearchInfo" Type="Self.ResearchInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ResearchItemInfo" Type="Self.ResearchItemInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ResearchInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchItemInfo">
+        <PropertyRef Name="ResearchID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchItemInfo_TemplateItemInfo">
+    <End Role="TemplateItemInfo" Type="Self.TemplateItemInfo" Multiplicity="1" />
+    <End Role="ResearchItemInfo" Type="Self.ResearchItemInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TemplateItemInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchItemInfo">
+        <PropertyRef Name="TemplateItemID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchPlanAttachmentInfo_ResearchPlanUserInfo">
+    <End Role="ResearchPlanUserInfo" Type="Self.ResearchPlanUserInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ResearchPlanAttachmentInfo" Type="Self.ResearchPlanAttachmentInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ResearchPlanUserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchPlanAttachmentInfo">
+        <PropertyRef Name="ResearchPlanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchPlanAttachmentInfo_UserInfo">
+    <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+    <End Role="ResearchPlanAttachmentInfo" Type="Self.ResearchPlanAttachmentInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchPlanAttachmentInfo">
+        <PropertyRef Name="CreateUserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchPlanInfo_TemplateInfo">
+    <End Role="TemplateInfo" Type="Self.TemplateInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ResearchPlanInfo" Type="Self.ResearchPlanInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TemplateInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchPlanInfo">
+        <PropertyRef Name="TemplateID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchPlanUserInfo_ResearchPlanInfo">
+    <End Role="ResearchPlanInfo" Type="Self.ResearchPlanInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ResearchPlanUserInfo" Type="Self.ResearchPlanUserInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ResearchPlanInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchPlanUserInfo">
+        <PropertyRef Name="ResearchPlanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ResearchPlanUserInfo_UserInfo">
+    <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ResearchPlanUserInfo" Type="Self.ResearchPlanUserInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ResearchPlanUserInfo">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RuleInfoPowerActionInfo_PowerActionInfo">
+    <End Role="PowerActionInfo" Type="Self.PowerActionInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="RuleInfoPowerActionInfo" Type="Self.RuleInfoPowerActionInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PowerActionInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="RuleInfoPowerActionInfo">
+        <PropertyRef Name="PowerActionInfo_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RuleInfoPowerActionInfo_RuleInfo">
+    <End Role="RuleInfo" Type="Self.RuleInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="RuleInfoPowerActionInfo" Type="Self.RuleInfoPowerActionInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RuleInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="RuleInfoPowerActionInfo">
+        <PropertyRef Name="RuleInfo_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SubjectInfo_DepartmentTypeInfo">
+    <End Role="DepartmentTypeInfo" Type="Self.DepartmentTypeInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="SubjectInfo" Type="Self.SubjectInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DepartmentTypeInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="SubjectInfo">
+        <PropertyRef Name="DepartmentTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TemplateItemInfo_TemplateInfo1">
+    <End Role="TemplateInfo" Type="Self.TemplateInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="TemplateItemInfo" Type="Self.TemplateItemInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TemplateInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="TemplateItemInfo">
+        <PropertyRef Name="TemplateID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TimeLineCommonInfo_TimeLineInfo">
+    <End Role="TimeLineInfo" Type="Self.TimeLineInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="TimeLineCommonInfo" Type="Self.TimeLineCommonInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TimeLineInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="TimeLineCommonInfo">
+        <PropertyRef Name="TimeLineID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TimeLineCommonInfo_UserInfo">
+    <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1" />
+    <End Role="TimeLineCommonInfo" Type="Self.TimeLineCommonInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="TimeLineCommonInfo">
+        <PropertyRef Name="CreateUserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TimeLineInfo_ResearchInfo">
+    <End Role="ResearchInfo" Type="Self.ResearchInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="TimeLineInfo" Type="Self.TimeLineInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ResearchInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="TimeLineInfo">
+        <PropertyRef Name="ResearchID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserActionInfo_ActionInfo">
+    <End Role="PowerActionInfo" Type="Self.PowerActionInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="UserActionInfo" Type="Self.UserActionInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PowerActionInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="UserActionInfo">
+        <PropertyRef Name="ActionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserActionInfo_UserInfo">
+    <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="UserActionInfo" Type="Self.UserActionInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="UserActionInfo">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserInfo_DepartmentInfo">
+    <End Role="DepartmentInfo" Type="Self.DepartmentInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DepartmentInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="UserInfo">
+        <PropertyRef Name="DepartmentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserInfo_SubjectInfo">
+    <End Role="SubjectInfo" Type="Self.SubjectInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SubjectInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="UserInfo">
+        <PropertyRef Name="SubjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserInfoRuleInfo_RuleInfo">
+    <End Role="RuleInfo" Type="Self.RuleInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="UserInfoRuleInfo" Type="Self.UserInfoRuleInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RuleInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="UserInfoRuleInfo">
+        <PropertyRef Name="RuleInfo_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserInfoRuleInfo_UserInfo">
+    <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="UserInfoRuleInfo" Type="Self.UserInfoRuleInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="UserInfoRuleInfo">
+        <PropertyRef Name="UserInfo_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WechatMsgInfo_UserInfo">
+    <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="WechatMsgInfo" Type="Self.WechatMsgInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="WechatMsgInfo">
+        <PropertyRef Name="CreateUserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="LWEvalModelStoreContainer">
+    <EntitySet Name="CityInfo" EntityType="Self.CityInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DepartmentInfo" EntityType="Self.DepartmentInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DepartmentTypeInfo" EntityType="Self.DepartmentTypeInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DepartmentTypeInfoDepartmentInfo" EntityType="Self.DepartmentTypeInfoDepartmentInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LogInfo" EntityType="Self.LogInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MemberGroupInfo" EntityType="Self.MemberGroupInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MemberGroupInfoUserInfo" EntityType="Self.MemberGroupInfoUserInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PowerActionInfo" EntityType="Self.PowerActionInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProfilesInfo" EntityType="Self.ProfilesInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProvinceInfo" EntityType="Self.ProvinceInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ResearchAttachmentInfo" EntityType="Self.ResearchAttachmentInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ResearchInfo" EntityType="Self.ResearchInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ResearchItemInfo" EntityType="Self.ResearchItemInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ResearchPlanAttachmentInfo" EntityType="Self.ResearchPlanAttachmentInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ResearchPlanInfo" EntityType="Self.ResearchPlanInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ResearchPlanUserInfo" EntityType="Self.ResearchPlanUserInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RuleInfo" EntityType="Self.RuleInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RuleInfoPowerActionInfo" EntityType="Self.RuleInfoPowerActionInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SubjectInfo" EntityType="Self.SubjectInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TemplateInfo" EntityType="Self.TemplateInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TemplateItemInfo" EntityType="Self.TemplateItemInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TimeLineCommonInfo" EntityType="Self.TimeLineCommonInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TimeLineInfo" EntityType="Self.TimeLineInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserActionInfo" EntityType="Self.UserActionInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserInfo" EntityType="Self.UserInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserInfoRuleInfo" EntityType="Self.UserInfoRuleInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="WechatMsgInfo" EntityType="Self.WechatMsgInfo" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_CityInfo_ProvinceInfo" Association="Self.FK_CityInfo_ProvinceInfo">
+      <End Role="ProvinceInfo" EntitySet="ProvinceInfo" />
+      <End Role="CityInfo" EntitySet="CityInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DepartmentTypeInfoDepartmentInfo_DepartmentInfo1" Association="Self.FK_DepartmentTypeInfoDepartmentInfo_DepartmentInfo1">
+      <End Role="DepartmentInfo" EntitySet="DepartmentInfo" />
+      <End Role="DepartmentTypeInfoDepartmentInfo" EntitySet="DepartmentTypeInfoDepartmentInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DepartmentTypeInfoDepartmentInfo_DepartmentTypeInfo1" Association="Self.FK_DepartmentTypeInfoDepartmentInfo_DepartmentTypeInfo1">
+      <End Role="DepartmentTypeInfo" EntitySet="DepartmentTypeInfo" />
+      <End Role="DepartmentTypeInfoDepartmentInfo" EntitySet="DepartmentTypeInfoDepartmentInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MemberGroupInfoUserInfo_MemberGroupInfo1" Association="Self.FK_MemberGroupInfoUserInfo_MemberGroupInfo1">
+      <End Role="MemberGroupInfo" EntitySet="MemberGroupInfo" />
+      <End Role="MemberGroupInfoUserInfo" EntitySet="MemberGroupInfoUserInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MemberGroupInfoUserInfo_UserInfo1" Association="Self.FK_MemberGroupInfoUserInfo_UserInfo1">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="MemberGroupInfoUserInfo" EntitySet="MemberGroupInfoUserInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchAttachmentInfo_ResearchInfo" Association="Self.FK_ResearchAttachmentInfo_ResearchInfo">
+      <End Role="ResearchInfo" EntitySet="ResearchInfo" />
+      <End Role="ResearchAttachmentInfo" EntitySet="ResearchAttachmentInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchInfo_ResearchPlanInfo" Association="Self.FK_ResearchInfo_ResearchPlanInfo">
+      <End Role="ResearchPlanInfo" EntitySet="ResearchPlanInfo" />
+      <End Role="ResearchInfo" EntitySet="ResearchInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchInfo_SubjectInfo" Association="Self.FK_ResearchInfo_SubjectInfo">
+      <End Role="SubjectInfo" EntitySet="SubjectInfo" />
+      <End Role="ResearchInfo" EntitySet="ResearchInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchInfo_UserInfo" Association="Self.FK_ResearchInfo_UserInfo">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="ResearchInfo" EntitySet="ResearchInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchItemInfo_ResearchInfo1" Association="Self.FK_ResearchItemInfo_ResearchInfo1">
+      <End Role="ResearchInfo" EntitySet="ResearchInfo" />
+      <End Role="ResearchItemInfo" EntitySet="ResearchItemInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchItemInfo_TemplateItemInfo" Association="Self.FK_ResearchItemInfo_TemplateItemInfo">
+      <End Role="TemplateItemInfo" EntitySet="TemplateItemInfo" />
+      <End Role="ResearchItemInfo" EntitySet="ResearchItemInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchPlanAttachmentInfo_ResearchPlanUserInfo" Association="Self.FK_ResearchPlanAttachmentInfo_ResearchPlanUserInfo">
+      <End Role="ResearchPlanUserInfo" EntitySet="ResearchPlanUserInfo" />
+      <End Role="ResearchPlanAttachmentInfo" EntitySet="ResearchPlanAttachmentInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchPlanAttachmentInfo_UserInfo" Association="Self.FK_ResearchPlanAttachmentInfo_UserInfo">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="ResearchPlanAttachmentInfo" EntitySet="ResearchPlanAttachmentInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchPlanInfo_TemplateInfo" Association="Self.FK_ResearchPlanInfo_TemplateInfo">
+      <End Role="TemplateInfo" EntitySet="TemplateInfo" />
+      <End Role="ResearchPlanInfo" EntitySet="ResearchPlanInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchPlanUserInfo_ResearchPlanInfo" Association="Self.FK_ResearchPlanUserInfo_ResearchPlanInfo">
+      <End Role="ResearchPlanInfo" EntitySet="ResearchPlanInfo" />
+      <End Role="ResearchPlanUserInfo" EntitySet="ResearchPlanUserInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ResearchPlanUserInfo_UserInfo" Association="Self.FK_ResearchPlanUserInfo_UserInfo">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="ResearchPlanUserInfo" EntitySet="ResearchPlanUserInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RuleInfoPowerActionInfo_PowerActionInfo" Association="Self.FK_RuleInfoPowerActionInfo_PowerActionInfo">
+      <End Role="PowerActionInfo" EntitySet="PowerActionInfo" />
+      <End Role="RuleInfoPowerActionInfo" EntitySet="RuleInfoPowerActionInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RuleInfoPowerActionInfo_RuleInfo" Association="Self.FK_RuleInfoPowerActionInfo_RuleInfo">
+      <End Role="RuleInfo" EntitySet="RuleInfo" />
+      <End Role="RuleInfoPowerActionInfo" EntitySet="RuleInfoPowerActionInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SubjectInfo_DepartmentTypeInfo" Association="Self.FK_SubjectInfo_DepartmentTypeInfo">
+      <End Role="DepartmentTypeInfo" EntitySet="DepartmentTypeInfo" />
+      <End Role="SubjectInfo" EntitySet="SubjectInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TemplateItemInfo_TemplateInfo1" Association="Self.FK_TemplateItemInfo_TemplateInfo1">
+      <End Role="TemplateInfo" EntitySet="TemplateInfo" />
+      <End Role="TemplateItemInfo" EntitySet="TemplateItemInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TimeLineCommonInfo_TimeLineInfo" Association="Self.FK_TimeLineCommonInfo_TimeLineInfo">
+      <End Role="TimeLineInfo" EntitySet="TimeLineInfo" />
+      <End Role="TimeLineCommonInfo" EntitySet="TimeLineCommonInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TimeLineCommonInfo_UserInfo" Association="Self.FK_TimeLineCommonInfo_UserInfo">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="TimeLineCommonInfo" EntitySet="TimeLineCommonInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TimeLineInfo_ResearchInfo" Association="Self.FK_TimeLineInfo_ResearchInfo">
+      <End Role="ResearchInfo" EntitySet="ResearchInfo" />
+      <End Role="TimeLineInfo" EntitySet="TimeLineInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserActionInfo_ActionInfo" Association="Self.FK_UserActionInfo_ActionInfo">
+      <End Role="PowerActionInfo" EntitySet="PowerActionInfo" />
+      <End Role="UserActionInfo" EntitySet="UserActionInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserActionInfo_UserInfo" Association="Self.FK_UserActionInfo_UserInfo">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="UserActionInfo" EntitySet="UserActionInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserInfo_DepartmentInfo" Association="Self.FK_UserInfo_DepartmentInfo">
+      <End Role="DepartmentInfo" EntitySet="DepartmentInfo" />
+      <End Role="UserInfo" EntitySet="UserInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserInfo_SubjectInfo" Association="Self.FK_UserInfo_SubjectInfo">
+      <End Role="SubjectInfo" EntitySet="SubjectInfo" />
+      <End Role="UserInfo" EntitySet="UserInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserInfoRuleInfo_RuleInfo" Association="Self.FK_UserInfoRuleInfo_RuleInfo">
+      <End Role="RuleInfo" EntitySet="RuleInfo" />
+      <End Role="UserInfoRuleInfo" EntitySet="UserInfoRuleInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserInfoRuleInfo_UserInfo" Association="Self.FK_UserInfoRuleInfo_UserInfo">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="UserInfoRuleInfo" EntitySet="UserInfoRuleInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WechatMsgInfo_UserInfo" Association="Self.FK_WechatMsgInfo_UserInfo">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="WechatMsgInfo" EntitySet="WechatMsgInfo" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

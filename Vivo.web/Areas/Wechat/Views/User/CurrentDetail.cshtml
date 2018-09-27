@@ -1,0 +1,56 @@
+﻿@using PagedList
+@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+@using PagedList.Mvc;
+@model Vivo.Model.UserInfo
+
+@{
+    ViewBag.Title = "个人资料";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+}
+
+<div style="text-align: center;">
+    <div style="margin: 15px;">
+        <img src="@Model.WechatHeadImg" nerror="this.src='/images/login_logo.png' ;"
+             style="height: 100px; width: 100px; border-radius: 5px;" />
+
+    </div>
+</div>
+
+<div class="weui_cells">
+    <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>微信昵称</p>
+        </div>
+        <div class="weui_cell_ft">@Model.WechatNameNick</div>
+    </div>
+    <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>姓名</p>
+        </div>
+        <div class="weui_cell_ft">@Model.Name</div>
+    </div>
+    <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>登录名</p>
+        </div>
+        <div class="weui_cell_ft">@Model.Code</div>
+    </div>
+    <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>所在单位</p>
+        </div>
+        <div class="weui_cell_ft">@Model.DepartmentInfo.Name</div>
+    </div>
+    <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>联系电话</p>
+        </div>
+        <div class="weui_cell_ft">@Model.Tel</div>
+    </div>
+
+</div>
+
+
+@Html.Partial("CopyRights")

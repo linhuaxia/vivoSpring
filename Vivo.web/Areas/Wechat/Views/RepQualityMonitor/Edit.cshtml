@@ -1,0 +1,84 @@
+﻿@model Vivo.Model.RepQualityMonitorInfo
+
+@{
+    ViewBag.Title = "编辑";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+}
+@section head{
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            alert(data.ErrorMsg);
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            location.href = "@Url.Action("index")";
+
+        }
+        function OnBegin() {
+            //do something before post data
+
+        }
+    </script>
+
+
+
+}
+
+@using (Ajax.BeginForm("Edit",new { area="Rep"},new AjaxOptions{HttpMethod = "post",OnSuccess = "OnSuccess",OnBegin = "OnBegin",LoadingElementId = "loadingToast"}))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.ID)
+
+    <div class="weui_cells">
+        <div class="weui_cell weui_cell_select weui_select_after">
+            <div class="weui_cell_hd">
+                <label for="" class="weui_label">监测类型</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.DropDownListFor(model => model.TypeFlag, ViewBag.listRepQualityMonitorType as IEnumerable<SelectListItem>, new { @class = "weui_select" })
+            </div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">监测时间</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.EditorFor(model => model.DateBegin, "yyyy-MM-dd", new { htmlAttributes = new { @class = "weui_input", type = "date" } })
+            </div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd">
+                <label for="" class="weui_label">次数</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.EditorFor(model => model.Times, new { htmlAttributes = new { @class = "weui_input", type = "Number" } })
+            </div>
+        </div>
+    </div>
+    <div class="weui_cells">
+
+        <div class="weui_cells_title">备注</div>
+        <div class="weui_cells weui_cells_form">
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.TextAreaFor(model => model.Memo, new
+               {
+                   @class = "weui_textarea",
+                   placeholder = "非必填项",
+                   rows = "3"
+               })
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="weui_btn_area">
+        <input type="submit" value="提交" class="weui_btn weui_btn_primary" />
+    </div>
+
+
+}
+
+

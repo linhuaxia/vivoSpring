@@ -1,0 +1,70 @@
+﻿@using Vivo.Model;
+@model DepartmentInfo
+
+@{
+    ViewBag.Title = "新建";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+}
+
+@section head{
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            alert(data.ErrorMsg);
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            parent.SetDepartmentSelected(data.Data);
+            parent.ModalHide('ModalDepartment');
+        }
+        function OnBegin() {
+
+        }
+        $(function () {
+            $("#WapHead").hide();
+
+        });
+    </script>
+}
+@using (Ajax.BeginForm("Create", "Department", new { area = "MP" }, new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.TypeEmun, new { Value=(int)SysEnum.DepartmentTypeEnum.区外学校})
+    @Html.HiddenFor(model => model.Enable, new { Value=true})
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">创建外区学校</h4>
+        </div>
+        <div class="modal-body">
+            <div class="weui_cells">
+                <div class="weui_cells_title">类型</div>
+                <div class="weui_cells weui_cells_checkbox">
+                    @foreach (var item in (IEnumerable<DepartmentTypeInfo>)ViewBag.listDepartmentType)
+                    {
+                        <label class="weui_cell weui_check_label" for="@("DepartmentType"+item.ID)">
+                            <div class="weui_cell_hd">
+                                <input type="checkbox" class="weui_check" name="DepartmentType" id="@("DepartmentType"+item.ID)" value="@item.ID">
+                                <i class="weui_icon_checked"></i>
+                            </div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>@item.Name</p>
+                            </div>
+                        </label>
+                    }
+                </div>
+
+                <div class="weui_cell">
+                    <div class="weui_cell_hd"><label class="weui_label" for="Name">名称</label></div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "weui_input" } })
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default"  onclick="parent.ModalHide('ModalDepartment')">关闭</button>
+            <button type="submit" class="btn btn-primary">提交</button>
+        </div>
+    </div>
+
+}

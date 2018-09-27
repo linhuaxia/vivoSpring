@@ -1,0 +1,229 @@
+﻿@using Tool;
+@using Vivo.Model;
+@model ResearchPlanInfo
+
+@{
+    ViewBag.Title = "新建";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+}
+
+@section head{
+
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            alert(data.ErrorMsg);
+            if (data.ErrorCode==2) {
+                location.href = "@Url.Action("Edit")/" + data.Data.ResearchID;
+                return;
+            }
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            location.href = "@Url.Action("Edit")/" + data.Data.ResearchID;
+
+        }
+        function OnBegin() {
+            return confirm("请仔细检查信息，是否确认无误？");
+        }
+        $(function () {
+            BindEvent();
+            $("#AreaID").change();
+        });
+        function BindEvent() {
+            $("#AreaID").change(function () {
+                var AreaID = $(this).val();
+                $("#DepartmentID").empty();
+                $("#DepartmentID").append('<option value="0">请选择</option>');
+              $.get("@Url.Action("APIQueue", "Department",new { area="wechat"})?AreaID=" + AreaID, function (data) {
+                    $(data.Data).each(function (index, item) {
+                        $("#DepartmentID").append('<option value="' + item.ID + '">'+item.Name+'</option>');
+                    });
+                    if (AreaID != "@((int)SysEnum.ResearchArea.区内)")
+                    {
+                        $("#DepartmentID").append('<option value="-1">添加外区外学校</option>');
+                    }
+                });
+            });
+            $("#DepartmentID").change(function () {
+                var ID = $(this).val();
+                if (ID==-1) {
+                    $('#ModalDepartment').modal('show')
+                    return;
+                }
+            });
+
+            $("#SubjectID").change(function () {
+                var SubjectID = $(this).val();
+                $("#lectureUserID").empty();
+                $("#lectureUserID").append("<option value='0'>请选择</option>");
+                var URL = "@Url.Action("APIQueue", "User")";
+                URL += "?DepartmentID=" + $("#DepartmentID").val();
+                URL += "&SubjectID=" + SubjectID;
+                $.get(URL, function (data) {
+                    $(data.Data).each(function(index,item) {
+                        $("#lectureUserID").append("<option value='" + item.ID+"'>"+item.Name+"</option>");
+                    });
+                    if ($("#AreaID").val() != "@((int)SysEnum.ResearchArea.区内)")
+                    {
+                        $("#lectureUserID").append('<option value="-1">添加外区外教师</option>');
+                    }
+                });
+            });
+
+
+            $("#lectureUserID").change(function () {
+                var ID = $(this).val();
+                if (ID == -1) {
+                    var DepartmentID = $("#DepartmentID").val();
+                    var SubjectID = $("#SubjectID").val();
+                    if (DepartmentID<=0) {
+                        layer.open({ content: '请先选择学校', skin: 'msg', time: 2 });
+                        return;
+                    }
+                    if (SubjectID<=0) {
+                        layer.open({ content: '请先选择学科', skin: 'msg', time: 2 });
+                        return;
+                    }
+                    var URL = "@Url.Action("OutCreate", "User",new { area="Wechat"})?DepartmentID=" + DepartmentID;
+                    URL += "&SubjectID=" + SubjectID;
+                    $("#IfrmeOutCreateUser").attr("src", URL );
+                    //alert($("#IfrmeOutCreateUser").attr("src"));
+                    $('#ModalUser').modal('show')
+                    return;
+                }
+            });
+        }
+
+        //以下为department子页调用
+        function SetDepartmentSelected(infoDepartment) {
+            $("#DepartmentID").append('<option value="' + infoDepartment.ID + '" selected="selected">' + infoDepartment.Name + '</option>');
+        }
+        function SeUserSelected(infoUser) {
+            $("#lectureUserID").append('<option value="' + infoUser.ID + '" selected="selected">' + infoUser.Name + '</option>');
+        }
+        function ModalHide(ModalID) {
+            $('#' + ModalID).modal('hide')
+        }
+    </script>
+}
+
+<div class="modal fade" id="ModalDepartment" tabindex="-1" role="dialog" aria-labelledby="ModalDepartment">
+    <div class="modal-dialog" role="document">
+        <iframe src="@Url.Action("OutCreate","Department",new { })" style="width:100%;height:65vh;"></iframe>
+    </div>
+</div>
+<div class="modal fade" id="ModalUser" tabindex="-2" role="dialog" aria-labelledby="ModalUser">
+    <div class="modal-dialog" role="document">
+        <iframe src="" id="IfrmeOutCreateUser" style="width:100%;height:260px;"></iframe>
+    </div>
+</div>
+
+@using (Ajax.BeginForm("Create", new { }, new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.TypeEnum, new { value = (int)SysEnum.ResearchPlanType.个人听课 })
+    <div class="weui_cells">
+        <div class="weui_cells_title">调研情况</div>
+        <div class="weui_cell weui_cell_select weui_select_after">
+            <div class="weui_cell_hd"><label class="weui_label">区域</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.DropDownListFor(model => model.AreaID, ViewBag.listArea as IEnumerable<SelectListItem>, new { @class = "weui_select" })
+            </div>
+        </div>
+        <div class="weui_cell weui_cell_select weui_select_after" id="DivDdlDepartment">
+            <div class="weui_cell_hd">
+                <label for="" class="weui_label">学校</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.DropDownListFor(model => model.DepartmentID, new List<SelectListItem>(), "请选择", new { @class = "weui_select" })
+            </div>
+        </div>
+        <div class="weui_cell weui_cell_select weui_select_after">
+            <div class="weui_cell_hd">
+                <label for="" class="weui_label">评价模板</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.DropDownListFor(model => model.TemplateID, ViewBag.listTemplate as IEnumerable<SelectListItem>, "请选择", new { @class = "weui_select" })
+            </div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label for="" class="weui_label">听课时间</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.TextBoxFor(model => model.DateBegin, "{0:yyyy-MM-dd}", new { @class = "weui_input", type = "date", value = DateTime.Now.ToString("yyyy-MM-dd") })
+            </div>
+        </div>
+    </div>
+    <div class="weui_cells">
+        <div class="weui_cells_title">听评课信息</div>
+        <div class="weui_cell weui_cell_select weui_select_after">
+            <div class="weui_cell_hd">
+                <label for="" class="weui_label">调研学科</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.DropDownListFor(model => model.ResearchInfo.FirstOrDefault().SubjectID, ViewBag.listSubject as IEnumerable<SelectListItem>, "请选择", new { @class = "weui_select" })
+            </div>
+        </div>
+        <div class="weui_cell weui_cell_select weui_select_after">
+            <div class="weui_cell_hd"><label class="weui_label">听课对象</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.DropDownListFor(model => model.ResearchInfo.FirstOrDefault().lectureUserID, new List<SelectListItem>(), "请选择", new { @class = "weui_select" })
+            </div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">听课课题</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.EditorFor(model => model.ResearchInfo.FirstOrDefault().Topic, new { htmlAttributes = new { @class = "weui_input", type = "text", placeholder = "请填写课题" } })
+            </div>
+        </div>
+        <div class="weui_cell weui_cell_select weui_select_after">
+            <div class="weui_cell_hd">
+                <label for="" class="weui_label">听课节次</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.DropDownListFor(model => model.ResearchInfo.FirstOrDefault().LessionNumber, ViewBag.listLessionNumber as IEnumerable<SelectListItem>, new { @class = "weui_select" })
+            </div>
+        </div>
+        <div class="weui_cell weui_cell_select weui_select_after">
+            <div class="weui_cell_hd">
+                <label for="" class="weui_label">听课年级</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.DropDownListFor(model => model.ResearchInfo.FirstOrDefault().GradeName, ViewBag.listGrade as IEnumerable<SelectListItem>, new { @class = "weui_select" })
+            </div>
+        </div>
+        <div class="weui_cell weui_cell_select weui_select_after">
+            <div class="weui_cell_hd">
+                <label for="" class="weui_label">听课班级</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.DropDownListFor(model => model.ResearchInfo.FirstOrDefault().ClassName, ViewBag.listClass as IEnumerable<SelectListItem>, new { @class = "weui_select" })
+            </div>
+        </div>
+
+
+    </div>
+    <div class="weui_cells">
+
+        <div class="weui_cells_title">备注</div>
+        <div class="weui_cells weui_cells_form">
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.TextAreaFor(model => model.Memo, new
+                       {
+                           @class = "weui_textarea",
+                           placeholder = "非必填项",
+                           rows = "3"
+                       })
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="weui_btn_area">
+                <input type="submit" value="提交" class="weui_btn weui_btn_primary" />
+            </div>
+
+}

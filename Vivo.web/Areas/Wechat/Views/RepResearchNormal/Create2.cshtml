@@ -1,0 +1,75 @@
+﻿@model Vivo.Model.RepResearchNormalInfo
+
+@{
+    ViewBag.Title = "新建";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+}
+
+@section head{
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            alert(data.ErrorMsg);
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            parent.location.reload();
+
+        }
+        function OnBegin() {
+
+        }
+    </script>
+}
+
+@using (Ajax.BeginForm("Create", new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.TypeFlag, new { Value= (int)ViewBag.RepNormalType })
+    <table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+        <tr>
+            <td class="td1_2">
+                学校（地址）
+            </td>
+            <td class="td1_3">
+                @Html.DropDownListFor(model => model.DepartmentID,ViewBag.listDepartment as IEnumerable<SelectListItem>,  new { @class = "form-control" })
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                调研时间
+            </td>
+            <td class="td1_3">
+                @Html.EditorFor(model => model.DateBegin, new { htmlAttributes = new { @class = "form-control", type = "date" } })
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                天数
+            </td>
+            <td class="td1_3">
+                @Html.EditorFor(model => model.Days, new { htmlAttributes = new { @class = "form-control",type="Number" } })
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                内容
+            </td>
+            <td class="td1_3">
+                @Html.TextAreaFor(model => model.Detail, new { @class = "form-control" })
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                备注
+            </td>
+            <td class="td1_3">
+                @Html.TextAreaFor(model => model.Memo, new { @class = "form-control" })
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2" colspan="2">
+                <input type="submit" value="提交" class="btn btn-default" />
+            </td>
+        </tr>
+    </table>
+}

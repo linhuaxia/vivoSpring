@@ -1,0 +1,66 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+
+@model DepartmentInfo
+
+@{
+    ViewBag.Title = "详细信息";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IPowerActionInfoService PowerActionBLL = AbstractFactory.CreatePowerActionInfoService();
+}
+@section head{
+
+
+
+}
+
+
+
+
+<div class="weui_cells">
+    <div class="weui_cell">
+        <div class="weui_cell_hd"><label class="weui_label">名称</label></div>
+        <div class="weui_cell_bd weui_cell_primary">
+            @Model.Name
+        </div>
+    </div>
+    <div class="weui_cell weui_cell_switch">
+        <div class="weui_cell_hd weui_cell_primary">是否可用</div>
+        <div class="weui_cell_ft">
+            @(Model.Enable?"正常":"禁用")
+        </div>
+    </div>
+    <div class="weui_cell weui_cell_select weui_select_after">
+        <div class="weui_cell_hd">
+            <label for="" class="weui_label">排序号</label>
+        </div>
+        <div class="weui_cell_bd weui_cell_primary">
+            @Model.OrderID
+        </div>
+    </div>
+    <div class="weui_cell weui_cell_select weui_select_after">
+        <div class="weui_cell_hd">
+            <label for="" class="weui_label">类型</label>
+        </div>
+        <div class="weui_cell_bd weui_cell_primary">
+            @SysEnum.GetName(typeof(SysEnum.DepartmentTypeEnum), Model.TypeEmun)
+        </div>
+    </div>
+    <div class="weui_cell weui_cell_select weui_select_after">
+        <div class="weui_cell_hd">
+            <label for="" class="weui_label">包含级别</label>
+        </div>
+        <div class="weui_cell_bd weui_cell_primary">
+            @string.Join(",",Model.DepartmentTypeInfo.Select(a=>a.Name))
+        </div>
+    </div>
+</div>
+@if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.PP系统帐户管理.PPP单位部门管理.编辑)) { 
+    <a href="@Url.Action("Edit",new { ID=Model.ID})" class="weui_btn weui_btn_primary" style="margin:15px;">
+        前住修改
+    </a>
+}
+
+
+

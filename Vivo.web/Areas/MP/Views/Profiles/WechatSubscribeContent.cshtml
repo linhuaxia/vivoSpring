@@ -1,0 +1,40 @@
+﻿@using Vivo.Model;
+@model ProfilesInfo
+@{
+    ViewBag.Title = "";
+    Layout = "~/Areas/MP/Views/Shared/_Layout.cshtml";
+
+}
+@section head{
+}
+
+
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.ID)
+
+    <table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+        <tr>
+            <td colspan="3" class="td1_1">
+                关注时间自动回复内容
+            </td>
+        </tr>
+        <tr>
+            <td  class="td1_3">
+                @Html.TextAreaFor(model => model.Value,new { rows="20"})
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2" colspan="2">
+                <input type="submit" value="提交" class="btn btn-default" />
+            </td>
+        </tr>
+
+    </table>
+
+}

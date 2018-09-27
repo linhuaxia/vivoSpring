@@ -1,0 +1,89 @@
+﻿@model Vivo.Model.EvalTemplateInfo
+
+@{
+    ViewBag.Title = "新建";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+}
+
+@section head{
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            alert(data.ErrorMsg);
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            location.href = "@Url.Action("Edit")/"+data.Data.ID;
+
+        }
+        function OnBegin() {
+
+        }
+    </script>
+}
+
+@using (Ajax.BeginForm("Create", new { @*area = "MP"*@ }, new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="weui_cells">
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">名称</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "weui_input" } })
+            </div>
+        </div>
+        <div class="weui_cell weui_cell_switch">
+            <div class="weui_cell_hd weui_cell_primary">是否可用</div>
+            <div class="weui_cell_ft">
+                @Html.CheckBoxFor(model => model.Enable, new { @class = "weui_switch", @checked = "checked" })
+            </div>
+        </div>
+        <div class="weui_cell weui_cell_select weui_select_after">
+            <div class="weui_cell_hd">
+                <label for="" class="weui_label">排序号</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.DropDownListFor(model => model.SortID, ViewBag.listSort as IEnumerable<SelectListItem>, new { @class = "weui_select" })
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-primary" style="margin:10px;">
+        <div class="panel-heading">
+            <h3 class="panel-title ">标准设置</h3>
+        </div>
+        <div class="panel-body">
+            <div class="weui_cells">
+                <div class="weui_cell">
+                    <div class="weui_cell_hd"><label class="weui_label">优秀下限</label></div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        @Html.EditorFor(model => model.Amin, new { htmlAttributes = new { @class = "weui_input", placeholder = "请输入" } })
+                    </div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd"><label class="weui_label">良好下限</label></div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        @Html.EditorFor(model => model.BMin, new { htmlAttributes = new { @class = "weui_input", placeholder = "请输入" } })
+                    </div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd"><label class="weui_label">合格下限</label></div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        @Html.EditorFor(model => model.CMin, new { htmlAttributes = new { @class = "weui_input", placeholder = "请输入" } })
+                    </div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd"><label class="weui_label">不合格下限</label></div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        @Html.EditorFor(model => model.DMin, new { htmlAttributes = new { @class = "weui_input", placeholder = "请输入" } })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="weui_btn_area">
+        <input type="submit" value="提交" class="weui_btn weui_btn_primary" />
+    </div>
+
+}

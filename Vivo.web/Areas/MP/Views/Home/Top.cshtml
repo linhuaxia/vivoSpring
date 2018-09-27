@@ -1,0 +1,72 @@
+﻿@using Vivo.Model;
+
+@model Vivo.Model.UserInfo
+@{
+    ViewBag.Title = "Top";
+    Layout = "~/Areas/MP/Views/Shared/_Layout.cshtml";
+}
+@section head{
+<script type="text/javascript">
+        function BtnLogin_Click() {
+             $.get("@Url.Action("Logout", "Login", new { area = "MP" })", function () {
+                location.href = "@Url.Action("index","Login")";
+            });
+        }
+</script>
+
+}
+
+<nav class="navbar navbar-default" style="background-color:#F1F2F6;">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+
+            <a class="navbar-brand" href="javascript:top.location.reload()">
+                <img src="~/images/logo.png" alt="Brand" style="width:20px;" />
+            </a>
+            <div class="collapse navbar-collapse" style="background:url(/images/Consolebanner.png) no-repeat 100% 0;background-repeat:no-repeat;">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#">
+                            <img src="@Model.WechatHeadImg" class="img-circle" style="width:20px;float:left;" />
+                            @Model.Name
+
+                        </a>
+                    </li>
+                    <li class="divider-vertical"></li>
+                    <li>
+                        <a href="javascript:BtnLogin_Click();">注销</a>
+                    </li>
+                    <li class="divider-vertical"></li>
+                    <li>
+                        <a href="@Url.Action("Pwd", "User")" tabindex="-1" target="main">修改密码</a>
+                    </li>
+                    <li class="divider-vertical"></li>
+                    <li>
+                        <a href="@Url.Action("ReLogin", "Login")" tabindex="-1" target="_parent">重新登录</a>
+                    </li>
+                    <li class="divider-vertical"></li>
+                    <li>
+                        <a href="javascript:parent.FullScreen();" tabindex="-1">全屏</a>
+                    </li>
+                    <li class="divider-vertical"></li>
+                    <li>
+                        <a href="javascript:parent.FullScreenCancel();" tabindex="-1">退出全屏</a>
+                    </li>
+                </ul>
+
+
+                <ul class="nav navbar-nav">
+                    <li >
+                        <a href="javascript:top.location.reload()" style="color:#ff6a00;">荔湾区教育发展研究中心</a>
+                    </li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </div>
+</nav>
+
+
+
+
+

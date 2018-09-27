@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="vivoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="vivoEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="AiQiYiInfo" EntityType="vivoModel.AiQiYiInfo" />
+    <EntitySet Name="LogInfo" EntityType="vivoModel.LogInfo" />
+    <EntitySet Name="PlanInfo" EntityType="vivoModel.PlanInfo" />
+    <EntitySet Name="PrizeResultInfo" EntityType="vivoModel.PrizeResultInfo" />
+    <EntitySet Name="ProfilesInfo" EntityType="vivoModel.ProfilesInfo" />
+    <EntitySet Name="RuleInfo" EntityType="vivoModel.RuleInfo" />
+    <EntitySet Name="sysdiagrams" EntityType="vivoModel.sysdiagrams" />
+    <EntitySet Name="UserInfo" EntityType="vivoModel.UserInfo" />
+    <EntitySet Name="WechatMsgInfo" EntityType="vivoModel.WechatMsgInfo" />
+    <AssociationSet Name="FK_WechatMsgInfo_UserInfo" Association="vivoModel.FK_WechatMsgInfo_UserInfo">
+      <End Role="UserInfo" EntitySet="UserInfo" />
+      <End Role="WechatMsgInfo" EntitySet="WechatMsgInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PrizeResultInfo_PlanInfo" Association="vivoModel.FK_PrizeResultInfo_PlanInfo">
+      <End Role="PlanInfo" EntitySet="PlanInfo" />
+      <End Role="PrizeResultInfo" EntitySet="PrizeResultInfo" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="AiQiYiInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CodeNo" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Int32" Nullable="false" />
+    <Property Name="OwnerUserID" Type="Int32" Nullable="false" />
+    <Property Name="OwnerUserOpenID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="LogInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Category" Type="String" Nullable="false" MaxLength="3000" FixedLength="false" Unicode="true" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Detail" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="AddDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Serious" Type="Int16" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PlanInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="DateEnd" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="AgenterName" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
+    <Property Name="Mount" Type="Int32" Nullable="false" />
+    <Property Name="Enable" Type="Boolean" Nullable="false" />
+    <Property Name="MarketLevel" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="PrizeResultInfo" Relationship="vivoModel.FK_PrizeResultInfo_PlanInfo" FromRole="PlanInfo" ToRole="PrizeResultInfo" />
+  </EntityType>
+  <EntityType Name="PrizeResultInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="OpenID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Tel" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="SnNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Result" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SnApiResult" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PlanID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="PlanInfo" Relationship="vivoModel.FK_PrizeResultInfo_PlanInfo" FromRole="PrizeResultInfo" ToRole="PlanInfo" />
+  </EntityType>
+  <EntityType Name="ProfilesInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Key" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Value" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="RuleInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Enable" Type="Boolean" Nullable="false" />
+    <Property Name="Remark" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Sort" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="UserInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="WechatOpenID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="WechatNameNick" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="WechatHeadImg" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Sex" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="true" />
+    <Property Name="IDCard" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TypeID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="WechatMsgInfo" Relationship="vivoModel.FK_WechatMsgInfo_UserInfo" FromRole="UserInfo" ToRole="WechatMsgInfo" />
+  </EntityType>
+  <EntityType Name="WechatMsgInfo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CreateUserID" Type="Int32" Nullable="false" />
+    <Property Name="AddDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Status" Type="Int32" Nullable="false" />
+    <Property Name="ToUserName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FromUserName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="Int32" Nullable="false" />
+    <Property Name="MsgType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Content" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="MsgId" Type="Int64" Nullable="false" />
+    <Property Name="XMLDom" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="UserInfo" Relationship="vivoModel.FK_WechatMsgInfo_UserInfo" FromRole="WechatMsgInfo" ToRole="UserInfo" />
+  </EntityType>
+  <Association Name="FK_WechatMsgInfo_UserInfo">
+    <End Type="vivoModel.UserInfo" Role="UserInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="vivoModel.WechatMsgInfo" Role="WechatMsgInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="WechatMsgInfo">
+        <PropertyRef Name="CreateUserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PrizeResultInfo_PlanInfo">
+    <End Type="vivoModel.PlanInfo" Role="PlanInfo" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="vivoModel.PrizeResultInfo" Role="PrizeResultInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PlanInfo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="PrizeResultInfo">
+        <PropertyRef Name="PlanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

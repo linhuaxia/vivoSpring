@@ -1,0 +1,93 @@
+﻿@model Vivo.Model.UserInfo
+@{
+    ViewBag.Title = "修改密码";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section head{
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            alert(data.ErrorMsg);
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            location.href = "@Url.Action("Logout","Login")";
+
+        }
+        function OnBegin() {
+            return Submit_ClientClick();
+
+        }
+    </script>
+    <style type="text/css">
+        .TxbCss {
+            width:250px;height:30px;line-height:30px;
+        }
+    </style>
+    <script type="text/javascript">
+        function Submit_ClientClick() {
+            var PwdNew2 = $("#PwdNew2").val();
+            var PwdNew = $("#PwdNew").val();
+            if (PwdNew2.length < 6) {
+                $(".red2").html("密码长度必需6位数上以");
+                return false;;
+            }
+            if (PwdNew!=PwdNew2) {
+                $(".red2").html("两次新密码不一致");
+                return false;
+            }
+            return true;
+        }
+    </script>
+    }
+
+@using (Ajax.BeginForm("Pwd", new AjaxOptions
+{
+    HttpMethod = "post",
+    OnSuccess = "OnSuccess",
+    OnBegin = "OnBegin",
+    LoadingElementId = "loadingToast"
+}))
+{
+
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+    <tr>
+        <td colspan="2" style="height: 30px" class="td1_1">
+            @ViewBag.Title
+            @Html.Hidden("ID", Model.ID)
+        </td>
+    </tr>
+    <tr>
+        <td class="td1_2">
+            旧密码：
+        </td>
+        <td class="td1_3">
+            @Html.TextBox("PwdOld", null, new Dictionary<string, object>() { { "class", "TxbCss" } })
+        </td>
+    </tr>
+    <tr>
+        <td class="td1_2">
+            新密码：
+        </td>
+        <td class="td1_3">
+            @Html.TextBox("PwdNew", null, new Dictionary<string, object>() { { "class", "TxbCss" } })
+        </td>
+    </tr>
+    <tr>
+        <td class="td1_2">
+            重复新密码：
+        </td>
+        <td class="td1_3">
+            @Html.TextBox("PwdNew2", null, new Dictionary<string, object>() { { "class", "TxbCss" } })
+        </td>
+    </tr>
+    <tr>
+        <td class="td1_2" colspan="2" >
+            <input type="submit"  value="提交"/>
+            <div class="red2">
+               : @ViewBag.ErrorMsg
+            </div>
+        </td>
+    </tr>
+</table>
+}

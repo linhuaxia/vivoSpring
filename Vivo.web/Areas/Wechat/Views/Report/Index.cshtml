@@ -1,0 +1,64 @@
+﻿@using PagedList
+@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+@using PagedList.Mvc;
+@using System.Linq;
+@{
+    ViewBag.Title = "汇总查询";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+    IPowerActionInfoService PowerActionBLL = (IPowerActionInfoService)ViewBag.PowerActionBLL;
+}
+@section head{
+<style type="text/css">
+    .weui_bar_item_on {
+        color: #F60;
+        background-color: #4310f3;
+    }
+
+    .GreenConfirm {
+        color: green;
+    }
+</style>
+
+
+}
+
+<div class="weui_panel weui_panel_access">
+    <div class="weui_panel_hd">统计汇总</div>
+    <div class="weui_panel_bd">
+        <a href="@Url.Action("ResearchS")" class="weui_media_box weui_media_appmsg">
+            <div class="weui_media_hd">
+                <img class="weui_media_appmsg_thumb" src="~/images/icon4/4.png" alt="">
+            </div>
+            <div class="weui_media_bd">
+                <h4 class="weui_media_title">教研员听课情况</h4>
+                <p class="weui_media_desc">查看教研员指定时间内进行的听评课次数</p>
+            </div>
+        </a>
+    </div>
+    <div class="weui_panel_bd">
+        <a href="@Url.Action("ResearchDepartment")" class="weui_media_box weui_media_appmsg">
+            <div class="weui_media_hd">
+                <img class="weui_media_appmsg_thumb" src="~/images/icon4/5.png" alt="">
+            </div>
+            <div class="weui_media_bd">
+                <h4 class="weui_media_title">学校调研报表</h4>
+                <p class="weui_media_desc">查看学校在教研员组织调研中的整体情况</p>
+            </div>
+        </a>
+    </div>
+    <div class="weui_panel_bd">
+        <a href="@Url.Action("ResearchLectureUser")" class="weui_media_box weui_media_appmsg">
+            <div class="weui_media_hd">
+                <img class="weui_media_appmsg_thumb" src="~/images/icon4/5.png" alt="">
+            </div>
+            <div class="weui_media_bd">
+                <h4 class="weui_media_title">学校教师调研报表</h4>
+                <p class="weui_media_desc">查看教师被评情况</p>
+            </div>
+        </a>
+    </div>
+</div>

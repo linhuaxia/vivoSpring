@@ -1,0 +1,33 @@
+﻿@using PagedList
+@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "错误";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    string Msg = ViewBag.Msg;
+}
+
+@section head{
+
+}
+<div class="container" id="container">
+    <div class="msg">
+        <div class="weui_msg">
+            <div class="weui_icon_area">
+                <i class="weui_icon_safe weui_icon_safe_warn"></i>
+            </div>
+            <div class="weui_text_area">
+                <h2 class="weui_msg_title">系统错误</h2>
+                <p class="weui_msg_desc">@Msg</p>
+            </div>
+            <div class="weui_opr_area">
+                <p class="weui_btn_area">
+                    <a href="@Url.Action("index","Home")" class="weui_btn weui_btn_primary">确定</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

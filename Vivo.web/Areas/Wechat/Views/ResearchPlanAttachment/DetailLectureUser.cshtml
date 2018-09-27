@@ -1,0 +1,113 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+
+@model ResearchPlanInfo
+
+@{
+    ViewBag.Title = "教案准备情况";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IPowerActionInfoService PowerActionBLL = AbstractFactory.CreatePowerActionInfoService();
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+    UserInfo CurrentUser = ViewBag.CurrentUser;
+    var listResrarchPlanAttachment = Model.ResearchPlanAttachmentInfo
+        .Where(a=>a.TypeEnum==(int)SysEnum.ResearchPlanAttachmentType.教案 && a.CreateUserID==CurrentUser.ID);
+}
+@section head{
+}
+<div class="weui_cells">
+    <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>调研名称</p>
+        </div>
+        <div class="weui_cell_ft">@Model.Name</div>
+    </div>
+    <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>调研时间</p>
+        </div>
+        <div class="weui_cell_ft">@Model.DateBegin.ToString("yyyy-MM-dd")</div>
+    </div>
+    <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>教案上传数量</p>
+        </div>
+        <div class="weui_cell_ft">@listResrarchPlanAttachment.Count()</div>
+    </div>
+</div>
+
+
+<div class="weui_panel">
+    <div class="weui_panel_bd">
+        @foreach (var item in listResrarchPlanAttachment)
+        {
+            var Icon = "logo.png";
+            if (item.MineType.ToLower().Contains("image"))
+            {
+                Icon = "image.png";
+            }
+            else if (item.MineType.ToLower().Contains("doc") || item.MineType.ToLower().Contains("word"))
+            {
+                Icon = "doc.png";
+            }
+            else if (item.MineType.ToLower().Contains("powerpoint") || item.MineType.ToLower().Contains("officedocument.presentationml.presentation"))
+            {
+                Icon = "ppt.png";
+            }
+            else if (item.MineType.ToLower().Contains("excel"))
+            {
+                Icon = "xls.png";
+            }
+            else if (item.MineType.ToLower().Contains("pdf"))
+            {
+                Icon = "pdf.png";
+            }
+            <a href="javascript:ResearchPlanAttachment_Click('@(item.PathRelative+item.Name)','@Icon')" class="weui_media_box weui_media_appmsg">
+                <div class="weui_media_hd">
+                    <img class="weui_media_appmsg_thumb" src="~/images/document/@Icon" alt="">
+                </div>
+                <div class="weui_media_bd">
+                    <h4 class="weui_media_title">@item.ShowName</h4>
+                    <p class="weui_media_desc">@item.Memo</p>
+                </div>
+            </a>
+        }
+
+        <script type="text/javascript">
+            function ResearchPlanAttachment_Click(SRC, ICON) {
+                var HTML = "";
+                if (ICON == "image.png") {
+                    HTML = '<img src="' + SRC + '" style="width:100%;max-height:100vh;"/>';
+                    layer.open({
+                        type: 1
+                        , content: HTML,
+                        anim: 'up',
+                        style: 'position:fixed; bottom:0; left:0; width: 100%; height: 90%; padding:0; border:none;'
+                    });
+                }
+                else {
+                    window.open(SRC, "_black");
+                }
+            }
+        </script>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

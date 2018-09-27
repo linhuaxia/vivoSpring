@@ -1,0 +1,52 @@
+﻿@using PagedList
+@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+@using PagedList.Mvc;
+@model IQueryable<Vivo.Model.UserInfo>
+
+@{
+    ViewBag.Title = "";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+}
+@section head{
+    <script language="javascript" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+        function FastLogin_Click(id) {
+            $.post("@Url.Action("LoginFast")",{id:id}, function (data) {
+                alert(data.ErrorMsg);
+            });
+
+
+        }
+    </script>
+}
+
+
+
+
+@foreach (var item in Model)
+{
+    <div class="weui_panel_bd">
+        <a href="javascript:FastLogin_Click(@item.ID);" class="weui_media_box weui_media_appmsg">
+            <div class="weui_media_hd">
+                <img class="weui_media_appmsg_thumb"
+                     src="@item.WechatHeadImg" alt="">
+            </div>
+            <div class="weui_media_bd">
+                <h4 class="weui_media_title">@item.Name</h4>
+                <p class="weui_media_desc">
+                    @item.WechatOpenID
+                    <div>
+                        学校、部门 @item.DepartmentInfo.Name
+                        &nbsp;
+                        &nbsp;
+                        学科:@string.Join("，",item.SubjectInfo.Select(a=>a.Name))
+                    </div>
+                </p>
+            </div>
+        </a>
+    </div>
+
+}

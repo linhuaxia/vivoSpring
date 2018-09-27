@@ -1,0 +1,144 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+
+@model Vivo.Model.DepartmentInfo
+
+@{
+    ViewBag.Title = "编辑";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IPowerActionInfoService PowerActionBLL = AbstractFactory.CreatePowerActionInfoService();
+    var listDepartmentType = ((IQueryable<DepartmentTypeInfo>)ViewBag.listDepartmentType).Select(dt => new { dt.ID, dt.Name });
+
+}
+@section head{
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            alert(data.ErrorMsg);
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            location.href = "@Url.Action("Detail", new { ID = Model.ID })";
+
+        }
+        function OnBegin() {
+            //do something before post data
+
+        }
+
+        $(function () {
+            InitDepartmentType();
+            $("#BtnAddDepartmentType").click(BtnAddDepartmentType_Click);
+        });
+        var JsonDepartmentType =@Html.Raw(ViewBag.listDepartmentTypeJSON);
+        function BtnAddDepartmentType_Click() {
+            var NewID = $("#DdlDepartmentType").val();
+            $.post("@Url.Action("Select", "DepartmentTypeDepartment", new { area = "MP" })", { DepartmentID:@Model.ID,DepartmentTypeID: NewID, IsChecked:true }, function (data) {
+                JsonDepartmentType = data.Data;
+                InitDepartmentType();
+            });
+        }
+        function BtnDelDepartmentType_Click(_ID) {
+            $.post("@Url.Action("Select", "DepartmentTypeDepartment", new { area="MP"})", { DepartmentID:@Model.ID,DepartmentTypeID: _ID, IsChecked: false }, function (data) {
+                JsonDepartmentType = data.Data;
+                InitDepartmentType();
+            });
+        }
+
+        function InitDepartmentType() {
+            var HTML = "";
+            $(JsonDepartmentType).each(function (index, item) {
+                HTML += '<div class="weui_cell">';
+                HTML += '   <div class="weui_cell_bd weui_cell_primary">';
+                HTML += '       <p>' + item.Name + '</p>';
+                HTML += '   </div>';
+                HTML += '   <div class="weui_cell_ft">';
+                HTML += '       <i class="weui_icon_cancel BtnDelDepartmentType" onclick="BtnDelDepartmentType_Click('+item.ID+')" ></i>';
+                HTML += '   </div>';
+                HTML += '</div>';
+            });
+            $("#DivDepartmentType").html(HTML);
+        }
+
+    </script>
+
+
+
+}
+
+
+@using (Ajax.BeginForm("Edit", "Department", new { area = "MP" }, new AjaxOptions { HttpMethod = "post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.ID)
+
+    <div class="weui_cells">
+        <div class="weui_cell weui_cell_select weui_select_after">
+            <div class="weui_cell_hd">
+                <label for="" class="weui_label">类型</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.DropDownListFor(model => model.TypeEmun, ViewBag.listTypeEnum as List<SelectListItem>, new { @class = "weui_select" })
+            </div>
+        </div>
+
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">学校/部门名称</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "weui_input" } })
+            </div>
+        </div>
+
+        <div class="weui_cell weui_cell_switch">
+            <div class="weui_cell_hd weui_cell_primary">是否可用</div>
+            <div class="weui_cell_ft">
+                @Html.CheckBoxFor(model => model.Enable, new { @class = "weui_switch", @checked = "checked" })
+            </div>
+        </div>
+        <div class="weui_cell weui_cell_select weui_select_after">
+            <div class="weui_cell_hd">
+                <label for="" class="weui_label">排序号</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.DropDownListFor(model => model.OrderID, ViewBag.listSort as IEnumerable<SelectListItem>, new { @class = "weui_select" })
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-primary" style="margin:10px;">
+        <div class="panel-heading clearfix">
+            <h3 class="panel-title pull-left">级别设置</h3>
+            <span class="badge pull-right">
+                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+            </span>
+        </div>
+
+        <div class="panel-body">
+            <div class="weui_cells">
+                <div class="weui_cell weui_vcode">
+                    <div class="weui_cell_bd weui_cell_primary">
+                        @Html.DropDownList("DdlDepartmentType", listDepartmentType.Select(a=>new SelectListItem{Text=a.Name,Value=a.ID.ToString() }), new { @class = "weui_select" })
+                    </div>
+                    <div class="weui_cell_ft">
+                        <input class="weui_input" type="button" id="BtnAddDepartmentType" value="加入">
+                    </div>
+                </div>
+                <div class="weui_cells" id="DivDepartmentType">
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div class="weui_btn_area">
+        <input type="submit" value="提交" class="weui_btn weui_btn_primary" />
+    </div>
+
+
+
+}
+
+

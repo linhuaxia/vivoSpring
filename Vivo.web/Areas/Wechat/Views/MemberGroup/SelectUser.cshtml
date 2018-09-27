@@ -1,0 +1,112 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+
+@model IQueryable<UserInfo>
+
+@{
+    ViewBag.Title = "详细信息";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IPowerActionInfoService PowerActionBLL = AbstractFactory.CreatePowerActionInfoService();
+    MemberGroupInfo info = (MemberGroupInfo)ViewBag.info;
+}
+@section head{
+
+    <style type="text/css">
+        .weui_bar_item_on {
+            color: #F60;
+            background-color: #4310f3;
+        }
+    </style>
+    <script type="text/javascript">
+        var SelectedUserJSON=@Html.Raw(ViewBag.SelectedUserJSON);
+        $(function () {
+            $(".weui_navbar_item").click(function () {
+                $(".DivTabBodys").hide();
+                $(".weui_navbar_item").removeClass("weui_bar_item_on");
+                var EleID = $(this).attr("id") + "BD";
+                $("#" + EleID).show();
+                $(this).addClass("weui_bar_item_on");
+            });
+            InitSelectedUser();
+        });
+        function InitSelectedUser() {
+            var HTML = '';
+            $(SelectedUserJSON).each(function (index,item) {
+                HTML += '<div class="weui_cell">';
+                HTML += '   <div class="weui_cell_bd weui_cell_primary">';
+                HTML += '     <p>' + item.Name +"/"+ item.subjectName+'</p>';
+                HTML += '   </div>';
+                HTML += '   <div class="weui_cell_ft">';
+                HTML += '       <i class="weui_icon_cancel" onclick="CbUserChange('+item.ID+',false)" ></i> ';
+                HTML += '   </div>';
+                HTML += '</div>';
+                $(".weui_check").each(function (indexcb, itemcb) {
+                    if (($(itemcb).attr("id") == "CB" + item.ID))
+                    { 
+                        $(itemcb).attr("checked", true);
+                    }
+                });
+             });
+            $("#listSelected").html(HTML);
+        }
+        function CbUserChange(UserID, IsAdd) {
+            var postData = {UserID:UserID,IsAdd:IsAdd,MemberGroupID:@info.ID};
+            $.post("@Url.Action("SelectUser")", postData, function (data) {
+                layer.open({ content: data.ErrorMsg, skin: 'msg', time: 1 });
+                if (data.ErrorCode == 0) {
+                    SelectedUserJSON = data.Data;
+                    InitSelectedUser();
+                }
+            });
+        }
+    </script>
+}
+
+
+<div class="navbar">
+    <div class="bd" style="height: 100%;">
+        <div class="weui_tab">
+            <div class="weui_navbar">
+                <div class="weui_navbar_item weui_bar_item_on" id="DivItem1">
+                    人员选择
+                </div>
+                <div class="weui_navbar_item" id="DivItem2">
+                    参与人员
+                </div>
+            </div>
+            <div class="weui_tab_bd">
+                <div id="DivItem1BD" class="DivTabBodys">
+                    <div class="weui_cells weui_cells_radio">
+                        @foreach (var item in Model)
+                        {
+                            <label class="weui_cell weui_check_label" for="@("CB"+item.ID)">
+                                <div class="weui_cell_bd weui_cell_primary">
+                                    <p>
+                                        @item.Name
+                                        <span>/</span>
+                                        @string.Join(",", item.SubjectInfo.Select(a => a.Name))
+                                    </p>
+                                </div>
+                                <div class="weui_cell_ft">
+                                    <input type="radio" class="weui_check" id="@("CB"+item.ID)" onclick="CbUserChange(@item.ID,true)">
+                                    <span class="weui_icon_checked"></span>
+                                </div>
+                            </label>
+                        }
+                    </div>
+                </div>
+                <div id="DivItem2BD" class="DivTabBodys" style="display:none;">
+                    <div class="weui_cells" id="listSelected">
+                        @*<div class="weui_cell">
+                                <div class="weui_cell_bd weui_cell_primary">
+                                    <p>标题文字</p>
+                                </div>
+                                <div class="weui_cell_ft"><i class="weui_icon_cancel"></i></div>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

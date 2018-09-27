@@ -1,0 +1,99 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+@using Tool;
+@model ResearchPlanInfo
+@{
+    ViewBag.Title = "调研整体汇总";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+    IPowerActionInfoService PowerActionBLL = (IPowerActionInfoService)ViewBag.PowerActionBLL;
+    var infoSubject = (SubjectInfo)ViewBag.infoSubject;
+    var listResearch = Model.ResearchInfo.Where(a => a.SubjectID == infoSubject.ID);
+}
+@section head{
+    <script type="text/javascript">
+        //汇总统计——整体反馈
+
+        var listResult =@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.listResult));
+                        $(function () {
+                            var HTML = "";
+                            $(listResult).each(function (index, item) {
+                                if (item.ID>0) {
+                                HTML += '<a class="weui_cell" href="@Url.Action("Report2",new { PlanID =Model.ID})&SubjectID=' + item.ID+'">';
+                                }
+                                else {
+                                    HTML += '<a class="weui_cell" href="javascript:void(9);">';
+                                }
+
+                                HTML += '   <div class="weui_cell_bd weui_cell_primary">';
+                                HTML += '       <p>' + item.Name +'</p>';
+                                HTML += '   </div>';
+                                HTML += '   <div class="weui_cell_ft">';
+                                HTML += '   人数:' + item.CountTeacher + '/节次:' + item.CountItems;
+                                HTML += '   </div>';
+                                HTML += '</a>';
+
+                            });
+                            $("#DivReportSum").html(HTML);
+                        });
+
+</script>
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            console.log(data);
+            alert(data.ErrorMsg);
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            location.href = location.href;
+
+        }
+        function OnBegin() {
+            //do something before post data
+
+        }
+    </script>
+
+
+
+
+
+}
+
+
+<div id="DivContainer">
+
+        <div class="weui_cells_title">学科汇总</div>
+        <div class="weui_cells weui_cells_access" id="DivReportSum">
+            @*<a class="weui_cell" href="javascript:;">
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>cell standard</p>
+                    </div>
+                    <div class="weui_cell_ft">说明文字</div>
+                </a>*@
+        </div>
+    <div class="weui_cells_title">整体总结</div>
+        @if (!PowerActionBLL.PowerCheck(PowerInfo.P_统计报表.PP集体调研汇总.PPP整体汇总填写.KEY))
+        {
+            <div class="weui_cells_tips">@Html.Raw(string.IsNullOrEmpty(Model.SummaryDetail) ? "未补充汇总总结" : Model.SummaryDetail.Replace("\n","<br/>"))</div>
+        }
+        else
+        {
+            using (Ajax.BeginForm("Report1", new { area = "MP" }, new AjaxOptions { HttpMethod = "post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.ID)
+                <div class="weui_cell">
+                    <div class="weui_cell_bd weui_cell_primary">
+                        @Html.TextArea("SummaryDetail",new { @class = "weui_textarea", placeholder = "未补充汇总总结"  , rows = "10",Value=Model.SummaryDetail })
+                        @*<div class="weui_textarea_counter"><span>0</span>/200</div>*@
+                    </div>
+                </div>
+                <div class="weui_btn_area">
+                    <input type="submit" value="确定" class="weui_btn weui_btn_primary" />
+                </div>
+            }
+        }
+</div>

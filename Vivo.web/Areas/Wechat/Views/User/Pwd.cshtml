@@ -1,0 +1,76 @@
+﻿@model Vivo.Model.UserInfo
+@{
+    ViewBag.Title = "修改密码";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+}
+
+@section head{
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            alert(data.ErrorMsg);
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            
+
+        }
+        function OnBegin() {
+            return Submit_ClientClick();
+
+        }
+    </script>
+    <style type="text/css">
+        .TxbCss {
+            width:250px;height:30px;line-height:30px;
+        }
+    </style>
+    <script type="text/javascript">
+        function Submit_ClientClick() {
+            var PwdNew2 = $("#PwdNew2").val();
+            var PwdNew = $("#PwdNew").val();
+            if (PwdNew2.length < 6) {
+                $(".red2").html("密码长度必需6位数上以");
+                return false;;
+            }
+            if (PwdNew!=PwdNew2) {
+                $(".red2").html("两次新密码不一致");
+                return false;
+            }
+            return true;
+        }
+    </script>
+    }
+
+@using (Ajax.BeginForm("Pwd", "User", new { area = "MP" }, new AjaxOptions
+{
+    HttpMethod = "post",
+    OnSuccess = "OnSuccess",
+    OnBegin = "OnBegin",
+    LoadingElementId = "loadingToast"
+}))
+{
+    @Html.Hidden("ID", Model.ID)
+
+    <div class="weui_cells weui_cells_form">
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">旧密码</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.TextBox("PwdOld", null, new { @class = "TxbCss" })
+            </div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">新密码</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.TextBox("PwdNew", null, new { @class = "TxbCss" })
+            </div>
+        </div>
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">重复新密码</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                @Html.TextBox("PwdNew2", null, new { @class = "TxbCss" })
+            </div>
+        </div>
+    </div>
+    <input type="submit" value="提交" class="weui_btn weui_btn_primary" />
+
+}

@@ -1,0 +1,412 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+
+@model Vivo.Model.ResearchInfo
+
+@{
+    ViewBag.Title = "组织调研听课-详细信息";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IPowerActionInfoService PowerActionBLL = AbstractFactory.CreatePowerActionInfoService();
+    IResearchInfoService ResearchBLL = AbstractFactory.CreateResearchInfoService();
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+    UserInfo CurrentUser = ViewBag.CurrentUser;
+    var listPlanAttachment = Model.ResearchPlanInfo.ResearchPlanAttachmentInfo.Where(a => a.CreateUserID == Model.lectureUserID);
+
+}
+@section head{
+    <style type="text/css">
+        .BarFocus {
+            color: #F60;
+            background-color: #4310f3;
+        }
+
+        .GreenConfirm {
+            color: green;
+        }
+
+        .weui_uploader_file {
+            margin-bottom: 40px;
+        }
+
+        timeStamp {
+            position: relative;
+            top: 70px;
+            font-size: 6px;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            $(".weui_tabbar_item").click(function () {
+                $(".DivTabBodys").hide();
+                $(".weui_tabbar_item").removeClass("BarFocus");
+                var EleID = $(this).attr("id") + "BD";
+                $("#" + EleID).show();
+                $(this).addClass("BarFocus");
+            });
+        });
+
+        function AudioPlay(ID) {
+            document.getElementById("Audio" + ID).play();
+        }
+
+    </script>
+
+    <script type="text/javascript">
+        //body3
+        $(function () {
+            InitResearchNote();
+            $(".weui_uploader_file").click(function () {
+                var src = $(this).css("background-image");
+                var contentBody3 = "<img src='" + src + "' style='width:100%;' />";
+                layer.open({
+                    content: contentBody3,
+                    btn: '好的'
+                });
+            });
+        });
+
+            var ListResearchNote;
+    function InitResearchNote() {
+        $.get("@Url.Action("Index", "ResearchNote",new { ResearchID=Model.ID})", function (data) {
+            var HTML = "";
+            ListResearchNote = data.Data;
+            $(ListResearchNote).each(function (index, item) {
+                HTML += '<item>';
+                HTML += '   <p>';
+                HTML += item.Detail;
+                HTML += '   <span class="badge">';
+                HTML += item.CreateDate;
+                HTML += '    </span>';
+               HTML+= '</p>';
+                $(item.ImageJSON).each(function (indexImage, itemImage) {
+                    HTML += '<ImgContainerThumb>';
+                    HTML += '   <img class="img-thumbnail" src="' + itemImage.FullPath + '" />';
+                    HTML += '   <span>' + itemImage.CreateDate + '</span>';
+                    HTML += '</ImgContainerThumb>';
+                });
+                HTML += '   <div style="clear:both"></div>';
+                $(item.AudioJSON).each(function (indexAudio, itemAudio) {
+                    HTML += '<div class="well well-sm" onclick="AudioPlay(\'' + itemAudio.ID + '\')">'
+                    HTML += itemAudio.CreateDate + '.mp3';
+                    HTML += '<audio id="Audio' + itemAudio.ID + '" src="' + itemAudio.FullPath + '" style="display:none;"></audio>';
+                    HTML += '</div>';
+                });
+                HTML += '   <div style="clear:both"></div>';
+                HTML += '</item>';
+            });
+            if (HTML=="") {
+                HTML = '<div class="well well-sm">没有课堂记录内容</div>';
+            }
+            $("#DivListResearchNoteRecord").html(HTML);
+        });
+
+    }
+
+    </script>
+
+
+
+    <script type="text/javascript">
+        $(function () {
+            $("#BtnDelete").click(function () {
+                if (!confirm("确定要删除数据吗？")) {
+                    return;
+                }
+                APINormalGet('@Url.Action("Delete",new { id=Model.ID})',
+                    '@Url.Action("index","home")');
+            });
+       });
+
+    </script>
+
+
+}
+
+<div class="tabbar">
+    <div class="weui_tab">
+        <div class="weui_tab_bd">
+            <!------------------------------------------>
+            <div id="DivItem1BD" class="DivTabBodys">
+                <div class="weui_cells">
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">
+                            <label for="" class="weui_label">调研学科</label>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            @Model.SubjectInfo.Name
+                        </div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">
+                            <label for="" class="weui_label">听课节次</label>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            @Model.LessionNumber
+                        </div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">
+                            <label for="" class="weui_label">听课年级</label>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            @SysEnum.GetName(typeof(SysEnum.LessionGrade), Tool.Function.ConverToInt(Model.GradeName))
+                        </div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd">
+                            <label for="" class="weui_label">听课班级</label>
+                        </div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            @Model.ClassName
+                        </div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd"><label class="weui_label">听课课题</label></div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            @Model.Topic
+                        </div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd"><label class="weui_label">听课对象</label></div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            @{ UserInfo infoLecture = UserBLL.GetList(a => a.ID == Model.lectureUserID).FirstOrDefault();}
+                            @if (null != infoLecture)
+                            {
+                                <span>@infoLecture.Name</span>
+                            }
+
+                        </div>
+                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_hd"><label class="weui_label">听评教研员</label></div>
+                        <div class="weui_cell_bd weui_cell_primary">
+                            @Model.UserInfo.Name
+
+                        </div>
+                    </div>
+                    @*<div class="weui_cell">
+                            <div class="weui_cell_hd"><label class="weui_label">状态</label></div>
+                            <div class="weui_cell_bd weui_cell_primary">
+                                @SysEnum.GetName(typeof(SysEnum.ResearchStatus), Model.Status)
+
+                            </div>
+                        </div>*@
+                </div>
+
+                <div style="margin:15px">
+                    @if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP组织调研.PPP听评课管理.修改及提交)
+        && CurrentUser.ID == Model.UserID
+        && Model.Status != (int)SysEnum.ResearchStatus.已确认)
+                    {
+                        <a href="@Url.Action("Edit",new { ID=Model.ID})" class="weui_btn weui_btn_plain_primary">前往修改</a>
+                    }
+                    @if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP组织调研.PPP听评课管理.删除) && CurrentUser.ID == Model.UserID)
+                    {
+                        <div id="BtnDelete" class="weui_btn weui_btn_warn">删除作废</div>
+                    }
+                </div>
+
+            </div>
+            <!------------------------------------------>
+            <div id="DivItem2BD" class="DivTabBodys" style="display:none;">
+                <div class="weui_panel weui_panel_access">
+                    <div class="weui_panel_bd">
+                        @foreach (var item in listPlanAttachment)
+                        {
+                            var Icon = "logo.png";
+                            if (item.Name.ToLower().Contains(".jpg")
+                                || item.Name.ToLower().Contains(".png")
+                                || item.Name.ToLower().Contains(".gif")
+                                || item.Name.ToLower().Contains(".jpeg")
+                                || item.Name.ToLower().Contains(".bmp")
+                                )
+                            {
+                                Icon = "image.png";
+                            }
+                            else if (item.Name.ToLower().Contains(".doc"))
+                            {
+                                Icon = "doc.png";
+                            }
+                            else if (item.Name.ToLower().Contains(".ppt"))
+                            {
+                                Icon = "ppt.png";
+                            }
+                            else if (item.Name.ToLower().Contains(".xls"))
+                            {
+                                Icon = "xls.png";
+                            }
+                            else if (item.Name.ToLower().Contains(".pdf"))
+                            {
+                                Icon = "pdf.png";
+                            }
+
+                            <a href="javascript:ResearchPlanAttachment_Click('@(item.PathRelative+item.Name)','@Icon')" class="weui_media_box weui_media_appmsg">
+                                <div class="weui_media_hd">
+                                    <img class="weui_media_appmsg_thumb" src="~/images/document/@Icon" alt="">
+                                </div>
+                                <div class="weui_media_bd">
+                                    <h4 class="weui_media_title">@item.ShowName</h4>
+                                    <p class="weui_media_desc">@item.Memo</p>
+                                </div>
+                            </a>
+                        }
+
+                        <script type="text/javascript">
+                                function ResearchPlanAttachment_Click(SRC, ICON) {
+                                    var HTML = "";
+                                    if (ICON == "image.png") {
+                                        HTML = '<img src="' + SRC + '" style="width:100%;max-height:100vh;"/>';
+                                        layer.open({
+                                            type: 1
+                                            , content: HTML,
+                                            anim: 'up',
+                                            style: 'position:fixed; bottom:0; left:0; width: 100%; height: 90%; padding:0; border:none;'
+                                        });
+                                    }
+                                    else {
+                                        window.open(SRC, "_black");
+                                    }
+                                }
+                        </script>
+
+                    </div>
+                </div>
+            </div>
+            <!------------------------------------------>
+            <div id="DivItem3BD" class="DivTabBodys" style="display:none;">
+                <div class="weui_cells_title">过程记录</div>
+                <style type="text/css">
+                    #DivListResearchNoteRecord item {
+                        margin: 2px;
+                        padding: 3px;
+                        border: 1px solid #CCC;
+                        clear: both;
+                        display: block;
+                        min-height: 26px;
+                    }
+
+                        #DivListResearchNoteRecord item p {
+                            margin: 0;
+                            padding: 0;
+                        }
+
+                        #DivListResearchNoteRecord item ImgContainerThumb {
+                            width: 45%;
+                            float: left;
+                            margin: 2%;
+                            display: block;
+                        }
+
+                        #DivListResearchNoteRecord item img {
+                            width: 100%;
+                            height: auto;
+                        }
+                </style>
+                <div id="DivListResearchNoteRecord" style="padding:10px;">
+                    <item>
+                        <p>
+                            fasdfasdfa
+                        </p>
+                        <img class="img-thumbnail" src="~/images/logo.jpg" />
+                        <img class="img-thumbnail" src="~/images/logo.jpg" />
+                        <img class="img-thumbnail" src="~/images/logo.jpg" />
+                        <img class="img-thumbnail" src="~/images/logo.jpg" />
+                        <div style="clear:both"></div>
+                        <div class="well well-sm">...</div>
+                        <div style="clear:both"></div>
+                    </item>
+                </div>
+
+            </div>
+            <!------------------------------------------>
+            <div id="DivItem4BD" class="DivTabBodys" style="display:none;">
+                <div class="weui_cells_title">量化评价</div>
+                <div class="weui_cells">
+                    @{ var listTemplateItem = Model.ResearchPlanInfo.EvalTemplateInfo.TemplateItemInfo
+              .Where(a => a.Enable)
+              .OrderByDescending(a => a.SortID)
+              .ThenBy(a => a.ID)
+              .Distinct();}
+                    @foreach (var item in listTemplateItem)
+                    {
+                        var ExistValue = Model.ResearchItemInfo.FirstOrDefault(a => a.TemplateItemID == item.ID);
+                        <div class="weui_cell">
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>@item.Name</p>
+                            </div>
+                            <div class="weui_cell_ft">
+                                @if (null == ExistValue)
+                                {
+                                    <text>没有评定项</text>
+                                }
+                                else
+                                {
+                                    if (Model.ResearchPlanInfo.EvalTemplateInfo.TypeFlag == (int)SysEnum.TemplateTypeFlag.分值模板)
+                                    {
+                                        <text>@ExistValue.ScoreValue.ToString()</text>
+                                    }
+                                    else
+                                    {
+                                        var ExistItemOption = Model.ResearchPlanInfo.EvalTemplateInfo.TemplateOptionInfo.FirstOrDefault(a => a.ID == ExistValue.ScoreValue);
+                                        <text>@(null == ExistItemOption ? "没有评定项" : ExistItemOption.Name.ToString())</text>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+                    @if (Model.ResearchPlanInfo.EvalTemplateInfo.TypeFlag == (int)SysEnum.TemplateTypeFlag.分值模板)
+                    {
+                        <div class="weui_cell">
+                            <div class="weui_cell_bd weui_cell_primary">
+                                <p>总分合计</p>
+                            </div>
+                            <div class="weui_cell_ft">
+                                @Model.ResearchItemInfo.Sum(a => a.ScoreValue)
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="weui_cells_title">主观评价</div>
+                <div class="weui_cells weui_cells_form">
+                    <div class="weui_cell">
+                        <div class="weui_cell_bd weui_cell_primary">
+                            @Model.SubjectiveOpinion
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!------------------------------------------>
+        </div>
+        <div style="height:70px"></div>
+        <div class="weui_tabbar" style="position:fixed;bottom:0;">
+            <a href="javascript:;" id="DivItem1" class="weui_tabbar_item BarFocus">
+                <div class="weui_tabbar_icon">
+                    <img src="~/images/icon4/10.png" alt="">
+                </div>
+                <p class="weui_tabbar_label">基本信息</p>
+            </a>
+            <a href="javascript:;" id="DivItem2" class="weui_tabbar_item">
+                <div class="weui_tabbar_icon">
+                    <img src="~/images/icon4/9.png" alt="">
+                </div>
+                <p class="weui_tabbar_label">教案</p>
+            </a>
+            @if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP听评课记录管理.PPP查看所有听课记录.KEY)||Model.UserID==CurrentUser.ID)
+            {
+                <a href="javascript:;" id="DivItem3" class="weui_tabbar_item">
+                    <div class="weui_tabbar_icon">
+                        <img src="~/images/icon4/10.png" alt="">
+                    </div>
+                    <p class="weui_tabbar_label">课堂记录</p>
+                </a>
+            }
+            <a href="javascript:;" id="DivItem4" class="weui_tabbar_item">
+                <div class="weui_tabbar_icon">
+                    <img src="~/images/icon4/5.png" alt="">
+                </div>
+                <p class="weui_tabbar_label">课堂评价</p>
+            </a>
+        </div>
+    </div>
+</div>

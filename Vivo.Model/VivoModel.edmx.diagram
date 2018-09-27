@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d78e78d45ba642228e5b68af7ee5c2a0" Name="Diagram1">
+        <EntityTypeShape EntityType="vivoModel.AiQiYiInfo" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="vivoModel.LogInfo" Width="1.5" PointX="0.75" PointY="5.75" />
+        <EntityTypeShape EntityType="vivoModel.PlanInfo" Width="1.5" PointX="2.75" PointY="5.75" />
+        <EntityTypeShape EntityType="vivoModel.PrizeResultInfo" Width="1.5" PointX="5.75" PointY="3.75" />
+        <EntityTypeShape EntityType="vivoModel.ProfilesInfo" Width="1.5" PointX="7.75" PointY="0.75" />
+        <EntityTypeShape EntityType="vivoModel.RuleInfo" Width="1.5" PointX="7.75" PointY="3.75" />
+        <EntityTypeShape EntityType="vivoModel.sysdiagrams" Width="1.5" PointX="4.75" PointY="7.75" />
+        <EntityTypeShape EntityType="vivoModel.UserInfo" Width="1.5" PointX="0.75" PointY="1.375" />
+        <EntityTypeShape EntityType="vivoModel.WechatMsgInfo" Width="1.5" PointX="3" PointY="1" />
+        <AssociationConnector Association="vivoModel.FK_WechatMsgInfo_UserInfo" />
+        <AssociationConnector Association="vivoModel.FK_PrizeResultInfo_PlanInfo" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

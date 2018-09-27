@@ -1,0 +1,109 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+
+@model Vivo.Model.ResearchPlanUserInfo
+
+@{
+    ViewBag.Title = "详细信息";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IPowerActionInfoService PowerActionBLL = AbstractFactory.CreatePowerActionInfoService();
+}
+@section head{
+
+<script type="text/javascript">
+        function OnSuccess(data) {
+            console.log(data);
+            alert(data.ErrorMsg);
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            location.href = "@Url.Action("index","Home")";
+
+        }
+        function OnBegin() {
+            //do something before post data
+
+    }
+        function BtnConfirm_Click(IsGO) {
+            $("#HidenIsConfirmGo").val(IsGO);
+            if (!IsGO) {
+                if (!confirm("确认不参与吗？"))
+                {
+                    return;
+                }
+            }
+            $("#BtnSubmit").click();
+        }
+</script>
+
+
+}
+
+
+<div class="weui_cells">
+    <div class="weui_cell">
+        <div class="weui_cell_hd"><label class="weui_label">名称</label></div>
+        <div class="weui_cell_bd weui_cell_primary">
+            @Model.ResearchPlanInfo.Name
+        </div>
+    </div>
+    <div class="weui_cell">
+        <div class="weui_cell_hd">
+            <label for="" class="weui_label">学校</label>
+        </div>
+        <div class="weui_cell_bd weui_cell_primary">
+            @Model.ResearchPlanInfo.DepartmentInfo.Name
+        </div>
+    </div>
+    <div class="weui_cell">
+        <div class="weui_cell_hd"><label for="" class="weui_label">计划日期</label></div>
+        <div class="weui_cell_bd weui_cell_primary">
+            @Model.ResearchPlanInfo.DateBegin.ToString("yyyy-MM-dd")
+        </div>
+    </div>
+</div>
+<div class="weui_cells">
+
+    <div class="weui_cells_title">备注</div>
+    <div class="weui_cells weui_cells_form">
+        <div class="weui_cell">
+            <div class="weui_cell_bd weui_cell_primary">
+               @Model.Memo
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@using (Ajax.BeginForm("Confirm", new
+{ @*area = "MP"*@ }, new AjaxOptions { HttpMethod = "post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.ID)
+    @Html.Hidden("HidenIsConfirmGo","true")
+    <div style="padding:15px">
+        @if (Model.IsConfirmed)
+        {
+            <div class="weui_cells_tips" style="text-align:center;">已于 @Model.DateConfirm.ToString() 确认参与</div>
+        }
+        else if (Model.DateConfirm.Date != DicInfo.DateZone.Date)
+        {
+            <div class="weui_cells_tips" style="text-align:center;">已于 @Model.DateConfirm.ToString() 进行不参与回复</div>
+        }
+        else
+        {
+            <div style="display:none">
+                <input type="submit" id="BtnSubmit"/>
+        </div>
+            
+            <a href="javascript:BtnConfirm_Click(true);" class="weui_btn weui_btn weui_btn_primary">确认参与</a>
+            <a href="javascript:BtnConfirm_Click(false);" class="weui_btn weui_btn_warn">不参与</a>
+        }
+    </div>
+
+}
+
+

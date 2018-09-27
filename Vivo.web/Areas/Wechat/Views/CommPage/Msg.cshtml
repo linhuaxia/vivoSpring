@@ -1,0 +1,31 @@
+﻿
+@{
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    var info = ViewBag.info;
+}
+
+<div class="container" id="container">
+    <div class="msg">
+        <div class="weui_msg">
+            <div class="weui_icon_area">
+                @if (!string.IsNullOrEmpty(info.Icon))
+                {
+                    @info.Icon
+                }
+                else
+                {
+                    <i class="weui_icon_msg weui_icon_info"></i>
+                }
+            </div>
+            <div class="weui_text_area">
+                <h2 class="weui_msg_title">@info.Title</h2>
+                <p class="weui_msg_desc">@Html.Raw(info.Detail)</p>
+            </div>
+            <div class="weui_opr_area">
+                <p class="weui_btn_area">
+                    <a href="@info.GoBackLink" class="weui_btn weui_btn_primary">确定</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

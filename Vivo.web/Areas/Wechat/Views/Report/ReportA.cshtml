@@ -1,0 +1,226 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+@using Tool;
+@model ResearchPlanInfo
+@{
+    ViewBag.Title = "调研情况汇总";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+    IPowerActionInfoService PowerActionBLL = (IPowerActionInfoService)ViewBag.PowerActionBLL;
+    var listSubject = (List<SubjectInfo>)ViewBag.listSubject;
+    var listValuableSubjectResearch = (IEnumerable<ResearchInfo>)ViewBag.listValuableSubjectResearch;
+    var listResearchItemInfo = listValuableSubjectResearch.SelectMany(a => a.ResearchItemInfo);
+}
+@section head{
+    <style type="text/css">
+        .nopadding {
+            padding: 0 0 0 10px !important;
+        }
+
+        .lableInliner {
+            margin: 1px;
+        }
+    </style>
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            console.log(data);
+            alert(data.ErrorMsg);
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            location.href = location.href;
+
+        }
+        function OnBegin() {
+            //do something before post data
+
+        }
+    </script>
+
+
+
+
+
+}
+<div class="weui_panel_bd">
+    @if (Model.EvalTemplateInfo.TypeFlag == (int)SysEnum.TemplateTypeFlag.等级模板 && listResearchItemInfo.Count() > 0)
+    {
+        <div class="weui_media_box weui_media_text">
+            <h4 class="weui_media_title">
+                项目累计
+            </h4>
+            <div class="weui_media_box weui_media_small_appmsg">
+                @foreach (var item in Model.EvalTemplateInfo.TemplateOptionInfo)
+                {
+
+                <div class="weui_cells">
+                    <div class="weui_cell nopadding">
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <p>@item.Name</p>
+                        </div>
+                        <span class="weui_cell_ft">
+                            <span class="label label-default lableInliner">
+                                个数： @listResearchItemInfo.Count(a => a.ScoreValue == item.ID)
+                            </span>
+                            <span class="label label-default lableInliner">
+                                占比：@Math.Round((decimal)listResearchItemInfo.Count(a => a.ScoreValue == item.ID) / listResearchItemInfo.Count() * 100,2) %
+                            </span>
+                        </span>
+                    </div>
+
+                </div>
+                }
+            </div>
+
+        </div>
+    }
+
+
+    <div class="weui_media_box weui_media_text">
+        <h4 class="weui_media_title">
+            合计
+            【共 @listValuableSubjectResearch.Count() 节】
+        </h4>
+        <div class="weui_media_box weui_media_small_appmsg">
+
+            @foreach (var itemTemplateItem in Model.EvalTemplateInfo.TemplateItemInfo)
+            {
+
+            <div class="weui_cells">
+                <div class="weui_cell nopadding">
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>@itemTemplateItem.Name</p>
+                    </div>
+                    <span class="weui_cell_ft">
+                        @if (Model.EvalTemplateInfo.TypeFlag == (int)SysEnum.TemplateTypeFlag.分值模板)
+                            {
+                                var arrays = listResearchItemInfo.Where(a => a.TemplateItemID == itemTemplateItem.ID).Select(a => a.ScoreValue);
+                                if (arrays.Count() > 0)
+                                {
+                            <text>@arrays.Average()</text>
+                                }
+                            }
+                            else
+                            {
+                                foreach (var itemOption in Model.EvalTemplateInfo.TemplateOptionInfo)
+                                {
+                            <span class="label label-default lableInliner">
+                                @itemOption.Name
+                                :
+                                @listResearchItemInfo.Count(a => a.TemplateItemID == itemTemplateItem.ID && a.ScoreValue == itemOption.ID)
+                            </span>
+                                }
+
+                            }
+
+
+
+
+                    </span>
+                </div>
+
+            </div>
+            }
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+    @foreach (var item in listSubject)
+    {
+        <div class="weui_media_box weui_media_text" onclick="location.href='@Url.Action("Report3",new { PlanID=Model.ID,SubjectID=item.ID})'">
+            <h4 class="weui_media_title">
+                @item.Name
+                【共 @listValuableSubjectResearch.Count(a => a.SubjectID == item.ID) 节】
+            </h4>
+            <div class="weui_media_box weui_media_small_appmsg">
+                <div class="weui_cells">
+                    @foreach (var itemTemplateItem in Model.EvalTemplateInfo.TemplateItemInfo)
+                    {
+                    <div class="weui_cell nopadding" onclick="location.href='@Url.Action("Report3",new { PlanID=Model.ID, SubjectID =item.ID})'">
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <p>@itemTemplateItem.Name</p>
+                        </div>
+                        <span class="weui_cell_ft">
+                            @if (Model.EvalTemplateInfo.TypeFlag == (int)SysEnum.TemplateTypeFlag.分值模板)
+                                {
+                                    var arrays = listResearchItemInfo.Where(a => a.ResearchInfo.SubjectID == item.ID && a.TemplateItemID == itemTemplateItem.ID).Select(a => a.ScoreValue);
+                                    if (arrays.Count() > 0)
+                                    {
+                                <text>@arrays.Average()</text>
+                                    }
+                                }
+                                else
+                                {
+                                    foreach (var itemOption in Model.EvalTemplateInfo.TemplateOptionInfo)
+                                    {
+                                <span class="label label-default lableInliner">
+                                    @itemOption.Name
+                                    :
+                                    @listResearchItemInfo.Count(a => a.ResearchInfo.SubjectID == item.ID && a.TemplateItemID == itemTemplateItem.ID && a.ScoreValue == itemOption.ID)
+                                </span>
+                                    }
+
+                                }
+                        </span>
+                    </div>
+                    }
+
+                </div>
+            </div>
+
+        </div>
+
+    }
+
+</div>
+
+<div id="DivContainer" style="margin:10px;padding:4px;border:1px solid #CCC;border-radius:5px;">
+    <ul id="myTabB" class="nav nav-tabs">
+        @if (PowerActionBLL.PowerCheck(PowerInfo.P_统计报表.PP集体调研汇总.PPP整体汇总填写.KEY))
+        {
+            <li><a data-toggle="modal" data-target="#ModalPost" class="btn btn-success">完善整体汇总</a></li>
+        }
+        <li><a href="#TabBDetail" data-toggle="tab">整体汇总</a></li>
+    </ul>
+    <div id="myTabBContent" class="tab-content">
+        <div class="tab-pane fade" id="TabBDetail">
+            @Html.Raw(Model.SummaryDetail.Replace("\n", "<br/>"))
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="ModalPost" tabindex="-1" role="dialog" aria-labelledby="ModalPostLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            @using (Ajax.BeginForm("Report1", new { area = "MP" }, new AjaxOptions { HttpMethod = "post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.ID)
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">完善整体汇总</h4>
+                </div>
+                <div class="modal-body">
+                    @Html.TextArea("SummaryDetail", new { @class = "weui_textarea", placeholder = "请补充汇总总结", rows = "13", Value = Model.SummaryDetail })
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </div>
+
+            }
+
+        </div>
+    </div>
+</div>

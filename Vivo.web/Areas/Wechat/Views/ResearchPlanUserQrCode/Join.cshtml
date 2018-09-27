@@ -1,0 +1,81 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+@using Tool;
+@model UserInfo
+@{
+    ViewBag.Title = "加入听评课计划";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    var infoPlan = (ResearchPlanInfo)ViewBag.infoPlan;
+    var infoWechatUserReturn = (WechatUserReturnInfo)ViewBag.infoWechatUserReturn;
+    var ProfilesBLL = (IProfilesInfoService)ViewBag.ProfilesBLL;
+}
+@section head{
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            console.log(data);
+            alert(data.ErrorMsg);
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            location.href = "@Url.Action("Detail", "ResearchPlan",new { ID=infoPlan.ID})";
+
+        }
+        function OnBegin() {
+
+        }
+    </script>
+}
+
+
+<div class="weui_cells_title">调研情况</div>
+<div class="weui_cells">
+    <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>@infoPlan.Name</p>
+        </div>
+        <div class="weui_cell_ft"></div>
+    </div>
+    <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>调研日期</p>
+        </div>
+        <div class="weui_cell_ft">@infoPlan.DateBegin.ToString("yyyy-MM-dd")</div>
+    </div>
+    <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>调研学校</p>
+        </div>
+        <div class="weui_cell_ft">@infoPlan.DepartmentInfo.Name</div>
+    </div>
+</div>
+@using (Ajax.BeginForm("Join", new { }, new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.Hidden("PlanID",infoPlan.ID)
+    @Html.Hidden("infoWechatUserReturnOpenID", infoWechatUserReturn.openid)
+    @Html.HiddenFor(model => model.ID, new { Value = (null == Model ? 0 : Model.ID) })
+    @Html.HiddenFor(model => model.DepartmentID, new { Value = (null == Model ? ProfilesBLL.GetValue(ProfilesInfo.OutSideUserSetting.DepartmentID) : Model.DepartmentID.ToString()) })
+    if (null == Model)
+    {
+        <div class="weui_cells_title">个人信息绑定</div>
+      <div class="weui_cells">
+          <div class="weui_cell">
+              <div class="weui_cell_hd"><label class="weui_label">姓名</label></div>
+              <div class="weui_cell_bd weui_cell_primary">
+                  @Html.TextBoxFor(model => model.Name, new { @class = "weui_input" })
+              </div>
+          </div>
+          <div class="weui_cell">
+              <div class="weui_cell_hd"><label class="weui_label">单位信息</label></div>
+              <div class="weui_cell_bd weui_cell_primary">
+                  @Html.TextBoxFor(model => model.Email, new { @class = "weui_input" })
+              </div>
+          </div>
+      </div>
+
+    }
+    <div class="weui_btn_area">
+        <input type="submit" class="weui_btn weui_btn_primary" value="确定参与" />
+    </div>
+}

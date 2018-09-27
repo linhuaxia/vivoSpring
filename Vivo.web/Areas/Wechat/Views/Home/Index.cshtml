@@ -1,0 +1,410 @@
+﻿@using PagedList
+@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+@using PagedList.Mvc;
+@using System.Linq;
+
+@{
+    ViewBag.Title = "主页";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+    IPowerActionInfoService PowerActionBLL = (IPowerActionInfoService)ViewBag.PowerActionBLL;
+
+}
+@section head{
+    <script type="text/javascript">
+        function BtnLoginout_Click() {
+            $.get("/MP/Login/Logout", function (data) {
+                alert("清除成功");
+                location.href = "@Url.Action("index")";
+            });
+        }
+    </script>
+    <style type="text/css">
+        .myweui_grid {
+            width: 25%;
+            display: block;
+            padding: 25px 0px 0px 0px;
+            float: left;
+            text-align: center;
+            color: #FFF;
+        }
+
+            .myweui_grid .weui_grid_icon {
+                width: 10vh;
+                height: 10vh;
+            }
+
+        .weui_grid_label {
+            color: #000;
+        }
+
+        body {
+            background-image: url(/images/icon3/bg2.jpg);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-color: #EFEFEF;
+            min-height: 555px;
+            height: 100%;
+        }
+
+        .maintips {
+            position: relative;
+            top: -40px;
+            left: 20px;
+            background-color: #FF0000;
+            border-radius: 10px;
+            display: initial;
+            padding: 2px 4px;
+        }
+        .weui_tab_bd {
+            display:none;
+        }
+        .weui_tabbar {
+            position:fixed;bottom:0;
+        }
+        .weui_tabbar_item {
+            font-size:24px;
+        }
+        .weui_bar_item_on span {
+            color: #09BB07;
+        }
+    </style>
+
+    <script type="text/javascript">
+        $(function () {
+            UpdateUI();
+            UpdateItemCount();
+            $("#WapHead").hide();
+            setInterval("UpdateItemCount()", 10000);
+        });
+
+        function UpdateUI() {
+            $(".maintips").each(function (index, item) {
+                var innerHtml = $(this).find("span").html().replace(/(^\s*)|(\s*$)/g, "");
+                if (innerHtml == "0" || innerHtml == "") {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+            });
+            $(".bigContainerContent").each(function (index, item) {
+
+                if ($(item).children().size() <= 1) {
+                    $(item).parent().hide();
+                }
+            });
+
+        }
+        function UpdateItemCount() {
+        }
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $(".weui_tabbar a").first().addClass("weui_bar_item_on");
+            $(".weui_tab_bd").first().show();
+
+            $(".weui_tabbar_item").click(function () {
+                $(".weui_tabbar_item").removeClass("weui_bar_item_on");
+                $(this).addClass("weui_bar_item_on");
+                $(".weui_tab_bd").hide();
+                $(".TabBodys" + $(this).attr("_ID")).show();
+                localStorage.setItem("HomeMenuID", $(this).attr("_ID"));
+            });
+            InitHomeMenuSelected();
+            
+        });
+        function InitHomeMenuSelected() {
+            var CurrentID = localStorage.getItem("HomeMenuID");
+            console.log("CurrentID=" + CurrentID);
+            if (null != CurrentID) {
+                $("a[_ID=" + CurrentID + "]").click();
+                console.log($("a[_ID=" + CurrentID + "]").attr("href"));
+            }
+        }
+    </script>
+
+}
+
+
+<div class="tabbar">
+    <div class="weui_tab">
+        <div class="weui_tab_bd TabBodysItem1">
+            <div class="bigContainerContent">
+                @if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP组织调研.PPP分组管理.KEY))
+                {
+                    <a href="@Url.Action("index", "PlanCategory")" class="myweui_grid">
+                        <div class="weui_grid_icon">
+                            <img src="~/images/icon3/3_16.png" class="mainicon" />
+
+                        </div>
+                        <p class="weui_grid_label">
+                            调研分组
+                        </p>
+                    </a>
+                }
+                @if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP组织调研.PPP调研计划.KEY))
+                {
+                    <a href="@Url.Action("index", "ResearchPlan")" class="myweui_grid">
+                        <div class="weui_grid_icon">
+                            <img src="~/images/icon2/2/46.png" class="mainicon" />
+
+                        </div>
+                        <p class="weui_grid_label">
+                            调研管理
+                        </p>
+                    </a>
+                }
+                @if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP组织调研.PPP听评课管理.KEY)
+                    && !PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP组织调研.PPP听评课管理.仅查看个人被评))
+                {
+                    <a href="@Url.Action("index", "ResearchPlan",new { GoAction="index",GoController="Research"})" class="myweui_grid">
+                        <div class="weui_grid_icon">
+                            <img src="~/images/icon2/3/19.png" class="mainicon" />
+                        </div>
+
+                        <p class="weui_grid_label">
+                            调研听课
+                        </p>
+                    </a>
+                }
+                @if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP个人听课.KEY)
+                    && !PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP个人听课.PPP仅查看个人被评.KEY))
+                {
+                    <a href="@Url.Action("index", "ResearchPerson")" class="myweui_grid">
+                        <div class="weui_grid_icon">
+                            <img src="~/images/icon2/3/25.png" class="mainicon" />
+                        </div>
+                        <p class="weui_grid_label">
+                            个人听课
+                        </p>
+                    </a>
+                }
+                @if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP组织调研.PPP听评课管理.仅查看个人被评))
+                {
+                    <a href="@Url.Action("ListLectureUser", "Research")" class="myweui_grid">
+                        <div class="weui_grid_icon">
+                            <img src="~/images/icon2/3/22.png" class="mainicon" />
+                        </div>
+                        <p class="weui_grid_label">
+                            我的反馈
+                        </p>
+                    </a>
+                }
+                @if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP教案管理.PPP组织被评教案上传情况.KEY))
+                {
+                    <a href="@Url.Action("ListLectureUser", "ResearchPlanAttachment")" class="myweui_grid">
+                        <div class="weui_grid_icon">
+                            <img src="~/images/icon2/b.png" class="mainicon" />
+                        </div>
+                        <p class="weui_grid_label">
+                            教案情况
+                        </p>
+                    </a>
+                }
+                @if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP收获反思.KEY))
+                {
+                    <a href="@Url.Action("index","TimeLine")" class="myweui_grid">
+                        <div class="weui_grid_icon">
+                            <img src="~/images/icon3/11.png" class="mainicon" />
+                        </div>
+                        <p class="weui_grid_label">
+                            收获反思
+                        </p>
+                    </a>
+                }
+                <div style="clear:both"></div>
+            </div>
+
+        </div>
+        <div class="weui_tab_bd TabBodysItem2">
+             <div class="bigContainerContent">
+                @if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.PP系统帐户管理.PPP用户管理.KEY))
+                {
+                    <a href="@Url.Action("index", "User")" class="myweui_grid">
+                        <div class="weui_grid_icon">
+                            <img src="~/images/icon2/1.png" class="mainicon" />
+                        </div>
+                        <p class="weui_grid_label">
+                            系统帐户
+                        </p>
+                    </a>
+                }
+                 @if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.PP系统帐户管理.PPP单位部门管理.KEY))
+                 {
+                     <a href="@Url.Action("index","Department" )" class="myweui_grid">
+                         <div class="weui_grid_icon">
+                             <img src="~/images/icon2/3.png" class="mainicon" />
+                         </div>
+                         <p class="weui_grid_label">
+                             学校部门
+                         </p>
+                     </a>
+                 }
+              @if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.PP用户群组.KEY))
+                {
+                    <a href="@Url.Action("index", "MemberGroup")" class="myweui_grid">
+                        <div class="weui_grid_icon">
+                            <img src="~/images/icon2/42.png" class="mainicon" />
+                        </div>
+                        <p class="weui_grid_label">
+                            用户群组
+                        </p>
+                    </a>
+                }
+                @if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.PP评价模板.KEY))
+                {
+                    <a href="@Url.Action("Index", "EvalTemplate")" class="myweui_grid">
+                        <div class="weui_grid_icon">
+                            <img src="~/images/icon2/3/18.png" class="mainicon" />
+                        </div>
+
+                        <p class="weui_grid_label">
+                            评价模板
+                        </p>
+                    </a>
+                }
+                <div style="clear:both"></div>
+            </div>
+        </div>
+        <div class="weui_tab_bd TabBodysItem3">
+            <div class="bigContainer">
+                <div class="bigContainerContent">
+                    @if (PowerActionBLL.PowerCheck(PowerInfo.P_工作信息管理.PP常规.PPP集体调研.KEY))
+                    {
+                        <a href="@Url.Action("Index","RepResearchNormal",new { RepNormalType =(int)SysEnum.RepNormalType.集体调研})" class="myweui_grid">
+                            <div class="weui_grid_icon">
+                                <img src="~/images/icon2/2/21.png" class="mainicon" />
+                            </div>
+                            <p class="weui_grid_label">
+                                集体调研
+                            </p>
+                        </a>
+                    }
+                    @if (PowerActionBLL.PowerCheck(PowerInfo.P_工作信息管理.PP常规.PPP集体调研.KEY))
+                    {
+                        <a href="@Url.Action("Index","RepResearchNormal",new { RepNormalType =(int)SysEnum.RepNormalType.一加三})" class="myweui_grid">
+                            <div class="weui_grid_icon">
+                                <img src="~/images/icon2//2/22.png" class="mainicon" />
+                            </div>
+                            <p class="weui_grid_label">
+                                一加三
+                            </p>
+                        </a>
+                    }
+                    @if (PowerActionBLL.PowerCheck(PowerInfo.P_工作信息管理.PP常规.PPP集体调研.KEY))
+                    {
+                        <a href="@Url.Action("Index","RepResearchNormal",new { RepNormalType =(int)SysEnum.RepNormalType.蹲点})" class="myweui_grid">
+                            <div class="weui_grid_icon">
+                                <img src="~/images/icon2/2/23.png" class="mainicon" />
+                            </div>
+                            <p class="weui_grid_label">
+                                蹲点
+                            </p>
+                        </a>
+                    }
+                    @if (PowerActionBLL.PowerCheck(PowerInfo.P_工作信息管理.PP常规.PPP集体调研.KEY))
+                    {
+                        <a href="@Url.Action("Index","RepResearchNormal",new { RepNormalType =(int)SysEnum.RepNormalType.教研组织})" class="myweui_grid">
+                            <div class="weui_grid_icon">
+                                <img src="~/images/icon2/2/24.png" class="mainicon" />
+                            </div>
+                            <p class="weui_grid_label">
+                                教研组织
+                            </p>
+                        </a>
+                    }
+                    @if (PowerActionBLL.PowerCheck(PowerInfo.P_工作信息管理.PP质量监测.KEY))
+                    {
+                        <a href="@Url.Action("Index","RepQualityMonitor")" class="myweui_grid">
+                            <div class="weui_grid_icon">
+                                <img src="~/images/icon2/2/39.png" class="mainicon" />
+                            </div>
+                            <p class="weui_grid_label">
+                                质量监测
+                            </p>
+                        </a>
+                    }
+
+                    <div style="clear:both"></div>
+                </div>
+
+            </div>
+        </div>
+        <div class="weui_tab_bd TabBodysItem4">
+            <div class="bigContainerContent">
+                @if (PowerActionBLL.PowerCheck(PowerInfo.P_统计报表.PP集体调研汇总.PPP教研员考核.KEY))
+                {
+                    <a href="@Url.Action("ResearchS","Report")" class="myweui_grid">
+                        <div class="weui_grid_icon">
+                            <img src="~/images/icon2/11.png" class="mainicon" />
+                        </div>
+                        <p class="weui_grid_label">
+                            教研员听课情况
+                        </p>
+                    </a>
+                }
+                <a href="@Url.Action("CurrentDetail","User")" class="myweui_grid">
+                    <div class="weui_grid_icon">
+                        <img src="~/images/icon2/3.png" class="mainicon" />
+                    </div>
+                    <p class="weui_grid_label">
+                        登录信息
+                    </p>
+                </a>
+
+                <a href="javascript:BtnLoginout_Click();" class="myweui_grid">
+                    <div class="weui_grid_icon">
+                        <img src="~/images/icon3/13.png" class="mainicon" />
+                    </div>
+                    <p class="weui_grid_label">
+                        清除缓存
+                    </p>
+                </a>
+
+                <div style="clear:both"></div>
+            </div>
+
+        </div>
+        <div class="weui_tabbar">
+            @if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP组织调研.KEY) || PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP个人听课.KEY))
+            {
+                <a href="javascript:;" class="weui_tabbar_item" _ID="Item1">
+                    <div class="weui_tabbar_icon">
+                        <span class="glyphicon glyphicon-film"></span>
+                    </div>
+                    <p class="weui_tabbar_label">听评课</p>
+                </a>
+            }
+            @if (PowerActionBLL.PowerCheck(PowerInfo.P_系统管理.KEY))
+            {
+                <a href="javascript:;" class="weui_tabbar_item" _ID="Item2">
+                    <div class="weui_tabbar_icon">
+                        <span class="glyphicon glyphicon-th-list"></span>
+                    </div>
+                    <p class="weui_tabbar_label">基础数据</p>
+                </a>
+            }
+@if (PowerActionBLL.PowerCheck(PowerInfo.P_工作信息管理.KEY) && false)
+{
+            <a href="javascript:;" class="weui_tabbar_item" _ID="Item3">
+                <div class="weui_tabbar_icon">
+                    <span class="glyphicon glyphicon-flag"></span>
+                </div>
+                <p class="weui_tabbar_label">工作信息</p>
+            </a>
+}
+            <a href="javascript:;" class="weui_tabbar_item" _ID="Item4">
+                <div class="weui_tabbar_icon">
+                    <span class="glyphicon glyphicon-book"></span>
+                </div>
+                <p class="weui_tabbar_label">其它</p>
+            </a>
+        </div>
+    </div>
+</div>
+
+@*@Html.Partial("CopyRights")*@

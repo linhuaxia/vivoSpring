@@ -1,0 +1,145 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+
+@model IPagedList<RepResearchNormalInfo>
+
+@{
+    SysEnum.RepNormalType RepNormalType=(SysEnum.RepNormalType)ViewBag.RepNormalType;
+    ViewBag.Title = RepNormalType.ToString()+ "管理";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IPowerActionInfoService PowerActionBLL = AbstractFactory.CreatePowerActionInfoService();
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+}
+@section head{
+    <script type="text/javascript">
+        function BtnSch_Click() {
+            var URL = "@Url.Action("index")";
+            URL += "?RepNormalType=@((int)RepNormalType)";
+            URL += "&DateBegin=" + $("#TxtDateBegin").val();
+            URL += "&DateEnd=" + $("#TxtDateEnd").val();
+            location.href = URL;
+        }
+        function BtnDelete_Click(ItemID) {
+            $.post("@Url.Action("Delete")", { ID: ItemID }, function (data) {
+                alert(data.ErrorMsg);
+                if (data.ErrorCode == 0) {
+                    location.reload();
+                }
+            });
+        }
+
+    </script>
+
+}
+
+
+
+<div class="panel panel-primary" style="margin:10px;">
+    <div class="panel-heading clearfix">
+        <h3 class="panel-title pull-left">搜索</h3>
+        <span class="badge pull-right">
+            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+        </span>
+    </div>
+    <div class="panel-body">
+        <div class="weui_cells weui_cells_form" style="margin:0;">
+            <div class="weui_cell weui_cell_select weui_select_after">
+                <div class="weui_cell_hd">
+                    <label for="" class="weui_label">开始日期</label>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.TextBox("TxtDateBegin","", new { @class = "weui_select", type = "Date" })
+                </div>
+            </div>
+            <div class="weui_cell weui_cell_select weui_select_after">
+                <div class="weui_cell_hd">
+                    <label for="" class="weui_label">结束日期</label>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    @Html.TextBox("TxtDateEnd", "", new { @class = "weui_select", type = "Date" })
+                </div>
+            </div>
+
+        </div>
+        <div class="clearfix">
+            <div style="float:left;width:50%;padding:6px 5px 0px 0px;">
+                @if (PowerActionBLL.PowerCheck(PowerInfo.P_工作信息管理.KEY))
+                {
+                    <a href="@Url.Action("Create",new { RepNormalType =(int)RepNormalType})" class="weui_btn weui_btn_primary" title="添加">
+                        添加
+                    </a>
+                }
+            </div>
+            <div style="float:left;width:50%;padding:6px 5px 0px 0px;">
+                <a href="javascript:BtnSch_Click();" class="weui_btn weui_btn_plain_primary">搜索</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="weui_panel" style="padding:20px;">
+    <div class="weui_panel_bd">
+        @foreach (var item in Model)
+        {
+
+            <a style="display:block;padding:5px 15px;" class="weui_media_box weui_media_text" href="@Url.Action("Edit",  new { ID=item.ID})">
+                <h4 class="weui_media_title">
+                    @SysEnum.GetName(typeof(SysEnum.RepQualityMonitorType), item.TypeFlag)
+                    @item.UserInfo.Name
+                    (@item.DateBegin.ToString("yyyy-MM-dd"))
+                </h4>
+                <p class="weui_media_desc">
+                    @item.Memo
+                </p>
+                <ul class="weui_media_info">
+                    <li class="weui_media_info_meta">
+                        创建时间: @item.CreateDate.ToString("yyyy-MM-dd")
+                    </li>
+                    <li class="weui_media_info_meta weui_media_info_meta_extra">
+                        @if (RepNormalType == SysEnum.RepNormalType.集体调研)
+                        {
+                                @item.Lessions <span>节</span>
+                        }
+                        @if (RepNormalType == SysEnum.RepNormalType.一加三)
+                        {
+                                @item.Days <span>天</span>
+                        }
+                        @if (RepNormalType == SysEnum.RepNormalType.教研组织)
+                        {
+                            <td>
+                                @item.Title
+                            </td>
+                        }
+
+                    </li>
+                </ul>
+            </a>
+        }
+    </div>
+</div>
+
+<div style="text-align:center">
+    @Html.PagedListPager((IPagedList)Model,
+    page => Url.Action("Index", new
+    {
+        page,
+        Name = ViewBag.Name,
+        RepNormalType = (int)RepNormalType,
+        DateBegin = ViewBag.TxtDateBegin,
+        DateEnd = ViewBag.TxtDateEnd
+    }),
+    new PagedListRenderOptions
+    {
+        LinkToPreviousPageFormat = "上一页",
+        LinkToNextPageFormat = "下一页",
+        MaximumPageNumbersToDisplay = 0,
+        Display = PagedListDisplayMode.IfNeeded,
+        DisplayEllipsesWhenNotShowingAllPageNumbers = true
+    }
+    )
+</div>
+
+

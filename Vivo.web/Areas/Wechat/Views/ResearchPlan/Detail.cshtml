@@ -1,0 +1,121 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+
+@model Vivo.Model.ResearchPlanInfo
+
+@{
+    ViewBag.Title = "详细信息";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    IPowerActionInfoService PowerActionBLL = AbstractFactory.CreatePowerActionInfoService();
+}
+@section head{
+
+    <script type="text/javascript">
+        $(function () {
+            $("#BtnDelete").click(function () {
+                if (!confirm("确定要删除数据吗？")) {
+                    return;
+                }
+                APINormalGet('@Url.Action("Delete",new {id=Model.ID})',
+                    '@Url.Action("index")');
+            });
+       });
+
+    </script>
+
+
+
+}
+
+
+<div class="weui_cells">
+    <div class="weui_cell">
+        <div class="weui_cell_hd">
+            <label for="" class="weui_label">分组</label>
+        </div>
+        <div class="weui_cell_bd weui_cell_primary">
+            @Model.PlanCategoryInfo.Name
+        </div>
+    </div>
+   <div class="weui_cell">
+        <div class="weui_cell_hd"><label class="weui_label">名称</label></div>
+        <div class="weui_cell_bd weui_cell_primary">
+            @Model.Name
+        </div>
+    </div>
+    <div class="weui_cell">
+        <div class="weui_cell_hd">
+            <label for="" class="weui_label">学校</label>
+        </div>
+        <div class="weui_cell_bd weui_cell_primary">
+            @Model.DepartmentInfo.Name
+        </div>
+    </div>
+    <div class="weui_cell">
+        <div class="weui_cell_hd">
+            <label for="" class="weui_label">评价模板</label>
+        </div>
+        <div class="weui_cell_bd weui_cell_primary">
+            @Model.EvalTemplateInfo.Name
+        </div>
+    </div>
+    <div class="weui_cell">
+        <div class="weui_cell_hd"><label for="" class="weui_label">计划日期</label></div>
+        <div class="weui_cell_bd weui_cell_primary">
+            @Model.DateBegin.ToString("yyyy-MM-dd")
+        </div>
+    </div>
+</div>
+<div class="weui_cells">
+
+    <div class="weui_cells_title">备注</div>
+    <div class="weui_cells weui_cells_form">
+        <div class="weui_cell">
+            <div class="weui_cell_bd weui_cell_primary">
+                @Model.Memo
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (DateTime.Now.Date <= Model.DateBegin.Date)
+{
+
+
+    if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP组织调研.PPP调研计划.编辑))
+    {
+        <a href="@Url.Action("Edit",new { ID=Model.ID})" class="weui_btn weui_btn_primary" style="margin:15px;">
+            前住修改
+        </a>
+    }
+    if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP组织调研.PPP调研计划.删除))
+    {
+        <div id="BtnDelete" class="weui_btn weui_btn_primary" style="margin:15px;">
+            删除
+        </div>
+    }
+    if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP组织调研.PPP调研计划.人员组织))
+    {
+
+        <a href="@Url.Action("SelectUser",new { ID=Model.ID})" class="weui_btn weui_btn_default" style="margin:15px;">
+            人员组织
+        </a>
+    }
+    if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP组织调研.PPP调研计划.通知推送) && Model.DateBegin.Date >= DateTime.Now.Date)
+    {
+        <a class="weui_btn weui_btn_default" style="margin:15px;" href="@Url.Action("PushMsg", new { id = Model.ID })">
+            <span class="glyphicon glyphicon-phone"></span> 通知推送
+        </a>
+    }
+
+    if (PowerActionBLL.PowerCheck(PowerInfo.P_评课管理.PP课表管理.KEY))
+    {
+        <a href="@Url.Action("index", "ResearchPlanAttachment", new { PlanID = Model.ID })" class="weui_btn weui_btn_default" style="margin:15px;">
+            课程表管理
+        </a>
+    }
+}
+
+

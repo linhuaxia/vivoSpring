@@ -1,0 +1,47 @@
+﻿@using Tool;
+@using Vivo.Model;
+
+@model ResearchPlanInfo
+
+@{
+    ViewBag.Title = "新建";
+    Layout = "~/Areas/Wechat/Views/Shared/_Layout.cshtml";
+    var listRule = (IQueryable<RuleInfo>)ViewBag.listRule;
+}
+
+@section head{
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            alert(data.ErrorMsg);
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            location.href = "@Url.Action("Detail",new { ID=Model.ID})";
+
+        }
+        function OnBegin() {
+
+        }
+    </script>
+}
+    @using (Ajax.BeginForm("PushMsg", new {  }, new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.ID)
+        @Html.Hidden("TimeStramp",DateTime.Now.ToString())
+        foreach (var item in listRule)
+        {
+            <div class="weui_cells weui_cells_form">
+                <div class="weui_cell weui_cell_switch">
+                    <div class="weui_cell_hd weui_cell_primary">@item.Name</div>
+                    <div class="weui_cell_ft">
+                        <input class="weui_switch" type="checkbox" name="RulesID" value="@item.ID" >
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="weui_btn_area">
+            <input type="submit" value="提交" class="weui_btn weui_btn_primary" />
+        </div>
+
+    }

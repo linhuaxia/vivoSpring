@@ -1,0 +1,344 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="LWEvalModelStoreContainer" CdmEntityContainer="LWEvalEntities">
+    <EntitySetMapping Name="CityInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.CityInfo">
+        <MappingFragment StoreEntitySet="CityInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ProvinceID" ColumnName="ProvinceID" />
+          <ScalarProperty Name="Enable" ColumnName="Enable" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DepartmentInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.DepartmentInfo">
+        <MappingFragment StoreEntitySet="DepartmentInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+          <ScalarProperty Name="Enable" ColumnName="Enable" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="TypeEmun" ColumnName="TypeEmun" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DepartmentTypeInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.DepartmentTypeInfo">
+        <MappingFragment StoreEntitySet="DepartmentTypeInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="SortID" ColumnName="SortID" />
+          <ScalarProperty Name="Enable" ColumnName="Enable" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LogInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.LogInfo">
+        <MappingFragment StoreEntitySet="LogInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Category" ColumnName="Category" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Detail" ColumnName="Detail" />
+          <ScalarProperty Name="AddDate" ColumnName="AddDate" />
+          <ScalarProperty Name="Serious" ColumnName="Serious" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MemberGroupInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.MemberGroupInfo">
+        <MappingFragment StoreEntitySet="MemberGroupInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="SortID" ColumnName="SortID" />
+          <ScalarProperty Name="Enable" ColumnName="Enable" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PowerActionInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.PowerActionInfo">
+        <MappingFragment StoreEntitySet="PowerActionInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="NewID" ColumnName="NewID" />
+          <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+          <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+          <ScalarProperty Name="ParentID2" ColumnName="ParentID2" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+          <ScalarProperty Name="Url" ColumnName="Url" />
+          <ScalarProperty Name="HttpMethod" ColumnName="HttpMethod" />
+          <ScalarProperty Name="Sort" ColumnName="Sort" />
+          <ScalarProperty Name="Enable" ColumnName="Enable" />
+          <ScalarProperty Name="TypeEnum" ColumnName="TypeEnum" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProfilesInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.ProfilesInfo">
+        <MappingFragment StoreEntitySet="ProfilesInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Key" ColumnName="Key" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProvinceInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.ProvinceInfo">
+        <MappingFragment StoreEntitySet="ProvinceInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Enable" ColumnName="Enable" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ResearchAttachmentInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.ResearchAttachmentInfo">
+        <MappingFragment StoreEntitySet="ResearchAttachmentInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="ResearchID" ColumnName="ResearchID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="PathRelative" ColumnName="PathRelative" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="MineType" ColumnName="MineType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ResearchInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.ResearchInfo">
+        <MappingFragment StoreEntitySet="ResearchInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="ResearchPlanID" ColumnName="ResearchPlanID" />
+          <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
+          <ScalarProperty Name="lectureUserID" ColumnName="lectureUserID" />
+          <ScalarProperty Name="Tipic" ColumnName="Tipic" />
+          <ScalarProperty Name="LessionNumber" ColumnName="LessionNumber" />
+          <ScalarProperty Name="ClassName" ColumnName="ClassName" />
+          <ScalarProperty Name="GradeName" ColumnName="GradeName" />
+          <ScalarProperty Name="SubjectiveOpinion" ColumnName="SubjectiveOpinion" />
+          <ScalarProperty Name="NoteMemo" ColumnName="NoteMemo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ResearchItemInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.ResearchItemInfo">
+        <MappingFragment StoreEntitySet="ResearchItemInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="ResearchID" ColumnName="ResearchID" />
+          <ScalarProperty Name="TemplateItemID" ColumnName="TemplateItemID" />
+          <ScalarProperty Name="ScoreValue" ColumnName="ScoreValue" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ResearchPlanAttachmentInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.ResearchPlanAttachmentInfo">
+        <MappingFragment StoreEntitySet="ResearchPlanAttachmentInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="ResearchPlanID" ColumnName="ResearchPlanID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="PathRelative" ColumnName="PathRelative" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="MineType" ColumnName="MineType" />
+          <ScalarProperty Name="CreateUserID" ColumnName="CreateUserID" />
+          <ScalarProperty Name="TypeEnum" ColumnName="TypeEnum" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ResearchPlanInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.ResearchPlanInfo">
+        <MappingFragment StoreEntitySet="ResearchPlanInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="TemplateID" ColumnName="TemplateID" />
+          <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+          <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+          <ScalarProperty Name="Memo" ColumnName="Memo" />
+          <ScalarProperty Name="TypeEnum" ColumnName="TypeEnum" />
+          <ScalarProperty Name="CreateUserID" ColumnName="CreateUserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ResearchPlanUserInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.ResearchPlanUserInfo">
+        <MappingFragment StoreEntitySet="ResearchPlanUserInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="ResearchPlanID" ColumnName="ResearchPlanID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="DateCreate" ColumnName="DateCreate" />
+          <ScalarProperty Name="DateConfirm" ColumnName="DateConfirm" />
+          <ScalarProperty Name="IsConfirmed" ColumnName="IsConfirmed" />
+          <ScalarProperty Name="Memo" ColumnName="Memo" />
+          <ScalarProperty Name="SumRemark" ColumnName="SumRemark" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RuleInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.RuleInfo">
+        <MappingFragment StoreEntitySet="RuleInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Enable" ColumnName="Enable" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+          <ScalarProperty Name="Sort" ColumnName="Sort" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SubjectInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.SubjectInfo">
+        <MappingFragment StoreEntitySet="SubjectInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="DepartmentTypeID" ColumnName="DepartmentTypeID" />
+          <ScalarProperty Name="Enable" ColumnName="Enable" />
+          <ScalarProperty Name="SortID" ColumnName="SortID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="sysdiagrams">
+      <EntityTypeMapping TypeName="LWEvalModel.sysdiagrams">
+        <MappingFragment StoreEntitySet="sysdiagrams">
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="definition" ColumnName="definition" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TemplateInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.TemplateInfo">
+        <MappingFragment StoreEntitySet="TemplateInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="SortID" ColumnName="SortID" />
+          <ScalarProperty Name="Enable" ColumnName="Enable" />
+          <ScalarProperty Name="Amin" ColumnName="Amin" />
+          <ScalarProperty Name="BMin" ColumnName="BMin" />
+          <ScalarProperty Name="CMin" ColumnName="CMin" />
+          <ScalarProperty Name="DMin" ColumnName="DMin" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TemplateItemInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.TemplateItemInfo">
+        <MappingFragment StoreEntitySet="TemplateItemInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="TemplateID" ColumnName="TemplateID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="MaxScore" ColumnName="MaxScore" />
+          <ScalarProperty Name="SortID" ColumnName="SortID" />
+          <ScalarProperty Name="Enable" ColumnName="Enable" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TimeLineCommonInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.TimeLineCommonInfo">
+        <MappingFragment StoreEntitySet="TimeLineCommonInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="TimeLineID" ColumnName="TimeLineID" />
+          <ScalarProperty Name="CreateUserID" ColumnName="CreateUserID" />
+          <ScalarProperty Name="Detail" ColumnName="Detail" />
+          <ScalarProperty Name="IsCommon" ColumnName="IsCommon" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TimeLineInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.TimeLineInfo">
+        <MappingFragment StoreEntitySet="TimeLineInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="ResearchID" ColumnName="ResearchID" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="Detail" ColumnName="Detail" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserActionInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.UserActionInfo">
+        <MappingFragment StoreEntitySet="UserActionInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="ActionID" ColumnName="ActionID" />
+          <ScalarProperty Name="IsPass" ColumnName="IsPass" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.UserInfo">
+        <MappingFragment StoreEntitySet="UserInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="PassWord" ColumnName="PassWord" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Tel" ColumnName="Tel" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="LastDate" ColumnName="LastDate" />
+          <ScalarProperty Name="Enable" ColumnName="Enable" />
+          <ScalarProperty Name="LocationX" ColumnName="LocationX" />
+          <ScalarProperty Name="LocationY" ColumnName="LocationY" />
+          <ScalarProperty Name="WechatOpenID" ColumnName="WechatOpenID" />
+          <ScalarProperty Name="WechatNameNick" ColumnName="WechatNameNick" />
+          <ScalarProperty Name="WechatHeadImg" ColumnName="WechatHeadImg" />
+          <ScalarProperty Name="Sex" ColumnName="Sex" />
+          <ScalarProperty Name="IDCard" ColumnName="IDCard" />
+          <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+          <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="WechatMsgInfo">
+      <EntityTypeMapping TypeName="LWEvalModel.WechatMsgInfo">
+        <MappingFragment StoreEntitySet="WechatMsgInfo">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="CreateUserID" ColumnName="CreateUserID" />
+          <ScalarProperty Name="AddDate" ColumnName="AddDate" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="ToUserName" ColumnName="ToUserName" />
+          <ScalarProperty Name="FromUserName" ColumnName="FromUserName" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="MsgType" ColumnName="MsgType" />
+          <ScalarProperty Name="Content" ColumnName="Content" />
+          <ScalarProperty Name="MsgId" ColumnName="MsgId" />
+          <ScalarProperty Name="XMLDom" ColumnName="XMLDom" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="DepartmentTypeInfoDepartmentInfo" TypeName="LWEvalModel.DepartmentTypeInfoDepartmentInfo" StoreEntitySet="DepartmentTypeInfoDepartmentInfo">
+      <EndProperty Name="DepartmentInfo">
+        <ScalarProperty Name="ID" ColumnName="DepartmentInfo_ID" />
+      </EndProperty>
+      <EndProperty Name="DepartmentTypeInfo">
+        <ScalarProperty Name="ID" ColumnName="DepartmentTypeInfo_ID" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="MemberGroupInfoUserInfo" TypeName="LWEvalModel.MemberGroupInfoUserInfo" StoreEntitySet="MemberGroupInfoUserInfo">
+      <EndProperty Name="MemberGroupInfo">
+        <ScalarProperty Name="ID" ColumnName="MemberGroupInfo_ID" />
+      </EndProperty>
+      <EndProperty Name="UserInfo">
+        <ScalarProperty Name="ID" ColumnName="UserInfo_ID" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="RuleInfoPowerActionInfo" TypeName="LWEvalModel.RuleInfoPowerActionInfo" StoreEntitySet="RuleInfoPowerActionInfo">
+      <EndProperty Name="PowerActionInfo">
+        <ScalarProperty Name="ID" ColumnName="PowerActionInfo_ID" />
+      </EndProperty>
+      <EndProperty Name="RuleInfo">
+        <ScalarProperty Name="ID" ColumnName="RuleInfo_ID" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserInfoRuleInfo" TypeName="LWEvalModel.UserInfoRuleInfo" StoreEntitySet="UserInfoRuleInfo">
+      <EndProperty Name="RuleInfo">
+        <ScalarProperty Name="ID" ColumnName="RuleInfo_ID" />
+      </EndProperty>
+      <EndProperty Name="UserInfo">
+        <ScalarProperty Name="ID" ColumnName="UserInfo_ID" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>
