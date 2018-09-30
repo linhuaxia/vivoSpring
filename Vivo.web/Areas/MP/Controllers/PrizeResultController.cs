@@ -21,7 +21,7 @@ namespace Vivo.web.Areas.MP.Controllers
         public ActionResult Index(int page = 1)
         {
             IQueryable<PrizeResultInfo> list = GetListData();
-            IPagedList<PrizeResultInfo> result = list.ToPagedList(page, 9999);
+            IPagedList<PrizeResultInfo> result = list.ToPagedList(page, 20);
             return View(result);
         }
 
