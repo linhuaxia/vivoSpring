@@ -1,0 +1,99 @@
+﻿@using Vivo.Model
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Areas/MP/Views/Shared/_Layout.cshtml";
+}
+
+@section head{
+    <script language="javascript" type="text/javascript">
+        $(document).ready(function () { $("#TxtName").focus(); });
+    </script>
+    <link href="~/Content/css/style.css" rel="stylesheet" />
+    <link href="~/Content/css/base.css" rel="stylesheet" />
+    <link href="~/Content/css/layout.css" rel="stylesheet" />
+    <style type="text/css">
+        body {
+            background-image: url('/images/thumb_540497848dab8.jpg');
+        }
+
+        .input {
+            width: 240px;
+            height: 42px;
+        }
+
+        .auto-style1 {
+            width: 54px;
+            height: 30px;
+            line-height: 30px;
+        }
+    </style>
+    <script type="text/javascript">
+        function LoginOnSuccess(data) {
+           // console.log(data);
+            if (data.ErrorCode==0)
+            {
+                location.href = "@Url.Action("index","Home")";
+                return;
+            }
+            $("#ErrorMsg").html(data.ErrorMsg);
+        }
+        function LoginOnBegin() {
+            $("#ErrorMsg").html("");
+        }
+    </script>
+}
+
+<div class="login-screen">
+    @using (Ajax.BeginForm("Index", "Login",
+                 new AjaxOptions { HttpMethod = "post", OnSuccess = "LoginOnSuccess", OnBegin = "LoginOnBegin", LoadingElementId = "loadingToast" }))
+    {
+        <div class="login-form">
+            <h1>
+                登录
+            </h1>
+            <div class="control-group">
+                @Html.TextBox("TxtName", "",
+    new { placeholder = "用户名", MaxLength = "26", @class = "login-field" })
+                <label class="login-field-icon user" for="TxtName"></label>
+            </div>
+            <div class="control-group">
+                @Html.Password("TxtPwd", "",
+                       new Dictionary<string, object>() { { "placeholder", "密码" }, { "MaxLength", 26 }, { "class", "login-field" } })
+
+                <label class="login-field-icon pwd" for="TxtPwd"></label>
+            </div>
+            <div class="control-group">
+                <div style="width: 296px;margin:0 auto;">
+                    @Html.TextBox("TxtCode", "",
+           new Dictionary<string, object>() { { "placeholder", "验证码" },
+               { "MaxLength", 4 },
+               { "class", "login-field" },
+               { "style","float: left; width: 100px"} })
+                    <div style="float: left;margin-left:20px;">
+                        <img width="94" height="42" style="cursor: pointer;" align="absmiddle" alt="点击更新新图" src="@Url.Action("randimg","sys")"
+                             onclick="this.src = '/MP/sys/randimg?' + Math.random();" />
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+            </div>
+            <div>
+                <input type="submit" value="登 录" class="btn-login" />
+            </div>
+            <span class="login-tips">
+                <i></i>
+                <span id="ErrorMsg">请输入用户名、密码</span>
+            </span>
+        </div>
+        <i class="arrow">箭头</i>
+    }
+</div>
+@{
+    var data = new ViewDataDictionary();
+    data.Add("LoadingToast", "正在登录");
+    Html.RenderPartial("_LoadingToastPartial", data);
+}
+
+<script type="text/javascript">
+    if (window.top != window.self) { window.top.location = window.self.location; }
+</script>
+

@@ -1,0 +1,109 @@
+﻿@using Vivo.Model;
+
+@model PlanInfo
+
+@{
+    ViewBag.Title = "新建";
+    Layout = "~/Areas/MP/Views/Shared/_Layout.cshtml";
+}
+
+@section head{
+    <script type="text/javascript">
+        function OnSuccess(data) {
+            alert(data.ErrorMsg);
+            if (data.ErrorCode != 0) {
+                return;
+            }
+            parent.location.reload();
+
+        }
+        function OnBegin() {
+
+        }
+
+        $(document).ready(function () {
+            $("#DateBegin").click(function () { WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm' }); });
+            $("#DateEnd").click(function () { WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm' }); });
+        });
+
+    </script>
+}
+
+@using (Ajax.BeginForm("Create", new AjaxOptions { HttpMethod = "Post", OnSuccess = "OnSuccess", OnBegin = "OnBegin", LoadingElementId = "loadingToast" }))
+{
+    @Html.AntiForgeryToken()
+
+    <table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+        <tr>
+            <td class="td1_2">
+                区域
+            </td>
+            <td class="td1_3">
+                @Html.EditorFor(model => model.AgenterName, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                市场层级
+            </td>
+            <td class="td1_3">
+                @Html.EditorFor(model => model.MarketLevel, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                开始时间
+            </td>
+            <td class="td1_3">
+                @Html.EditorFor(model => model.DateBegin, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                结束时间
+            </td>
+            <td class="td1_3">
+                @Html.EditorFor(model => model.DateEnd, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                市场层级
+            </td>
+            <td class="td1_3">
+                @Html.EditorFor(model => model.MarketLevel, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                中奖序号(这次活动中第几个人将得到奖)
+            </td>
+            <td class="td1_3">
+                @Html.EditorFor(model => model.Mount, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                优先级（数字越大越优先）
+            </td>
+            <td class="td1_3">
+                @Html.EditorFor(model => model.SortID, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                奖项
+            </td>
+            <td class="td1_3">
+                @Html.DropDownListFor(model => model.TypeFlag, ViewBag.listPrizeType as IEnumerable<SelectListItem>,
+               new { @class = "form-control" })
+                只设置一二奖。如不希望它中奖，就将中将序号设置得很大
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2" colspan="2">
+                <input type="submit" value="提交" class="btn btn-default" />
+            </td>
+        </tr>
+    </table>
+}

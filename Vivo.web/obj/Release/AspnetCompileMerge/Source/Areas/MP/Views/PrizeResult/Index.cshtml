@@ -1,0 +1,163 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+
+@model IPagedList<PrizeResultInfo>
+
+@{
+    ViewBag.Title = "";
+    Layout = "~/Areas/MP/Views/Shared/_Layout.cshtml";
+    IUserInfoService UserBLL = AbstractFactory.CreateUserInfoService();
+}
+@section head{
+    <script type="text/javascript">
+        function BtnExport_Click() {
+            var URL = "@Url.Action("Export")";
+            URL += "?PlanID=" + $("#DdlPlanID").val();
+            URL += "&PrizeType=" + $("#DdlPrizeType").val();
+            URL += "&DateBegin=" + $("#TxtDateBegin").val();
+            URL += "&DateEnd=" + $("#TxtDateEnd").val();
+            URL += "&Name=" + $("#TxtName").val();
+            location.href = URL;
+        }
+        function BtnSch_Click() {
+            var URL = "@Url.Action("Index")";
+            URL += "?PlanID=" + $("#DdlPlanID").val();
+            URL += "&PrizeType=" + $("#DdlPrizeType").val();
+            URL += "&DateBegin=" + $("#TxtDateBegin").val();
+            URL += "&DateEnd=" + $("#TxtDateEnd").val();
+            URL += "&Name=" + $("#TxtName").val();
+            location.href = URL;
+        }
+        $(document).ready(function () {
+            $("#TxtDateBegin").click(function () { WdatePicker({ dateFmt: 'yyyy-MM-dd' }); });
+            $("#TxtDateEnd").click(function () { WdatePicker({ dateFmt: 'yyyy-MM-dd' }); });
+        });
+    </script>
+}
+
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+    <tr>
+        <td  colspan="4" style="height: 30px" class="td1_1">
+            抽奖记录
+        </td>
+    </tr>
+    @*<tr>
+        <td class="td1_2">
+            活动
+        </td>
+        <td class="td1_3">
+            @Html.DropDownList("DdlPlanID", ViewBag.listPlan as IEnumerable<SelectListItem>, "不限", new { @class = "form-control" })
+        </td>
+        <td class="td1_2">
+            奖项
+        </td>
+        <td class="td1_3">
+            @Html.DropDownList("DdlPrizeType", ViewBag.listPrizeType as IEnumerable<SelectListItem>, "不限", new { @class = "form-control" })
+        </td>
+    </tr>
+    <tr>
+        <td class="td1_2">
+            抽奖时间从
+        </td>
+        <td class="td1_3">
+            @Html.TextBox("TxtDateBegin", ViewBag.TxtDateBegin == null ? "" : (string)ViewBag.TxtDateBegin, new { placeholder = "", @class = "form-control" })
+        </td>
+        <td class="td1_2">
+            到
+        </td>
+        <td class="td1_3">
+            @Html.TextBox("TxtDateEnd", ViewBag.TxtDateEnd == null ? "" : (string)ViewBag.TxtDateEnd, new { placeholder = "", @class = "form-control" })
+        </td>
+    </tr>*@
+    <tr>
+        <td class="td1_2">
+            抽奖人姓名、电话
+        </td>
+        <td class="td1_3">
+            @Html.TextBox("TxtName", ViewBag.TxtName == null ? "" : (string)ViewBag.TxtName, new { placeholder = "", @class = "form-control" })
+        </td>
+        <td class="td1_2" colspan="2">
+            <input type="button" value="搜索" class="btn btn-default" onclick="BtnSch_Click();" />
+            <input type="button" value="导出" class="btn btn-default" onclick="BtnExport_Click();" />
+
+        </td>
+    </tr>
+</table>
+
+<table class="table">
+    <tr>
+        <th>
+            ID
+        </th>
+        <th>
+            IP
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            StoreAdd
+        </th>
+        <th>
+            Tel
+        </th>
+        <th>
+            SnNumber
+        </th>
+        <th>
+            AreaName
+        </th>
+        <th>
+            RegistDate
+        </th>
+        <th>
+            Result
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ID)
+            </td>
+            <td>
+                @item.IP
+            </td>
+            <td>
+                @item.Name      
+            </td>
+            <td>
+                @item.StoreAdd
+            </td>
+            <td >
+                @item.Tel
+            </td>
+            <td>
+                @item.SnNumber
+            </td>
+            <td>
+                @item.AreaName
+            </td>
+            <td>
+                @(item.CreateDate.Date<=DicInfo.DateZone?"": item.CreateDate.ToString("yyyy-MM-dd HH:mm:ss"))
+            </td>
+            <td>
+                @SysEnum.GetName(typeof(SysEnum.PrizeType), item.Result)
+            </td>
+        </tr>
+    }
+
+</table>
+<div class="PageCotainer">
+    <p class="PageInfoMain">共 @Model.PageCount 页 | @Model.TotalItemCount 条数据</p>
+    @Html.PagedListPager(Model, page => Url.Action("Index", new
+{
+    page,
+}))
+</div>
+
+

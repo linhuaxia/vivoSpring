@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>vivoX20幸运大抽奖</title>
+	<link rel="stylesheet" type="text/css" href="/Content/css/index.css?v=bbb">
+</head>
+<body>
+	<div id="wrapper">
+		<div id="bg1-1" class="bg">
+			<img src="images/bg1/bg1.jpg">
+		</div>
+		<div id="bg1-2" class="bg"><img src="images/bg1/bg2.jpg"></div>
+		<div id="bg1-3" class="bg"><img src="images/bg1/bg3.jpg"></div>
+		<div id="bg1-4" class="bg"><img src="images/bg1/bg4.jpg"></div>
+		<div id="bg1-5" class="bg">
+			<img src="images/bg1/bg5.jpg">
+			<div class="wrapperbtn">
+				<img src="images/bg1/button.png">
+			</div>
+		</div>
+	</div>
+
+	<div id="info">
+		<div id="bg2-1" class="bg"><img src="images/bg2/bg1.jpg"></div>
+		<div id="bg2-2" class="bg"><img src="images/bg2/bg2.jpg">
+		    <div class="sendInfo">
+		    	<input type="text" name="name" id="username" placeholder="姓 名：">
+		    	<input type="text" name="phoneNum" id="usernum" placeholder="电 话：">
+		    	<div class="codebox">
+			    	<input type="text" name="codeNum" id="codenum" placeholder="串 码：">
+			    	<span class="codebtn">[—]</span>
+		    	</div>
+		    </div> 
+		</div>
+		<div id="bg2-3" class="bg"><img src="images/bg2/bg3.jpg">
+	        <div class="infobtn">
+	        	<img src="images/bg2/button.png" class="okbtn" alt="">
+	        	<a href="#" class="rulebtn">活动规则</a>
+	        </div>
+		</div>
+	</div>
+
+	<div id="rule">
+	    <div id="close"><img src="images/bg3/close.jpg" alt=""></div>
+		<div id="bg3-1" class="bg"><img src="images/bg3/bg.jpg"></div>
+		<div id="columLine"></div>
+		<div id="rulecontent">
+			<p><span class="ringbol"></span><span class="headname"> 活动时间:</span> 9月30日——10月8日</p>
+			<p><span class="ringbol"></span><span class="headname"> 活动对象:</span><br><span class="text">购买vivo X20,X20A 手机的顾客</span></p>
+			<p><span class="ringbol"></span><span class="headname"> 活动奖品:</span><br><span class="text">特等奖泰国双飞五日游<br>幸运奖爱奇艺会员<br></span></p>
+			<p><span class="ringbol"></span><span class="headname"> 领取方式:</span><br>
+				<span class="text">点击“vivo山东服务号”菜单栏进入活动进行抽奖。</span></p>
+			<p><span class="ringbol"></span><span class="headname"> 常见问题:</span><br><span class="text">Q1、网络故障，请稍后再试。<br>
+																  A1：点击活动页面右上角菜单栏，点击刷新3次。<br>
+															   	  Q2、您的礼品已经被领取，请勿重复领取。<br>
+																  A2：串码未妥善保管，已被他人抽奖。购买机器时，请及时进行抽奖。<br>
+																  Q3、今天购买手机，由于系统原因没有进行及时抽奖，第二天可以继续参与吗？<br>
+																  A3：购买手机第二天依然可以参与抽奖。<br>
+																  Q4：抽取到的礼品如何进行领取？<br>
+																  A4：请抽奖的顾客填写认真正确姓名、联系方式。<br>
+																  本次活动最终解释权归vivo山东所有</span></p>
+		</div>
+	</div>
+
+	<div id="prize">
+		<div class="prizeiqiyi goods" id="good2">
+			<div class="iqiyiimg">
+				<img src="images/bg4/iqiyi2.png" alt="" class="iqiyi">
+			</div>
+			<p>爱奇艺会员</p>
+			<input id="vipnum" readonly="text" value="test-num"><br>
+			<button class="copy" data-clipboard-target="#vipnum">点击复制</button>
+			<p class="att">会员卡或激活码可用来激活爱奇艺VIP会员身份，激活码不可兑换现金，使用时间自激活起一个月。激活方法：<br>1， 请使用：PC网页或安卓系统客户端注册登录账号；<br>2， 点击开通会员支付中心，选择激活码(删去前边17开头的数字)支付；<br>3， 输入正确激活码和验证码；<br>4， 点击【下一步】完成支付；</p>
+			<!-- <div class="copy" data-clipboard-action="copy" data-clipboard-target="#vipnum">复制</div> -->
+			<p class="sure">确定</p>
+		</div>
+		<div class="prizex9splus goods" id="good1">
+			<img src="images/bg4/thai.png" alt="">
+			<p>泰国双飞五日游套餐</p>
+			<p class="sure">确定</p>
+		</div>
+	</div>
+	<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
+    <script src="Scripts/jquery-1.10.2.min.js"></script>
+	<!--<script type="text/javascript" src="js/jquery.min.js"></script>-->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js"></script>
+	<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+	<script type="text/javascript" src="Scripts/index.js?v=4e5d9o"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <title></title>
+    <script type="text/javascript">
+        function ReloadLeft() {
+            // window.open("/menu.aspx", "left");
+            left.UpdateCount();
+        }
+
+        function changeFrameHeight() {
+            var ifm = document.getElementsByName("left");
+            ifm.height = document.documentElement.clientHeight;
+            ifm = document.getElementsByName("main");
+            ifm.height = document.documentElement.clientHeight;
+        }
+        window.onresize = function () {
+            changeFrameHeight();
+        } 
+    </script>
+</head>
+<body style="background-color:#F1F2F6">
+    <div class="container-fluid" style="padding:0;">
+        <div class="row">
+            <div class="col-md-2">
+                <iframe src="/MP/Home/menuTemp"  style="width:200px;height:100%;min-height:100vh;"  onload="changeFrameHeight()"
+                        name="left"  frameBorder="0" noresize="noresize" scrolling="No"></iframe>
+
+            </div>
+            <div class="col-md-10" style="padding-left:0px;">
+                <iframe src="@Url.Action("index","PrizeResult")" style="width:100%;height:100%;min-height:100vh;" onload="changeFrameHeight()"
+                        name="main" frameBorder="0" noresize="noresize" scrolling="yes" ></iframe>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

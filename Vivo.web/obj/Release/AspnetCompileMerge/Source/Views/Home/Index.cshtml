@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+@{ ViewBag.Title = "vivo Festive Celebrations";}
+<html >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/Scripts/layer.mobile-v2.0/layer_mobile/need/layer.css" rel="stylesheet" />
+    <script src="~/Scripts/layer.mobile-v2.0/layer_mobile/layer.js"></script>
+    <title>@ViewBag.Title</title>
+    <script type="text/javascript">
+        var infoWechatUserReturn = undefined;
+
+    </script>
+	
+    <link rel="stylesheet" type="text/css" href="/Content/css/index.css?v=b79b3b">
+	<link rel="stylesheet" type="text/css" href="images/shake.css?v=bbb">
+	
+</head>
+<body >
+    <div id="wrapper"  >
+        <div id="bg1-1" class="bg">
+            <img src="images/a1.jpg">
+        </div>
+        <!--<div id="bg1-2" class="bg"><img src="images/bg1/bg2.jpg"></div>
+        <div id="bg1-3" class="bg"><img src="images/bg1/bg3.jpg"></div>
+        <div id="bg1-4" class="bg"><img src="images/bg1/bg4.jpg"></div>-->
+		
+		
+		<div id="bg1-7" class="bg">
+            <!--<img src="images/bg1/bg5.jpg">-->
+            <div class="wrapperbtn">
+               						
+				<img src="images/buy.png?v=33" class="eye" />
+					   
+            </div>
+        </div>
+		
+		
+		<div id="bg1-6" class="bg">
+            <!--<img src="images/bg1/bg5.jpg">-->
+            <div class="wrapperbtn">
+               						
+				<img class="shake shake-opacity" src="images/win.png" class="eye" />
+					   
+            </div>
+        </div>
+		
+		
+        <div id="bg1-5" class="bg">
+            <!--<img src="images/bg1/bg5.jpg">-->
+            <div class="wrapperbtn shake2"  >
+               						
+				<img src="images/zhiwen.png"  />
+					   
+            </div>
+        </div>
+    </div>
+
+    <div id="info">
+        <div id="bg2-1" class="bg"><img src="images/a2_1.jpg?v=12"></div>
+        <div id="bg2-2" class="bg">
+            <img src="images/a2_2.jpg?v=12">
+            <div class="sendInfo">
+                <input type="text" name="TxtName" id="TxtName" placeholder="Name：" >
+				 <input type="text" name="TxtAddress" id="TxtAddress" placeholder="Store Add：">
+                <input type="text" name="TxtTel" id="TxtTel" placeholder="Tel：">
+                <div class="codebox">
+                    <input type="text" name="TxtSnNumber" id="TxtSnNumber" placeholder="SN：">
+                    <span class="codebtn">[—]</span>
+                </div>
+				<select  type="text" name="TxtAreaName" id="TxtAreaName" placeholder="Area：">
+				<option value="">Choose Area</option>  
+				   <option value="HYD KA - 1">HYD KA - 1</option>  
+				   
+        <option value="HYD KA - 2">HYD KA - 2</option>   
+        <option value="HYD NORTH">HYD NORTH</option>   
+        <option value="HYD SOUTH">HYD SOUTH</option>   
+        <option value="KARIMNAGAR">KARIMNAGAR</option>   
+		  <option value="KHAMMAM">KHAMMAM</option>   
+		    <option value="MAHBUBNAGAR">MAHBUBNAGAR</option>   
+			  <option value="MEDAK">MEDAK</option>   
+			    <option value="NALGONDA">NALGONDA</option>   
+				  <option value="NIZAMABAD">NIZAMABAD</option>   
+				  <option value="SHOWROOM">SHOWROOM</option>   
+				  <option value="WARANGAL">WARANGAL</option>   
+            
+      </select>  
+				
+				
+            </div>
+        </div>
+        <div id="bg2-3" class="bg">
+            <img src="images/a2_3.jpg?v=12">
+            <div class="infobtn">
+                <img src="images/a2_but.png" class="okbtn" alt="">
+                <a href="#" class="rulebtn">Activity Rules</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="rule">
+        <div id="close"><img src="/images/bg3/close.jpg" alt=""></div>
+        <div id="bg3-1" class="bg"><img src="/images/bg3/bg.jpg?v=2569"></div>
+        <div id="columLine"></div>
+        <div id="rulecontent" >
+            <p><span class="ringbol"></span><span class="headname"> Activity time:</span> Offer period from 1/10/2018 to 15/11/2018</p>
+			<p><span class="ringbol"></span><span class="headname">
+    Active object:
+</span><br><span class="text"> Customers who buy vivo smartphones can participate in the lucky draw</span></p>
+			<p><span class="ringbol"></span><span class="headname"> Awards:</span><br><span class="text">
+    Special prize,Travel Voucher<br>
+
+    First prize: vivo y71i<br>
+    Second prize: cash back 100rs, 200rs, 500rs <br>Third prize:water bottle<br>
+</span></p>
+            <p>
+                <span class="ringbol"></span><span class="headname"> Activity description:</span><br>
+                                                                                                 <span class="text">
+                                                                                                     1. After purchase, please provide the details according to the terms and conditions provided. <br>
+                                                                                                     2. All the prizes will be distributed within 7 working days.
+                                                                                                 </span>
+            </p>
+           
+        </div>
+    </div>
+
+    <div id="prize">
+        <div class="prizex9splus goods" style="display:none;" id="good5" tips="说明：这个div是MeiJiang">
+            <img src="images/thankyou.png" alt="">
+        </div>
+        <div class="prizex9splus goods" style="display:none;" id="good4" tips="说明：这个div是3等奖">
+            <img src="images/sandengjiang.jpg" alt="">
+        </div>
+        <div class="prizex9splus goods" style="display:none;" id="good3500rs" tips="说明：这个div是2等奖">
+            <img src="images/erdengjiang.jpg" alt="">
+        </div>
+        <div class="prizex9splus goods" style="display:none;" id="good3200rs" tips="说明：这个div是2等奖">
+            <img src="images/erdengjiang.jpg" alt="">
+        </div>
+        <div class="prizex9splus goods" style="display:none;" id="good3100rs" tips="说明：这个div是1等奖">
+
+            <img src="images/yidengjiang.jpg" alt="">
+        </div>
+        <div class="prizex9splus goods" style="display:none;" id="good1" tips="说明：这个div是Te等奖">
+            <img src="images/tedengjiang.jpg" alt="">
+        </div>
+    </div>
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
+    <script src="/Scripts/jquery-1.10.2.min.js"></script>
+    <!--<script type="text/javascript" src="js/jquery.min.js"></script>-->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js"></script>
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script type="text/javascript" src="/Scripts/index.js?v=511d9o"></script>
+	
+	
+	
+</body>
+</html>

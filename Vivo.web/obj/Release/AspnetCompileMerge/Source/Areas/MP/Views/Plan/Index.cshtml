@@ -1,0 +1,131 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+
+@model IPagedList<PlanInfo>
+
+@{
+    ViewBag.Title = "投放规则设置";
+    Layout = "~/Areas/MP/Views/Shared/_Layout.cshtml";
+}
+@section head{
+    <script type="text/javascript">
+        function BtnSch_Click() {
+            var URL = "@Url.Action("index")";
+            URL += "?Name=" + $("#TxtName").val();
+            URL += "&TypeID=" + $("#DdlTypeID").val();
+            location.href = URL;
+        }
+        function BtnDelete_Click(ItemID) {
+            $.post("@Url.Action("Delete")", { ID: ItemID }, function (data) {
+                alert(data.ErrorMsg);
+                if (data.ErrorCode == 0) {
+                    location.reload();
+                }
+            });
+        }
+
+    </script>
+}
+
+
+    <p class="pAdd">
+        <a href="javascript:Layer('@Url.Action("Create")')" class="a_Add" title="添加">
+            添加
+        </a>
+    </p>
+
+<table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+    <tr>
+        <td colspan="6" style="height: 30px" class="td1_1">
+            @ViewBag.Title
+        </td>
+    </tr>
+</table>
+
+<table class="table">
+    <tr>
+        <th>
+            ID
+        </th>
+        <th>
+            区域
+        </th>
+        <th>
+            优先级(数字越大越优先)
+        </th>
+        <th>
+            奖项
+        </th>
+        <th>
+            市场层级
+        </th>
+       <th>
+            开始时间
+        </th>
+        <th>
+            结束时间
+        </th>
+        <th>
+            大奖序号
+        </th>
+        <th>
+            操作
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ID)
+            </td>
+            <td style="text-align:left;">
+                @item.AgenterName
+            </td>
+            <td style="text-align:left;">
+                @item.SortID
+            </td>
+            <td style="text-align:left;">
+                @SysEnum.GetName(typeof(SysEnum.PrizeType),item.TypeFlag)
+            </td>
+            <td style="text-align:left;">
+                @item.MarketLevel
+            </td>
+            <td>
+                @item.DateBegin.ToString("yyyy-MM-dd HH:mm")
+            </td>
+            <td>
+                @item.DateEnd.ToString("yyyy-MM-dd HH:mm")
+            </td>
+            <td>
+                @item.Mount
+            </td>
+            <td>
+                    <a href="javascript:Layer('@Url.Action("Edit", new { id = item.ID })')" title="编辑">
+                        编辑
+                    </a>
+                @*|
+                    <a href="javascript:BtnDelete_Click(@item.ID)" title="删除"
+                       onclick="return confirm('确定要删除数据吗？')">
+                        删除
+                    </a>*@
+
+            </td>
+        </tr>
+    }
+
+</table>
+<div class="PageCotainer">
+    <p class="PageInfoMain">共 @Model.PageCount 页 | @Model.TotalItemCount 条数据</p>
+    @Html.PagedListPager(Model, page => Url.Action("Index", new
+{
+    page,
+    Name = ViewBag.Name,
+    TypeID = ViewBag.DdlTypeID
+}))
+</div>
+
+

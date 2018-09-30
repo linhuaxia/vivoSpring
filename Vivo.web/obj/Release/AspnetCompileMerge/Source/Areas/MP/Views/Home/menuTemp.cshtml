@@ -1,0 +1,24 @@
+﻿@using Vivo.Model;
+@using Vivo.IBLL;
+@using Vivo.BLLFactory;
+
+
+@{
+    Layout = "~/Areas/MP/Views/Shared/_Layout.cshtml";
+
+}
+@section head{
+    <style type="text/css">
+    </style>
+
+}
+
+<div class="list-group">
+    <a href="#" class="list-group-item disabled">
+        系统菜单
+    </a>
+    <a href="@Url.Action("index","PrizeResult")" target="main" class="list-group-item">抽奖记录</a>
+    <a href="@Url.Action("index","Plan")" target="main" class="list-group-item">投放规则</a>
+    <a href="@Url.Action("Edit","Profiles")" target="main" class="list-group-item">其它项设置</a>
+</div>
+

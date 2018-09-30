@@ -1,0 +1,72 @@
+﻿        .VideoTitle {
+            font-size:22px;line-height:24px;color:#202020;padding-bottom:16px;width:400px;font-weight:normal;
+            cursor:pointer;
+        }
+        .ItemStatus {
+            position: absolute;
+            width: 204px;
+            height: 24px;
+            line-height: 24px;
+            font-size: 12px;
+            color: #fff;
+            filter: progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr='#99000000', endColorstr='#99000000');
+            background-color: rgba(0,0,0,0.6);
+            margin-top: -30px;
+            overflow: hidden;
+            padding-left: 10px;
+        }
+
+        .ULVideoCollection {
+        }
+
+            .ULVideoCollection li {
+                float: left;
+                margin: 10px 5px;
+                height: 180px;
+                overflow:hidden;
+                width: 227px;
+                border:1px solid #FFF;
+            }
+
+        .DivLiSub {
+            width: 215px;
+            height: 175px;
+            padding: 5px;
+            overflow:hidden;
+           
+        }
+        .DivLiSub .NewFlag {
+            position:absolute;
+            z-index:1;
+            left:0px;
+            top:0px;
+        }
+            .DivLiSub img {
+                max-width:215px;
+                max-height:115px;
+            }
+        .DivLiSub:hover{
+                 /*border: 1px solid #DDD;
+            -moz-box-shadow: 1px 1px 1px #DDD;
+            box-shadow: 1px 1px 1px #DDD;*/        
+
+        }
+
+            .DivLiSub td {text-align:center;height:123px; vertical-align:middle;
+                          background-color:#EEE;position:relative;
+                          border-radius:3px;
+            }
+
+        .DivLiSubTitle, .DivLiSubTitle a, .DivLiSubTitle a:visited {
+            font-size: 14px;
+            line-height: 21px;
+            height: 40px;
+            margin-bottom: 8px;
+            overflow: hidden;
+            position: relative;
+            color: #333;
+        }
+
+            .DivLiSubTitle a:hover {
+                color: #62B4F7;
+            }

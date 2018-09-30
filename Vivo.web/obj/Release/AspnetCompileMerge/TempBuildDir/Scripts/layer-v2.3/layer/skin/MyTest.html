@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+    <script src="../../../jquery-1.10.2.min.js"></script>
+    <script src="../layer.js"></script>
+    <script src="../../../Public.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#DivFrame").click(function () {
+               
+                Layer("http://weixin.gongsuda.com", function(){alert('you are deaded')}, 200, 200);               // Layer("http://weixin.gongsuda.com", "alert('you are deaded')", 200, 200);
+
+            });
+        });
+    </script>
+</head>
+<body>
+
+    <div style="background-color:red;" id="DivFrame">frame</div>
+
+</body>
+</html>

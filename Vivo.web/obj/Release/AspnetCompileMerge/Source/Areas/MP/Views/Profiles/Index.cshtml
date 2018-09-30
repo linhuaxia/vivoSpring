@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/MP/Views/Shared/_Layout.cshtml";
+}
+
+<table class="table">
+    <tr>
+        <td colspan="6" style="height: 30px" class="td1_1">
+            系统参数设置
+        </td>
+    </tr>
+    <tr>
+        <td class="td1_3">
+            <a href="@Url.Action("EamilSetting")">
+                邮件服务器参数配置
+            </a>
+        </td>
+        <td class="td1_3">
+            <a href="@Url.Action("OutSideUserSetting")">
+                外部人员听评课帐户创建设置
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td class="td1_3">
+            <a href="@Url.Action("InportSetting")">
+                系统教师帐户导入设置
+            </a>
+        </td>
+        <td class="td1_3">
+            
+        </td>
+    </tr>
+</table>
+

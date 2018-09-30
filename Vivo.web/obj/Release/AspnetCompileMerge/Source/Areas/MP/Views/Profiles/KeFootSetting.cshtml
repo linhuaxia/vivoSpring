@@ -1,0 +1,62 @@
+﻿@using Vivo.Model;
+@model ProfilesInfo
+@{
+    ViewBag.Title = "EamilSettingFeedBack";
+    Layout = "~/Areas/MP/Views/Shared/_Layout.cshtml";
+
+}
+@section head{
+    <link href="~/Content/kindeditor-4.1.7/themes/default/default.css" rel="stylesheet" />
+    <script src="~/Content/kindeditor-4.1.7/kindeditor-min.js"></script>
+    <script src="~/Content/kindeditor-4.1.7/lang/zh_CN.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //$("#DateBegin").click(function () { WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm' }); });
+            //$("#DateEnd").click(function () { WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm' }); });
+            var editor;
+            KindEditor.ready(function (K) {
+                editor = K.create('textarea[name="Value"]', {
+                    uploadJson: '/Content/kindeditor-4.1.7/upload_json.ashx',
+                    fileManagerJson: '/Content/kindeditor-4.1.7/file_manager_json.ashx',
+                    allowFileManager: true,
+                    filterMode: false,
+                    width: "100%",
+                    height: "400px"
+                });
+            });
+        });
+    </script>
+}
+
+
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.ID)
+
+    <input type="hidden" id="TimeStamp" name="TimeStamp" value="@DateTime.Now.ToString("fffff")" />
+    <table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+        <tr>
+            <td colspan="3" class="td1_1">
+                脚部内容设置
+            </td>
+        </tr>
+        <tr>
+            <td  class="td1_3">
+                @Html.TextAreaFor(model => model.Value);
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2" colspan="2">
+                <input type="submit" value="提交" class="btn btn-default" />
+            </td>
+        </tr>
+
+    </table>
+
+}
