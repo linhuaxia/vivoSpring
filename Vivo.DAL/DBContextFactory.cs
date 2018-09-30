@@ -22,7 +22,7 @@ namespace Vivo.DAL
             DbContext dbContext = (DbContext)CallContext.GetData(DbContextName);
             if (null== dbContext)
             {
-                dbContext = new vivoEntities();
+                dbContext = new vivoIndiaEntities();
                 CallContext.SetData(DbContextName, dbContext);
             }
             return dbContext;

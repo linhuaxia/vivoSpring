@@ -1,0 +1,3 @@
+D:\webs\vivoInd\Vivo.API\obj\Debug\Vivo.API.csprojResolveAssemblyReference.cache
+D:\webs\vivoInd\Vivo.API\obj\Debug\Vivo.API.csproj.CoreCompileInputs.cache
+D:\webs\vivoInd\Vivo.API\obj\Debug\Eval.API.dll

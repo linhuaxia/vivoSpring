@@ -15,15 +15,13 @@ namespace Vivo.Model
     public partial class PrizeResultInfo
     {
         public int ID { get; set; }
-        public string OpenID { get; set; }
+        public string IP { get; set; }
         public string Name { get; set; }
+        public string StoreAdd { get; set; }
         public string Tel { get; set; }
         public string SnNumber { get; set; }
+        public string AreaName { get; set; }
         public System.DateTime CreateDate { get; set; }
-        public string Result { get; set; }
-        public string SnApiResult { get; set; }
-        public int PlanID { get; set; }
-    
-        public virtual PlanInfo PlanInfo { get; set; }
+        public int Result { get; set; }
     }
 }

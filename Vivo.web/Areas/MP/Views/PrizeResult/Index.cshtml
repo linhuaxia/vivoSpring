@@ -44,7 +44,7 @@
             抽奖记录
         </td>
     </tr>
-    <tr>
+    @*<tr>
         <td class="td1_2">
             活动
         </td>
@@ -71,7 +71,7 @@
         <td class="td1_3">
             @Html.TextBox("TxtDateEnd", ViewBag.TxtDateEnd == null ? "" : (string)ViewBag.TxtDateEnd, new { placeholder = "", @class = "form-control" })
         </td>
-    </tr>
+    </tr>*@
     <tr>
         <td class="td1_2">
             抽奖人姓名、电话
@@ -93,96 +93,60 @@
             ID
         </th>
         <th>
-            OpenID
+            IP
         </th>
         <th>
-            昵称
+            Name
         </th>
         <th>
-            头像
-        </th>
-       <th>
-            姓名
+            StoreAdd
         </th>
         <th>
-            电话
+            Tel
         </th>
         <th>
-            SN号
+            SnNumber
         </th>
         <th>
-            SN区域
+            AreaName
         </th>
         <th>
-            SN市场层级
+            RegistDate
         </th>
         <th>
-            抽奖时间
-        </th>
-        <th>
-            抽奖结果
-        </th>
-        <th>
-            限定活动
+            Result
         </th>
     </tr>
 
     @foreach (var item in Model)
     {
-        var infoUser = UserBLL.GetList(a => a.WechatOpenID == item.OpenID).FirstOrDefault();
-        var infoVivoAPI = Newtonsoft.Json.JsonConvert.DeserializeObject<VivoAPIInfo>(item.SnApiResult);
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.ID)
             </td>
             <td>
-                @item.OpenID
+                @item.IP
             </td>
             <td>
-                @(null!=infoUser?infoUser.WechatNameNick:"")
+                @item.Name      
             </td>
             <td>
-                <img src="@(null!=infoUser?infoUser.WechatHeadImg:"")"  style="width:24px;"/>
+                @item.StoreAdd
             </td>
-            <td style="text-align:left;">
-                @item.Name
-            </td>
-            <td>
+            <td >
                 @item.Tel
             </td>
             <td>
                 @item.SnNumber
             </td>
             <td>
-                @(null != infoVivoAPI ? infoVivoAPI.AgenterName : "")
+                @item.AreaName
             </td>
             <td>
-                @(null != infoVivoAPI ? infoVivoAPI.MarketLevel : "")
+                @(item.CreateDate.Date<=DicInfo.DateZone?"": item.CreateDate.ToString("yyyy-MM-dd HH:mm:ss"))
             </td>
             <td>
-                @item.CreateDate
-            </td>
-            <td>
-                @if (string.IsNullOrEmpty(item.Result))
-                {
-                    <text>不中奖</text>
-                }
-                else if (item.Result.Contains("-"))
-                {
-                    <text>@item.Result</text>
-                }
-                else if (Tool.Function.ConverToInt(item.Result)>0)
-                {
-                    <text>@SysEnum.GetName(typeof(SysEnum.PrizeType),Tool.Function.ConverToInt(item.Result))</text>
-                }
-            </td>
-            <td>
-                @item.PlanInfo.AgenterName
-                /
-                @item.PlanInfo.MarketLevel
-                /
-                @item.PlanInfo.DateBegin.ToString("MM-dd HH")到
-                @item.PlanInfo.DateEnd.ToString("MM-dd HH")
+                @SysEnum.GetName(typeof(SysEnum.PrizeType), item.Result)
             </td>
         </tr>
     }

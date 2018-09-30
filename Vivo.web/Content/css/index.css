@@ -195,7 +195,7 @@ body{
 	background: rgba(31,31,31,0.95);
 	width: 100%;
 	height: 100%;
-	background-image: url(/images/a3_1.png);
+	
 	background-position: center 0%;
 	background-repeat: no-repeat;
 	background-size: 100% auto;
@@ -204,7 +204,7 @@ body{
 }
 #prize img{
 	width: 100%;
-	vertical-align: bottom;
+	vertical-align: top;
 }
 .goods{
 	position: absolute;
@@ -260,7 +260,7 @@ body{
 .prizey55{
 	width: 100%;
 	left: 0%;
-	bottom: 0%;
+	top: 0%;
 	margin-left: 0%;
 	display: block;
 }

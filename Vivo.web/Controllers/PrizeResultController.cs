@@ -15,171 +15,94 @@ namespace Vivo.web.Controllers
 {
     public class PrizeResultController : BaseController
     {
-        public static object objlocker = new object();
         public ActionResult C(PrizeResultInfo info)
         {
-            if (string.IsNullOrEmpty(info.OpenID))
+            if (!string.IsNullOrEmpty(System.Web.HttpContext.Current.Request.ServerVariables["HTTP_VIA"]))
+            { info.IP = Convert.ToString(System.Web.HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"]); }
+            else
             {
-                return Json(new APIJson(-1, "parms error ,can't find openid"));
+                info.IP = string.Empty;
+            }
+            if (info.IP.Length>50)
+            {
+                info.IP = info.IP.Substring(0, 49);
+            }
+
+            
+            if (string.IsNullOrEmpty(info.Name))
+            {
+                return Json(new APIJson(1, ""));
             }
             if (string.IsNullOrEmpty(info.Name) || info.Name.Length > 50)
             {
-                return Json(new APIJson(-1, "用户名不能为空，请输入重试!"));
+                return Json(new APIJson(2, ""));
+            }
+            if (string.IsNullOrEmpty(info.StoreAdd))
+            {
+                return Json(new APIJson(3, ""));
+            }
+            if (info.StoreAdd.Length>500)
+            {
+                return Json(new APIJson(4, ""));
             }
             if (!IsMobilePhone(info.Tel))
             {
-                return Json(new APIJson(-1, "手机号输入不正确，请重新输入!"));
+                return Json(new APIJson(5, "手机号输入不正确，请重新输入!"));
+            }
+            if (info.SnNumber.Length!=15)
+            {
+                return Json(new APIJson(6, "SN!"));
+            }
+            if (string.IsNullOrEmpty(info.AreaName))
+            {
+                return Json(new APIJson(7, "Area!"));
             }
 
-            VivoAPIInfo infoAPIresult = GetAgentAndMarketLevel(info.SnNumber);
-
-            if (infoAPIresult.Status == 0)
+           var infoExist= PrizeResultBLL.GetList(a => a.SnNumber == info.SnNumber).FirstOrDefault();
+            if (null==infoExist)
             {
-                return Json(new APIJson(-1, infoAPIresult.message));
+                return Json(new APIJson(8, "SN not exist!"));
             }
-            var infoPrizeResult = PrizeResultBLL.GetList(a => a.SnNumber == info.SnNumber).FirstOrDefault();
-            if (null != infoPrizeResult)
+            if (!string.IsNullOrEmpty(infoExist.Name))
             {
-                string ExistMsg = "这个SN码已经参与过抽奖。";
-                if (string.IsNullOrEmpty(infoPrizeResult.Result))
-                {
-                    ExistMsg += "谢谢参与，祝您好运";
-                }
-
-                return Json(new APIJson(-1, ExistMsg, infoPrizeResult.Result));
+                var ExistOBJ = new {infoExist.ID,infoExist.Name,infoExist.IP,infoExist.StoreAdd,infoExist.Tel,infoExist.SnNumber,infoExist.CreateDate,infoExist.Result };
+                return Json(new APIJson(-1, "Has Taken!",ExistOBJ));
             }
-            DateTime BuyTime = GetSnretailTime(info.SnNumber);
-            int EnablePrizeHour = Function.ConverToInt(ProfilesBLL.GetValue("手机购买时间有效小时数"));
-            if ((DateTime.Now - BuyTime).TotalHours > EnablePrizeHour)
+            infoExist.IP = info.IP;
+            infoExist.Name = info.Name;
+            infoExist.StoreAdd = info.StoreAdd;
+            infoExist.Tel = info.Tel;
+            //infoExist.SnNumber=info
+            infoExist.AreaName = info.AreaName;
+            infoExist.CreateDate = DateTime.Now;
+            //infoExist.Result
+            if (PrizeResultBLL.Edit(infoExist))
             {
-                return Json(new APIJson(-189, "抱歉，本次活动限定在购买日" + EnablePrizeHour + "小时内参与抽奖，您已超过限定时段"));
+                var ExistOBJ = new { infoExist.ID, infoExist.Name, infoExist.IP, infoExist.StoreAdd, infoExist.Tel, infoExist.SnNumber, infoExist.CreateDate, infoExist.Result };
+                return Json(new APIJson(0, "OK!", ExistOBJ));
             }
-            string ListEnableAgenterName = ProfilesBLL.GetValue("EnableAgenterName");
-            if (!ListEnableAgenterName.Contains(infoAPIresult.AgenterName))
+            else
             {
-                return Json(new APIJson(-123, "不在活动范围,无法抽奖。"));
-            }
-            var listPlan = PlanBLL.GetList(a => DbFunctions.DiffMinutes(a.DateBegin, DateTime.Now) >= 0
-                                            && DbFunctions.DiffMinutes(a.DateEnd, DateTime.Now) <= 0
-                                            && a.Enable).OrderByDescending(a=>a.SortID);
-            if (listPlan.Count() == 0)
-            {
-                return Json(new APIJson(-123, "不在活动期间,无法抽奖。"));
-            }
-            info.SnApiResult = Newtonsoft.Json.JsonConvert.SerializeObject(infoAPIresult);
-            info.CreateDate = DateTime.Now;
-
-
-            bool ResultCreate = GetPrize(listPlan, infoAPIresult, info);
-            if (!ResultCreate)
-            {
-                return Json(new APIJson(-1, "暂时无法进行抽奖，请重试"));
-            }
-            var Result = new
-            {
-                info.ID,
-                info.OpenID,
-                info.Tel,
-                info.Result
-            };
-            return Json(new APIJson(0, "", Result));
-        }
-
-        private static Random rand = new Random();
-        private bool GetPrize(IQueryable<PlanInfo> listPlan, VivoAPIInfo infoAPIresult, PrizeResultInfo info)
-        {
-
-            int randResult = rand.Next(0, 99);
-            int AiQiYiRate = Tool.Function.ConverToInt(ProfilesBLL.GetValue("AiQiYiRate"), 50);
-
-            info.PlanID = listPlan.FirstOrDefault().ID;
-            if (infoAPIresult.MarketLevel == "乡镇")
-            {
-                lock (objlocker)
-                {
-                    info.Result = "";
-                    return PrizeResultBLL.Create(info).ID > 0;
-                }
-            }
-
-
-
-            lock (objlocker)
-            {
-                var infoPlanTarget = listPlan.FirstOrDefault(a => a.AgenterName == infoAPIresult.AgenterName && (a.MarketLevel.Contains(infoAPIresult.MarketLevel)));
-                if (null != infoPlanTarget)
-                {
-                    if (infoPlanTarget.Mount - 1 <= infoPlanTarget.PrizeResultInfo.Count() && !infoPlanTarget.PrizeResultInfo.Any(a => a.Result ==infoPlanTarget.TypeFlag.ToString()))
-                    {
-                        info.PlanID = infoPlanTarget.ID;
-                        info.Result =infoPlanTarget.TypeFlag.ToString();
-                        return PrizeResultBLL.Create(info).ID > 0;
-                    }
-                }
-                if (randResult <= AiQiYiRate)
-                {
-                    AiQiYiInfo infoEmpty = AiQiYiBLL.GetList(a => a.Status == 1).FirstOrDefault();
-                    if (null != infoEmpty)
-                    {
-                        infoEmpty.Status = 0;
-                        infoEmpty.OwnerUserOpenID = info.OpenID;
-                        info.Result = infoEmpty.CodeNo;
-                        if (null!=infoPlanTarget)
-                        {
-                            info.PlanID = infoPlanTarget.ID;
-                        }
-                        AiQiYiBLL.Edit(infoEmpty);
-                        return PrizeResultBLL.Create(info).ID > 0;
-                    }
-                }
-                info.Result = string.Empty;
-                return PrizeResultBLL.Create(info).ID > 0;
-            }
-
-
-        }
-
-
-        private const string APIURL = "http://sdapi.vivo.xyz:8888/api/Account/GetAgentAndMarketLevel?snnumber=";
-        private VivoAPIInfo GetAgentAndMarketLevel(string snnumber)
-        {
-            try
-            {
-                string Result = DataHelper.GetHttpData(APIURL + snnumber);
-                Result = Result.Trim('\"').Replace("\\", "");
-                var info = Newtonsoft.Json.JsonConvert.DeserializeObject<VivoAPIInfo>(Result);
-                return info;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-        private DateTime GetSnretailTime(string snnumber)
-        {
-            string URL = "http://sdapi.vivo.xyz:8888/api/Account/GetSnretailTime?snnumber=" + snnumber;
-            try
-            {
-                string Result = DataHelper.GetHttpData(URL);
-                Result = Result.Trim('\"').Replace("\\", "");
-                return Tool.Function.ConverToDateTime(Result);
-            }
-            catch (Exception)
-            {
-                return DicInfo.DateZone;
+                return Json(new APIJson(9, "NotSavedYet!"));
             }
         }
 
-        /// <summary>
-        /// 判断输入的字符串是否是一个合法的手机号
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
+
         public static bool IsMobilePhone(string input)
         {
-            Regex regex = new Regex("^1[345678]\\d{9}$");
-            return regex.IsMatch(input);
-
+            if (input.Length!=10)
+            {
+                return false;
+            }
+            try
+            {
+                Convert.ToInt64(input);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
     }

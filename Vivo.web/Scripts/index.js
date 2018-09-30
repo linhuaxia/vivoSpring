@@ -1,4 +1,23 @@
-$(function(){
+var ErrorJson = [
+    { "ID": -1, "CN": "合法，抽过奖，显示出之前的信息", "EN": "SN has participated in the lottery." },
+    { "ID": 1, "CN": "用户名不能为空", "EN": "User name can not be empty." },
+    { "ID": 2, "CN": "用户名不能超过50个字符", "EN": "The user name should not exceed 50 characters." },
+    { "ID": 3, "CN": "地址不能为空", "EN": "The Store address must not be empty." },
+    { "ID": 4, "CN": "地址不能超过500", "EN": "" },
+    { "ID": 5, "CN": "手机号输入不正确，请重新输入", "EN": "Incorrect phone number input." },
+    { "ID": 6, "CN": "SN码长度应该是15位", "EN": "The length of SN code is incorrect." },
+    { "ID": 7, "CN": "未选择区域", "EN": "Unselected region" },
+    { "ID": 8, "CN": "SN码非法，在数据库不存在", "EN": "SN code is illegal" },
+    { "ID": 9, "CN": "数据未保存，要重试", "EN": "Please Try Again" },
+    { "ID": 10, "CN": "", "EN": "1" },
+    { "ID": 11, "CN": "", "EN": "2" },
+    { "ID": 12, "CN": "", "EN": "3" },
+    { "ID": 13, "CN": "", "EN": "4" },
+    { "ID": 14, "CN": "", "EN": "5" },
+];
+
+
+$(function () {
     $(".rulebtn").click(function(){
         $("#rule").show();
         $("#info").hide();
@@ -24,15 +43,13 @@ $(function(){
         }
         return theRequest[name];
     }
-    var openid = GetQueryString('openid');
-    var nickname = decodeURI(GetQueryString('nickname'));
-    var headImgurl = GetQueryString('headimgurl');
 
 
 
-    getOpenId();
 
-    $(".okbtn").click(function(){
+    $(".okbtn").click(function () {
+        showWinningstate();
+        return;
         var $username = $("#username").val();
         var $usernum = $("#usernum").val();
         var $codenum = $("#codenum").val();
@@ -77,22 +94,22 @@ $(function(){
         })
         
     }
-    
+
+
     function showWinningstate() {
         layer.open({
             type: 2
-            , content: '正在抽奖中。。'
+            , content: 'Processing。。'
         });
-        var $codenum = $("#codenum").val();
-        var $address = $("#address").val(); 
         $.ajax({
             type: 'post',
             url: '/PrizeResult/C',
             data: {
-                OpenID: infoWechatUserReturn.openid,
-                Name: $("#username").val(),
-                Tel: $("#usernum").val(),
-                SnNumber: $("#codenum").val()
+                Name: $("#TxtName").val(),
+                StoreAdd: $("#TxtAddress").val(),
+                Tel: $("#TxtTel").val(),
+                SnNumber: $("#TxtSnNumber").val(),
+                AreaName: $("#TxtAreaName").val()
             },
             header: {
                     'Accept': "application/json"
@@ -102,90 +119,37 @@ $(function(){
             success: function (data) {
                 layer.closeAll();
                 console.log(data);
-                if (data.ErrorCode!=0) {
-                    alert(data.ErrorMsg);
+                if (data.ErrorCode==0) {
+                    $("#prize").show();
+                    $("#good" + data.Data.Result).show();
                     return;
                 }
-                if (data.Data.Result =="1")
-                {
-                    $("#prize").show();
-                    $("#good1").show();
-                }
-                else if (data.Data.Result=="2") {
-                    $("#prize").show();
-                    $("#good2").show();
-                }
-                else if (data.Data.Result != "")
-                {
-                    $("#prize").show();
-                    $("#good3").show();
-                    $("#vipnum").val(data.Data.Result);
-                    vipnumClick();
-                }
                 else {
-                    alert("谢谢参与，祝您好运");
+                    var HasErrorBeenFind = false;
+                    $(ErrorJson).each(function (indexJson,itemJson) {
+                        if (itemJson.ID == data.ErrorCode) {
+                            HasErrorBeenFind = true;
+                            alert(itemJson.EN);
+                            return true;
+                        }
+                    });
+                    if (!HasErrorBeenFind) {
+                        alert("Undefind Error");
+                    }
                 }
+                
 
 
             },
             error: function(){
                 layer.closeAll();
-               alert("网络错误，请稍后再试");
+               alert("Network Error,Please Try Again Later");
             }
         }) 
     }
 
 
-    function getOpenId(){
-        $.ajax({
-            type: 'get',
-            /*data: {
-                openid: openid 
-            },*/
-            url: ''+openid,
-            success: function(data){
-                console.log(data); 
-                if(data.d.level!='0'){
-                    $("#prize").show();
-                    $("#good"+data.d.level).show();
-                    $("#vipnum").val(data.d.content);
-                    vipnumClick();         
-                }
-            }
-        })
-    }
     
-    var getAppId;
-    var getNonceStr;
-    var getSignature;
-    var getTimestamp;
-    var getUrl = encodeURIComponent(location.href.split('#')[0]);
-    $.ajax({
-        url: "" + getUrl,
-        async: false,
-        type: "GET",
-        header: {
-            'accept': 'application/json',
-        },
-        dataType: 'json',
-        data: {},
-        error: function (request) {
-        },
-        success: function (data) {
-            getAppId = data.appId;
-            getNonceStr = data.nonceStr;
-            getSignature = data.signature;
-            getTimestamp = data.timestamp;
-        }
-    });
-    wx.config({
-        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-        appId: getAppId,
-        timestamp: getTimestamp,
-        nonceStr: getNonceStr,
-        signature: getSignature,
-        jsApiList: ['scanQRCode']
-    });
     $(".codebtn").click(function () {
         wx.scanQRCode({
             needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，

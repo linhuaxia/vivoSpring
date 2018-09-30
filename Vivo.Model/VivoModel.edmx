@@ -37,21 +37,22 @@
           <Property Name="Mount" Type="int" Nullable="false" />
           <Property Name="Enable" Type="bit" Nullable="false" />
           <Property Name="MarketLevel" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="TypeFlag" Type="bit" Nullable="false" />
+          <Property Name="TypeFlag" Type="int" Nullable="false" />
+          <Property Name="SortID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="PrizeResultInfo">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="OpenID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="IP" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="StoreAdd" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="Tel" Type="nvarchar" MaxLength="15" Nullable="false" />
           <Property Name="SnNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AreaName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
-          <Property Name="Result" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="SnApiResult" Type="ntext" Nullable="false" />
-          <Property Name="PlanID" Type="int" Nullable="false" />
+          <Property Name="Result" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ProfilesInfo">
           <Key>
@@ -109,20 +110,6 @@
           <Property Name="MsgId" Type="bigint" Nullable="false" />
           <Property Name="XMLDom" Type="ntext" Nullable="false" />
         </EntityType>
-        <Association Name="FK_PrizeResultInfo_PlanInfo">
-          <End Role="PlanInfo" Type="Self.PlanInfo" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="PrizeResultInfo" Type="Self.PrizeResultInfo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PlanInfo">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="PrizeResultInfo">
-              <PropertyRef Name="PlanID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_WechatMsgInfo_UserInfo">
           <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -147,10 +134,6 @@
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserInfo" EntityType="Self.UserInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WechatMsgInfo" EntityType="Self.WechatMsgInfo" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_PrizeResultInfo_PlanInfo" Association="Self.FK_PrizeResultInfo_PlanInfo">
-            <End Role="PlanInfo" EntitySet="PlanInfo" />
-            <End Role="PrizeResultInfo" EntitySet="PrizeResultInfo" />
-          </AssociationSet>
           <AssociationSet Name="FK_WechatMsgInfo_UserInfo" Association="Self.FK_WechatMsgInfo_UserInfo">
             <End Role="UserInfo" EntitySet="UserInfo" />
             <End Role="WechatMsgInfo" EntitySet="WechatMsgInfo" />
@@ -160,11 +143,9 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="vivoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityContainer Name="vivoEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="vivoIndiaEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AiQiYiInfo" EntityType="vivoModel.AiQiYiInfo" />
           <EntitySet Name="LogInfo" EntityType="vivoModel.LogInfo" />
-          <EntitySet Name="PlanInfo" EntityType="vivoModel.PlanInfo" />
-          <EntitySet Name="PrizeResultInfo" EntityType="vivoModel.PrizeResultInfo" />
           <EntitySet Name="ProfilesInfo" EntityType="vivoModel.ProfilesInfo" />
           <EntitySet Name="RuleInfo" EntityType="vivoModel.RuleInfo" />
           <EntitySet Name="sysdiagrams" EntityType="vivoModel.sysdiagrams" />
@@ -174,10 +155,8 @@
             <End Role="UserInfo" EntitySet="UserInfo" />
             <End Role="WechatMsgInfo" EntitySet="WechatMsgInfo" />
           </AssociationSet>
-          <AssociationSet Name="FK_PrizeResultInfo_PlanInfo" Association="vivoModel.FK_PrizeResultInfo_PlanInfo">
-            <End Role="PlanInfo" EntitySet="PlanInfo" />
-            <End Role="PrizeResultInfo" EntitySet="PrizeResultInfo" />
-          </AssociationSet>
+          <EntitySet Name="PlanInfo" EntityType="vivoModel.PlanInfo" />
+          <EntitySet Name="PrizeResultInfo" EntityType="vivoModel.PrizeResultInfo" />
         </EntityContainer>
         <EntityType Name="AiQiYiInfo">
           <Key>
@@ -199,35 +178,6 @@
           <Property Name="Detail" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="AddDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Serious" Type="Int16" Nullable="false" />
-        </EntityType>
-        <EntityType Name="PlanInfo">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateEnd" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="AgenterName" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
-          <Property Name="Mount" Type="Int32" Nullable="false" />
-          <Property Name="Enable" Type="Boolean" Nullable="false" />
-          <Property Name="MarketLevel" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="PrizeResultInfo" Relationship="vivoModel.FK_PrizeResultInfo_PlanInfo" FromRole="PlanInfo" ToRole="PrizeResultInfo" />
-          <Property Name="TypeFlag" Type="Boolean" Nullable="false" />
-        </EntityType>
-        <EntityType Name="PrizeResultInfo">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="OpenID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Tel" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="SnNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Result" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SnApiResult" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PlanID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="PlanInfo" Relationship="vivoModel.FK_PrizeResultInfo_PlanInfo" FromRole="PrizeResultInfo" ToRole="PlanInfo" />
         </EntityType>
         <EntityType Name="ProfilesInfo">
           <Key>
@@ -301,26 +251,40 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PrizeResultInfo_PlanInfo">
-          <End Type="vivoModel.PlanInfo" Role="PlanInfo" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="vivoModel.PrizeResultInfo" Role="PrizeResultInfo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PlanInfo">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="PrizeResultInfo">
-              <PropertyRef Name="PlanID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
+        <EntityType Name="PlanInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateEnd" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="AgenterName" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="Mount" Type="Int32" Nullable="false" />
+          <Property Name="Enable" Type="Boolean" Nullable="false" />
+          <Property Name="MarketLevel" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TypeFlag" Type="Int32" Nullable="false" />
+          <Property Name="SortID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PrizeResultInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IP" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StoreAdd" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Tel" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="SnNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AreaName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Result" Type="Int32" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="vivoModelStoreContainer" CdmEntityContainer="vivoEntities">
+        <EntityContainerMapping StorageEntityContainer="vivoModelStoreContainer" CdmEntityContainer="vivoIndiaEntities">
           <EntitySetMapping Name="AiQiYiInfo">
             <EntityTypeMapping TypeName="vivoModel.AiQiYiInfo">
               <MappingFragment StoreEntitySet="AiQiYiInfo">
@@ -340,35 +304,6 @@
                 <ScalarProperty Name="Detail" ColumnName="Detail" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="Category" ColumnName="Category" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PlanInfo">
-            <EntityTypeMapping TypeName="vivoModel.PlanInfo">
-              <MappingFragment StoreEntitySet="PlanInfo">
-                <ScalarProperty Name="TypeFlag" ColumnName="TypeFlag" />
-                <ScalarProperty Name="MarketLevel" ColumnName="MarketLevel" />
-                <ScalarProperty Name="Enable" ColumnName="Enable" />
-                <ScalarProperty Name="Mount" ColumnName="Mount" />
-                <ScalarProperty Name="AgenterName" ColumnName="AgenterName" />
-                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
-                <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PrizeResultInfo">
-            <EntityTypeMapping TypeName="vivoModel.PrizeResultInfo">
-              <MappingFragment StoreEntitySet="PrizeResultInfo">
-                <ScalarProperty Name="PlanID" ColumnName="PlanID" />
-                <ScalarProperty Name="SnApiResult" ColumnName="SnApiResult" />
-                <ScalarProperty Name="Result" ColumnName="Result" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="SnNumber" ColumnName="SnNumber" />
-                <ScalarProperty Name="Tel" ColumnName="Tel" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="OpenID" ColumnName="OpenID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -430,6 +365,36 @@
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="AddDate" ColumnName="AddDate" />
                 <ScalarProperty Name="CreateUserID" ColumnName="CreateUserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PlanInfo">
+            <EntityTypeMapping TypeName="vivoModel.PlanInfo">
+              <MappingFragment StoreEntitySet="PlanInfo">
+                <ScalarProperty Name="SortID" ColumnName="SortID" />
+                <ScalarProperty Name="TypeFlag" ColumnName="TypeFlag" />
+                <ScalarProperty Name="MarketLevel" ColumnName="MarketLevel" />
+                <ScalarProperty Name="Enable" ColumnName="Enable" />
+                <ScalarProperty Name="Mount" ColumnName="Mount" />
+                <ScalarProperty Name="AgenterName" ColumnName="AgenterName" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PrizeResultInfo">
+            <EntityTypeMapping TypeName="vivoModel.PrizeResultInfo">
+              <MappingFragment StoreEntitySet="PrizeResultInfo">
+                <ScalarProperty Name="Result" ColumnName="Result" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="AreaName" ColumnName="AreaName" />
+                <ScalarProperty Name="SnNumber" ColumnName="SnNumber" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="StoreAdd" ColumnName="StoreAdd" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IP" ColumnName="IP" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

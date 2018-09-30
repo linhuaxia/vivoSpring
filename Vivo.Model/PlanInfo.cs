@@ -14,12 +14,6 @@ namespace Vivo.Model
     
     public partial class PlanInfo
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PlanInfo()
-        {
-            this.PrizeResultInfo = new HashSet<PrizeResultInfo>();
-        }
-    
         public int ID { get; set; }
         public System.DateTime DateBegin { get; set; }
         public System.DateTime DateEnd { get; set; }
@@ -27,9 +21,7 @@ namespace Vivo.Model
         public int Mount { get; set; }
         public bool Enable { get; set; }
         public string MarketLevel { get; set; }
-        public bool TypeFlag { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PrizeResultInfo> PrizeResultInfo { get; set; }
+        public int TypeFlag { get; set; }
+        public int SortID { get; set; }
     }
 }

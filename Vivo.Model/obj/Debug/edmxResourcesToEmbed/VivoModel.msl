@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="vivoModelStoreContainer" CdmEntityContainer="vivoEntities">
+  <EntityContainerMapping StorageEntityContainer="vivoModelStoreContainer" CdmEntityContainer="vivoIndiaEntities">
     <EntitySetMapping Name="AiQiYiInfo">
       <EntityTypeMapping TypeName="vivoModel.AiQiYiInfo">
         <MappingFragment StoreEntitySet="AiQiYiInfo">
@@ -20,35 +20,6 @@
           <ScalarProperty Name="Detail" ColumnName="Detail" />
           <ScalarProperty Name="UserName" ColumnName="UserName" />
           <ScalarProperty Name="Category" ColumnName="Category" />
-          <ScalarProperty Name="ID" ColumnName="ID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="PlanInfo">
-      <EntityTypeMapping TypeName="vivoModel.PlanInfo">
-        <MappingFragment StoreEntitySet="PlanInfo">
-          <ScalarProperty Name="TypeFlag" ColumnName="TypeFlag" />
-          <ScalarProperty Name="MarketLevel" ColumnName="MarketLevel" />
-          <ScalarProperty Name="Enable" ColumnName="Enable" />
-          <ScalarProperty Name="Mount" ColumnName="Mount" />
-          <ScalarProperty Name="AgenterName" ColumnName="AgenterName" />
-          <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
-          <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
-          <ScalarProperty Name="ID" ColumnName="ID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="PrizeResultInfo">
-      <EntityTypeMapping TypeName="vivoModel.PrizeResultInfo">
-        <MappingFragment StoreEntitySet="PrizeResultInfo">
-          <ScalarProperty Name="PlanID" ColumnName="PlanID" />
-          <ScalarProperty Name="SnApiResult" ColumnName="SnApiResult" />
-          <ScalarProperty Name="Result" ColumnName="Result" />
-          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-          <ScalarProperty Name="SnNumber" ColumnName="SnNumber" />
-          <ScalarProperty Name="Tel" ColumnName="Tel" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="OpenID" ColumnName="OpenID" />
           <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -110,6 +81,36 @@
           <ScalarProperty Name="Status" ColumnName="Status" />
           <ScalarProperty Name="AddDate" ColumnName="AddDate" />
           <ScalarProperty Name="CreateUserID" ColumnName="CreateUserID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PlanInfo">
+      <EntityTypeMapping TypeName="vivoModel.PlanInfo">
+        <MappingFragment StoreEntitySet="PlanInfo">
+          <ScalarProperty Name="SortID" ColumnName="SortID" />
+          <ScalarProperty Name="TypeFlag" ColumnName="TypeFlag" />
+          <ScalarProperty Name="MarketLevel" ColumnName="MarketLevel" />
+          <ScalarProperty Name="Enable" ColumnName="Enable" />
+          <ScalarProperty Name="Mount" ColumnName="Mount" />
+          <ScalarProperty Name="AgenterName" ColumnName="AgenterName" />
+          <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+          <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PrizeResultInfo">
+      <EntityTypeMapping TypeName="vivoModel.PrizeResultInfo">
+        <MappingFragment StoreEntitySet="PrizeResultInfo">
+          <ScalarProperty Name="Result" ColumnName="Result" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="AreaName" ColumnName="AreaName" />
+          <ScalarProperty Name="SnNumber" ColumnName="SnNumber" />
+          <ScalarProperty Name="Tel" ColumnName="Tel" />
+          <ScalarProperty Name="StoreAdd" ColumnName="StoreAdd" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="IP" ColumnName="IP" />
           <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>

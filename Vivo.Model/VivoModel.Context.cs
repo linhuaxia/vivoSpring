@@ -13,10 +13,10 @@ namespace Vivo.Model
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class vivoEntities : DbContext
+    public partial class vivoIndiaEntities : DbContext
     {
-        public vivoEntities()
-            : base("name=vivoEntities")
+        public vivoIndiaEntities()
+            : base("name=vivoIndiaEntities")
         {
         }
     
@@ -27,12 +27,12 @@ namespace Vivo.Model
     
         public virtual DbSet<AiQiYiInfo> AiQiYiInfo { get; set; }
         public virtual DbSet<LogInfo> LogInfo { get; set; }
-        public virtual DbSet<PlanInfo> PlanInfo { get; set; }
-        public virtual DbSet<PrizeResultInfo> PrizeResultInfo { get; set; }
         public virtual DbSet<ProfilesInfo> ProfilesInfo { get; set; }
         public virtual DbSet<RuleInfo> RuleInfo { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<UserInfo> UserInfo { get; set; }
         public virtual DbSet<WechatMsgInfo> WechatMsgInfo { get; set; }
+        public virtual DbSet<PlanInfo> PlanInfo { get; set; }
+        public virtual DbSet<PrizeResultInfo> PrizeResultInfo { get; set; }
     }
 }

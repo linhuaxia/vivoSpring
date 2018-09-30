@@ -32,21 +32,22 @@
     <Property Name="Mount" Type="int" Nullable="false" />
     <Property Name="Enable" Type="bit" Nullable="false" />
     <Property Name="MarketLevel" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="TypeFlag" Type="bit" Nullable="false" />
+    <Property Name="TypeFlag" Type="int" Nullable="false" />
+    <Property Name="SortID" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="PrizeResultInfo">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="OpenID" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="IP" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="StoreAdd" Type="nvarchar" MaxLength="500" Nullable="false" />
     <Property Name="Tel" Type="nvarchar" MaxLength="15" Nullable="false" />
     <Property Name="SnNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="AreaName" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="CreateDate" Type="datetime" Nullable="false" />
-    <Property Name="Result" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="SnApiResult" Type="ntext" Nullable="false" />
-    <Property Name="PlanID" Type="int" Nullable="false" />
+    <Property Name="Result" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="ProfilesInfo">
     <Key>
@@ -104,20 +105,6 @@
     <Property Name="MsgId" Type="bigint" Nullable="false" />
     <Property Name="XMLDom" Type="ntext" Nullable="false" />
   </EntityType>
-  <Association Name="FK_PrizeResultInfo_PlanInfo">
-    <End Role="PlanInfo" Type="Self.PlanInfo" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="PrizeResultInfo" Type="Self.PrizeResultInfo" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="PlanInfo">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="PrizeResultInfo">
-        <PropertyRef Name="PlanID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_WechatMsgInfo_UserInfo">
     <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -142,10 +129,6 @@
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserInfo" EntityType="Self.UserInfo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="WechatMsgInfo" EntityType="Self.WechatMsgInfo" Schema="dbo" store:Type="Tables" />
-    <AssociationSet Name="FK_PrizeResultInfo_PlanInfo" Association="Self.FK_PrizeResultInfo_PlanInfo">
-      <End Role="PlanInfo" EntitySet="PlanInfo" />
-      <End Role="PrizeResultInfo" EntitySet="PrizeResultInfo" />
-    </AssociationSet>
     <AssociationSet Name="FK_WechatMsgInfo_UserInfo" Association="Self.FK_WechatMsgInfo_UserInfo">
       <End Role="UserInfo" EntitySet="UserInfo" />
       <End Role="WechatMsgInfo" EntitySet="WechatMsgInfo" />

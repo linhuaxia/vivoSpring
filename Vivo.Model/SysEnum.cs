@@ -63,7 +63,7 @@ namespace Vivo.Model
         /// </summary>
         public enum LoginState { 登录成功 = 1, 无权登录, 用户不存在, 密码不正确 }
         public enum ActionHttpMethod { Get = 1, Post }
-        public enum PrizeType { 一等奖 = 1, 二等奖 = 2, 爱奇艺会员 = 3, 没中奖 = 4 }
+        public enum PrizeType { 特等奖 = 1, 一等奖 = 2, 二等奖 = 3, 三等奖 = 4, 谢谢参与=5        }
         public class EnableStatus
         {
             public enum EnumEnableStatus { 启用 = 1, 禁用 }

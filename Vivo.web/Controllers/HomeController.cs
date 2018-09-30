@@ -10,13 +10,12 @@ using Vivo.Model;
 
 namespace Vivo.web.Controllers
 {
-    public class HomeController : BaseWechatUnUserController
+    public class HomeController : Controller
     {
         public ActionResult Index()
         {
-            ViewBag.infoWechatUserReturn = infoWechatUserReturn;
+            //ViewBag.infoWechatUserReturn = infoWechatUserReturn;
             return View();
-            //return Redirect("/index.html?openid="+infoWechatUserReturn.openid);
         }
 
         //public ActionResult GetInfoWechatUserReturn()

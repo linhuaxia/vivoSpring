@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<preserve resultType="2" virtualPath="/Views/Shared/DisplayTemplates/yyyy-MM-dd.cshtml" hash="ffffffffb4e96f50" filehash="ffffd96f1870805a" flags="110000" assembly="App_Web_1pzansos" type="ASP._Page_Views_Shared_DisplayTemplates_yyyy_MM_dd_cshtml">
-    <filedeps>
-        <filedep name="/Views/Shared/DisplayTemplates/yyyy-MM-dd.cshtml" />
-    </filedeps>
-</preserve>
