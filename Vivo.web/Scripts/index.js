@@ -121,7 +121,7 @@ $(function () {
                 console.log(data);
                 if (data.ErrorCode==0) {
                     $("#prize").show();
-                    $("#good" + data.Data.Result).show();
+                    $("#good" + data.Data.Result+data.Data.IP).show();
                     return;
                 }
                 else {

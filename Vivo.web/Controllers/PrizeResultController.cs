@@ -17,16 +17,6 @@ namespace Vivo.web.Controllers
     {
         public ActionResult C(PrizeResultInfo info)
         {
-            if (!string.IsNullOrEmpty(System.Web.HttpContext.Current.Request.ServerVariables["HTTP_VIA"]))
-            { info.IP = Convert.ToString(System.Web.HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"]); }
-            else
-            {
-                info.IP = string.Empty;
-            }
-            if (info.IP.Length>50)
-            {
-                info.IP = info.IP.Substring(0, 49);
-            }
 
             
             if (string.IsNullOrEmpty(info.Name))
@@ -68,7 +58,7 @@ namespace Vivo.web.Controllers
                 var ExistOBJ = new {infoExist.ID,infoExist.Name,infoExist.IP,infoExist.StoreAdd,infoExist.Tel,infoExist.SnNumber,infoExist.CreateDate,infoExist.Result };
                 return Json(new APIJson(-1, "Has Taken!",ExistOBJ));
             }
-            infoExist.IP = info.IP;
+           // infoExist.IP = info.IP;
             infoExist.Name = info.Name;
             infoExist.StoreAdd = info.StoreAdd;
             infoExist.Tel = info.Tel;
