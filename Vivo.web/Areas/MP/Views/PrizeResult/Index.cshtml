@@ -15,20 +15,20 @@
     <script type="text/javascript">
         function BtnExport_Click() {
             var URL = "@Url.Action("Export")";
-            URL += "?PlanID=" + $("#DdlPlanID").val();
-            URL += "&PrizeType=" + $("#DdlPrizeType").val();
+            URL += "?RS=" + $("#TxtRS").val();
             URL += "&DateBegin=" + $("#TxtDateBegin").val();
             URL += "&DateEnd=" + $("#TxtDateEnd").val();
             URL += "&Name=" + $("#TxtName").val();
+            URL += "&SN=" + $("#TxtSN").val();
             location.href = URL;
         }
         function BtnSch_Click() {
             var URL = "@Url.Action("Index")";
-            URL += "?PlanID=" + $("#DdlPlanID").val();
-            URL += "&PrizeType=" + $("#DdlPrizeType").val();
+            URL += "?RS=" + $("#TxtRS").val();
             URL += "&DateBegin=" + $("#TxtDateBegin").val();
             URL += "&DateEnd=" + $("#TxtDateEnd").val();
             URL += "&Name=" + $("#TxtName").val();
+            URL += "&SN=" + $("#TxtSN").val();
             location.href = URL;
         }
         $(document).ready(function () {
@@ -38,54 +38,54 @@
     </script>
 }
 
-<table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
-    <tr>
-        <td  colspan="4" style="height: 30px" class="td1_1">
-            抽奖记录
-        </td>
-    </tr>
-    @*<tr>
-        <td class="td1_2">
-            活动
-        </td>
-        <td class="td1_3">
-            @Html.DropDownList("DdlPlanID", ViewBag.listPlan as IEnumerable<SelectListItem>, "不限", new { @class = "form-control" })
-        </td>
-        <td class="td1_2">
-            奖项
-        </td>
-        <td class="td1_3">
-            @Html.DropDownList("DdlPrizeType", ViewBag.listPrizeType as IEnumerable<SelectListItem>, "不限", new { @class = "form-control" })
-        </td>
-    </tr>
-    <tr>
-        <td class="td1_2">
-            抽奖时间从
-        </td>
-        <td class="td1_3">
-            @Html.TextBox("TxtDateBegin", ViewBag.TxtDateBegin == null ? "" : (string)ViewBag.TxtDateBegin, new { placeholder = "", @class = "form-control" })
-        </td>
-        <td class="td1_2">
-            到
-        </td>
-        <td class="td1_3">
-            @Html.TextBox("TxtDateEnd", ViewBag.TxtDateEnd == null ? "" : (string)ViewBag.TxtDateEnd, new { placeholder = "", @class = "form-control" })
-        </td>
-    </tr>*@
-    <tr>
-        <td class="td1_2">
-            抽奖人姓名、电话
-        </td>
-        <td class="td1_3">
-            @Html.TextBox("TxtName", ViewBag.TxtName == null ? "" : (string)ViewBag.TxtName, new { placeholder = "", @class = "form-control" })
-        </td>
-        <td class="td1_2" colspan="2">
-            <input type="button" value="搜索" class="btn btn-default" onclick="BtnSch_Click();" />
-            <input type="button" value="导出" class="btn btn-default" onclick="BtnExport_Click();" />
+    <table cellpadding="0" cellspacing="0" width="100%" border="0" class="table1">
+        <tr>
+            <td colspan="6" style="height: 30px" class="td1_1">
+                抽奖记录
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                抽奖时间从
+            </td>
+            <td class="td1_3">
+                @Html.TextBox("TxtDateBegin", ViewBag.TxtDateBegin == null ? "" : (string)ViewBag.TxtDateBegin, new { placeholder = "", @class = "form-control" })
+            </td>
+            <td class="td1_2">
+                到
+            </td>
+            <td class="td1_3">
+                @Html.TextBox("TxtDateEnd", ViewBag.TxtDateEnd == null ? "" : (string)ViewBag.TxtDateEnd, new { placeholder = "", @class = "form-control" })
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                抽奖人姓名、电话
+            </td>
+            <td class="td1_3">
+                @Html.TextBox("TxtName", ViewBag.TxtName == null ? "" : (string)ViewBag.TxtName, new { placeholder = "", @class = "form-control" })
+            </td>
+            <td class="td1_2">
+                SN
+            </td>
+            <td class="td1_3">
+                @Html.TextBox("TxtSN", ViewBag.TxtSN == null ? "" : (string)ViewBag.TxtSN, new { placeholder = "", @class = "form-control" })
+            </td>
+        </tr>
+        <tr>
+            <td class="td1_2">
+                RS
+            </td>
+            <td class="td1_3">
+                @Html.TextBox("TxtRS", ViewBag.TxtRS == null ? "" : (string)ViewBag.TxtRS, new { placeholder = "", @class = "form-control" })
+            </td>
+            <td class="td1_2" colspan="2">
+                <input type="button" value="搜索" class="btn btn-default" onclick="BtnSch_Click();" />
+                <input type="button" value="导出" class="btn btn-default" onclick="BtnExport_Click();" />
 
-        </td>
-    </tr>
-</table>
+            </td>
+        </tr>
+    </table>
 
 <table class="table">
     <tr>
